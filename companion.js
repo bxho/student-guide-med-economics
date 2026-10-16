@@ -37,7 +37,15 @@ function art(kind,stage=0,outfit=0){
  const mouth=c.kind==='robot'?'':'<ellipse cx="32" cy="59" rx="5" ry="2.5" fill="#f39b9f" opacity=".65"/><ellipse cx="64" cy="59" rx="5" ry="2.5" fill="#f39b9f" opacity=".65"/>'+(mood==='sleepy'?'<path d="M43 61 Q48 59 53 61" fill="none" stroke="#754d42" stroke-width="2.4" stroke-linecap="round"/>':mood==='curious'?'<ellipse cx="48" cy="62" rx="3" ry="4" fill="#754d42"/>':mood==='excited'?'<path d="M39 59 Q48 75 57 59Z" fill="#a83d58" stroke="#754d42" stroke-width="1.8"/>':'<path d="M38 59 Q48 72 58 59 Q48 64 38 59Z" fill="#a83d58" stroke="#754d42" stroke-width="1.8"/>');
  const collar=c.kind==='cat'?'<path d="M37 76 L48 83 L59 76" fill="none" stroke="#e3c65e" stroke-width="3"/>':'<path d="M48 72 L42 80 L48 87 L54 80Z" fill="'+c.accent+'" stroke="#fff" stroke-width="1.5"/>';
  const extra=c.kind==='animal'?'<circle cx="35" cy="48" r="2" fill="#5a3b20"/><circle cx="61" cy="48" r="2" fill="#5a3b20"/>':'';
- return '<svg viewBox="0 0 96 112" role="img" aria-label="'+c.name+'" xmlns="http://www.w3.org/2000/svg"><g transform="translate(48 57) scale('+scale+') translate(-48 -57)"><ellipse cx="48" cy="103" rx="25" ry="5" fill="#172b4b" opacity=".12"/><path d="M29 78 Q9 78 15 59 Q20 49 28 59" fill="none" stroke="'+c.fur+'" stroke-width="9" stroke-linecap="round"/><path d="M31 75 L25 93 L40 93 L45 78 M53 78 L57 93 L72 93 L65 75" fill="'+coat+'" stroke="#25395c" stroke-width="2"/><path d="M29 72 Q48 62 67 72 L65 89 Q48 98 31 89Z" fill="'+coat+'" stroke="#25395c" stroke-width="2"/><path d="M35 86 L61 86" stroke="#fff" stroke-width="2" opacity=".8"/>'+ears+face+extra+eyes+muzzle+mouth+hair+glasses+headphones+collar+(stage>=3?'<path d="M16 42 Q5 29 18 21 M78 42 Q91 29 78 21" fill="none" stroke="#ffe58b" stroke-width="3" stroke-linecap="round"/>':'')+'</g></svg>';
+ const tier=Math.min(7,1+Math.floor(Math.max(0,Number(data.xp)||0)/100));
+ const magicalFx='<ellipse cx="48" cy="103" rx="25" ry="5" fill="#9f8cff" opacity=".35"/>'+
+   (tier>=2?'<path d="M28 72 Q9 59 16 43 Q28 49 31 62 M68 72 Q87 59 80 43 Q68 49 65 62" fill="#7ce7ff" fill-opacity=".55" stroke="#7ce7ff" stroke-width="2"/>':'')+
+   (tier>=3?'<ellipse cx="48" cy="25" rx="29" ry="7" fill="none" stroke="#8feaff" stroke-width="2" opacity=".9"/><circle cx="20" cy="24" r="2.5" fill="#fff0a6"/><circle cx="76" cy="24" r="2.5" fill="#fff0a6"/>':'')+
+   (tier>=4?'<path d="M36 91 Q29 101 38 105 Q40 99 44 96 M52 96 Q58 101 57 106 Q68 100 60 91" fill="#42d9ff" stroke="#d5fbff" stroke-width="1.5"><animate attributeName="opacity" values=".65;1;.65" dur=".7s" repeatCount="indefinite"/></path>':'')+
+   (tier>=5?'<path d="M16 30 l3 -6 l3 6 l-3 3Z M75 38 l3 -6 l3 6 l-3 3Z M47 10 l3 -6 l3 6 l-3 3Z" fill="#ffe58b"/>':'')+
+   (tier>=6?'<path d="M24 15 Q48 -1 72 15" fill="none" stroke="#ffd66e" stroke-width="3" stroke-linecap="round"/><circle cx="48" cy="9" r="4" fill="#fff4bd" stroke="#ffd66e" stroke-width="2"/>':'')+
+   (tier>=7?'<circle cx="48" cy="53" r="43" fill="none" stroke="#ffd66e" stroke-width="1.5" stroke-dasharray="3 5" opacity=".9"/><path d="M10 54 l5 -8 l5 8 l-5 8Z M76 54 l5 -8 l5 8 l-5 8Z" fill="#ffd66e"/>':'');
+ return '<svg viewBox="0 0 96 112" role="img" aria-label="'+c.name+'، الطور السحري '+tier+' من 7" xmlns="http://www.w3.org/2000/svg"><g transform="translate(48 57) scale('+scale+') translate(-48 -57)"><ellipse cx="48" cy="103" rx="25" ry="5" fill="#172b4b" opacity=".12"/><path d="M29 78 Q9 78 15 59 Q20 49 28 59" fill="none" stroke="'+c.fur+'" stroke-width="9" stroke-linecap="round"/><path d="M31 75 L25 93 L40 93 L45 78 M53 78 L57 93 L72 93 L65 75" fill="'+coat+'" stroke="#25395c" stroke-width="2"/><path d="M29 72 Q48 62 67 72 L65 89 Q48 98 31 89Z" fill="'+coat+'" stroke="#25395c" stroke-width="2"/><path d="M35 86 L61 86" stroke="#fff" stroke-width="2" opacity=".8"/>'+ears+face+extra+eyes+muzzle+mouth+hair+glasses+headphones+collar+(stage>=3?'<path d="M16 42 Q5 29 18 21 M78 42 Q91 29 78 21" fill="none" stroke="#ffe58b" stroke-width="3" stroke-linecap="round"/>':'')+magicalFx+'</g></svg>';
 }
 function stage(){return data.xp>=700?3:data.xp>=300?2:data.xp>=100?1:0}
 function rank(){return ['صغير','يافع','بالغ','أسطوري'][stage()]}
@@ -59,8 +67,8 @@ function renderBuddy(){
  const dock=$('#companionDock');if(!dock)return;
  $('#companionArt').innerHTML=art(chosen(),stage(),data.outfit);
  $('#companionLabel').textContent=companionName(chosen());
- $('#companionLevel').textContent=rank()+' · '+data.xp+' XP';
- $('#companionStage').textContent='المستوى '+(stage()+1)+' من 4';
+ $('#companionLevel').textContent='طور '+Math.min(7,1+Math.floor(Math.max(0,Number(data.xp)||0)/100))+' من 7 · '+data.xp+' XP';
+ $('#companionStage').textContent='الطور السحري '+Math.min(7,1+Math.floor(Math.max(0,Number(data.xp)||0)/100))+' من 7 · '+rank();
 }
 const cheers=['أنت قادر عليها! ابدأ بخمس دقائق فقط.','كل صفحة تفهمها تقرّبك من هدفك.','لا تحتاج للكمال؛ المهم أن تواصل.','خذ نفسًا عميقًا، ثم أنجز خطوة صغيرة.','تقدّمك ولو كان بسيطًا يستحق الفخر.','هل نراجع سؤالًا واحدًا معًا؟','استراحة قصيرة ثم نعود أقوى!','أنت تبني مستقبلك خطوة خطوة.'];
 let wanderTimer=null, cheerTimer=null, wandering=false, sleeping=false, sleepTransition=false;
