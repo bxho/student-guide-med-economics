@@ -9,13 +9,18 @@ This directory is a **Unity source scaffold**, not a compiled Unity WebGL build.
 - XP entry point accepts a unique study-task ID and awards XP only once per task.
 - XP, evolution stage, and completed task IDs are saved locally using Unity PlayerPrefs.
 
-## Add the Cyber-Bot sprite sheet
-1. Open this folder as part of a Unity 2D project (create a project in Unity Hub, then copy the `Assets` folder into it).
-2. Import the supplied Cyber-Bot sheet as a Sprite (2D and UI).
-3. Set Sprite Mode to Multiple, open Sprite Editor, slice each frame, and apply.
-4. Create a GameObject with SpriteRenderer, BoxCollider2D, and AdvancedCompanionController.
-5. Populate all seven Stage Animation Data entries in the Inspector. Assign each state its ordered frames and frame rate. The sheet in the conversation is a visual reference; it is not automatically available as a sliced Unity asset in this source scaffold.
-6. Test in Unity Editor, then select WebGL in Build Profiles and build to a folder such as `Build/WebGL`.
+## Generate a playable demo scene
+1. Open a Unity 2D project in Unity Hub and copy this folder's `Assets` directory into the project.
+2. Wait for Unity to finish importing the scripts.
+3. Choose `Tools → Student Guide → Build Companion Demo (7 Stages)`.
+4. Open `Assets/StudentGuideCompanionDemo/CompanionDemo.unity` and press Play.
+5. Use the in-scene Arabic test controls to try idle, walk, run, jump, tired and sleep; the companion also wanders autonomously. Drag it with the mouse to test the dragged state.
+6. Use the demo-only XP button and duplicate-ID test. Demo progress is isolated under `StudentGuide.Companion.Demo`.
+
+The generated pixel-art sprites are **temporary test artwork**, not the final character art. To match the intended character designs, replace these generated sprites with the approved original character sheets and assign the frames to each stage/state.
+
+## Build WebGL
+After the demo scene runs and any compile/runtime errors are fixed, select WebGL in Build Profiles and build to a folder such as `Build/WebGL`. Embed that output only after verifying it in a browser.
 
 ## XP contract
 Call `AddCompletedStudyTaskXP(taskId, xpAmount)` only from the integration layer after a task transitions from incomplete to complete. `taskId` must be the stable unique ID of that task. Repeated calls for the same ID are ignored, including after a reload because completed IDs are saved. Do not award XP from focus sessions, cards, notes, feeding, or a standalone daily-mission button.
