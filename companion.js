@@ -173,8 +173,8 @@ function bind(){
  $('#companionSocialOpen').addEventListener('click',()=>openSocial('community'));
  $('#socialBack').addEventListener('click',closeSocial);
  document.querySelectorAll('[data-social-tab]').forEach(b=>b.addEventListener('click',()=>{setSocialTab(b.dataset.socialTab);if(b.dataset.socialTab==='community')loadCommunity().catch(e=>socialStatus(e.message));if(b.dataset.socialTab==='friends')loadFriends().catch(e=>socialStatus(e.message));if(b.dataset.socialTab==='profile')loadSocialData().catch(e=>socialStatus(e.message))}));
- $('#communityForm').addEventListener('submit',e=>{e.preventDefault();sendSocialMessage('community_messages','communityInput',null)});
- $('#directChatForm').addEventListener('submit',e=>{e.preventDefault();if(activeDirectFriend)sendSocialMessage('direct_messages','directChatInput',activeDirectFriend.id)});
+ $('#communityForm').addEventListener('submit',e=>{e.preventDefault();sendSocialMessage('student_social_messages','communityInput',null)});
+ $('#directChatForm').addEventListener('submit',e=>{e.preventDefault();if(activeDirectFriend)sendSocialMessage('student_social_messages','directChatInput',activeDirectFriend.id)});
  $('#addFriendForm').addEventListener('submit',e=>{e.preventDefault();addFriendByUsername()});
  $('#socialProfileForm').addEventListener('submit',saveSocialProfile);
  $('#socialAvatarFile').addEventListener('change',()=>{const file=$('#socialAvatarFile').files?.[0],preview=$('#socialAvatarPreview');if(!file)return;preview.src=URL.createObjectURL(file);preview.hidden=false});
@@ -210,15 +210,8 @@ function bind(){
  document.addEventListener('pointerup',cancelHold,{passive:true});document.addEventListener('pointercancel',cancelHold,{passive:true});document.addEventListener('contextmenu',e=>{if(!e.target.closest('input,textarea,[contenteditable="true"]')){e.preventDefault();openPanel();bubble('قائمة الرفيق جاهزة لك!')}});
 
  buddy.addEventListener('pointerdown',e=>{if(e.button!==0&&e.pointerType==='mouse')return;const r=buddy.getBoundingClientRect();drag={x:e.clientX-r.left,y:e.clientY-r.top};clearTimeout(wanderTimer);buddy.setPointerCapture(e.pointerId)});
- buddy.addEventListener('pointermove',e=>{if(!drag)return;const x=Math.max(0,Math.min(innerWidth-buddy.offsetWidth,e.clientX-drag.x));const y=Math.max(60,Math.min(innerHeight-buddy.offsetHeight,e.clientY-drag.y));buddy.style.position='fixed';buddy.style.bottom='auto';buddy.style.left=x+'px';buddy.style.top=y+'px';buddy.style.zIndex='801'});
+ buddy.addEventListener('pointermove',e=>{if(!drag)return;const stage=$('.companion-stage-platform');if(!stage)return;const r=stage.getBoundingClientRect();const x=Math.max(0,Math.min(r.width-buddy.offsetWidth,e.clientX-r.left-drag.x));const y=Math.max(0,Math.min(r.height-buddy.offsetHeight,e.clientY-r.top-drag.y));buddy.style.position='absolute';buddy.style.bottom='auto';buddy.style.left=x+'px';buddy.style.top=y+'px';buddy.style.zIndex='3'});
  const end=()=>{drag=null;scheduleWander(2800)};buddy.addEventListener('pointerup',end);buddy.addEventListener('pointercancel',end);
- document.addEventListener('click',e=>{if(e.target.closest('#appContent button, #appContent form'))syncLater()});
- document.addEventListener('submit',e=>{if(e.target.closest('#appContent'))syncLater()});
- const app=$('#appContent');
- const mo=new MutationObserver(()=>{const visible=!app.classList.contains('auth-locked');$('#companionDock').hidden=!visible;if(visible){computeProgress();renderBuddy();if(!data.introSeen){selected=data.chosen||'medicine';data.introSeen=true;save();bubble('أهلًا! أنا رفيقك الدراسي. اضغط «رفيقي» لفتح أدواتي.')}else if(!sessionStorage.getItem('companionWelcomeSeen')){sessionStorage.setItem('companionWelcomeSeen','1');bubble('أهلًا بعودتك! اضغط «رفيقي» لفتح أدواتك دون تعطيل الصفحة.')}}});
- mo.observe(app,{attributes:true,attributeFilter:['class']});
- // App might already be unlocked on a warm reload.
- if(!app.classList.contains('auth-locked')){dock.hidden=false;if(!data.introSeen){data.introSeen=true;save();renderBuddy();bubble('أهلًا! أنا رفيقك الدراسي. اضغط «رفيقي» لفتح أدواتي.')}else renderBuddy()}
 }
 function init(){
  inject();bind();renderBuddy();startAutonomy();
