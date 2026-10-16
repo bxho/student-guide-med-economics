@@ -37,3 +37,5 @@
 #companionDock{--companion-accent:var(--social-accent)}
 @media(max-width:620px){.social-compose,.social-inline-form{flex-direction:column}.social-message{max-width:100%}.social-tabs .btn{flex:1 1 42%}}
 @media(prefers-reduced-motion:reduce){#bxSplash,.bx-splash-line{animation:none;transition:none}}
+
+#companionArt .creature-pixel-art,#companionPanelArt .creature-pixel-art,#habitatPet .creature-pixel-art{filter:var(--social-pet-filter,none)}
