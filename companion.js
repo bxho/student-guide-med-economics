@@ -286,9 +286,13 @@ function bind(){
 }
 window.addEventListener('student-guide-companion-customized',()=>{try{Object.assign(data,JSON.parse(localStorage.getItem('studentGuideCompanion_v2')||'{}'));renderBuddy();refreshPanel();if(!$('#companionHabitat')?.hidden)renderHabitat()}catch(_){}});
 function init(){
- inject();bind();renderBuddy();startAutonomy();
+ inject();
+ const app=document.querySelector('#appContent');
+ const syncDockVisibility=()=>{const dock=$('#companionDock');if(!dock)return;dock.hidden=app?app.classList.contains('auth-locked'):false;};
+ syncDockVisibility();
+ if(app){new MutationObserver(syncDockVisibility).observe(app,{attributes:true,attributeFilter:['class']});}
+ bind();renderBuddy();startAutonomy();
  const moods=['happy','curious','excited'];let moodIndex=0;setInterval(()=>{if(document.hidden)return;moodIndex=(moodIndex+1)%moods.length;data.mood=moods[moodIndex];renderBuddy();if(!$('#companionHabitat')?.hidden)$('#habitatPet').innerHTML=art(chosen(),stage(),data.outfit);if(!$('#companionOverlay')?.hidden)$('#companionChoose').querySelectorAll('[data-companion-choice]').forEach(b=>{const k=b.dataset.companionChoice;b.querySelector('span').innerHTML=art(k,0,0)});},3200);
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{}); 
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
