@@ -93,7 +93,7 @@ function bind(){
  document.addEventListener('click',e=>{if(e.target.closest('#appContent button, #appContent form'))syncLater()});
  document.addEventListener('submit',e=>{if(e.target.closest('#appContent'))syncLater()});
  const app=$('#appContent');
- const mo=new MutationObserver(()=>{const visible=!app.classList.contains('auth-locked');dock.hidden=!visible;if(visible){computeProgress();if(!data.introSeen){selected=data.chosen||'medicine';overlay(true)}else{renderBuddy();if(!sessionStorage.getItem('companionWelcomeSeen')){sessionStorage.setItem('companionWelcomeSeen','1');overlay(false);$('#companionWelcomeArt').innerHTML=art(chosen(),stage(),data.outfit);$('#companionReturn').hidden=false;$('#companionBegin').hidden=true}}}});
+ const mo=new MutationObserver(()=>{const visible=!app.classList.contains('auth-locked');$('#companionDock').hidden=!visible;if(visible){computeProgress();if(!data.introSeen){selected=data.chosen||'medicine';overlay(true)}else{renderBuddy();if(!sessionStorage.getItem('companionWelcomeSeen')){sessionStorage.setItem('companionWelcomeSeen','1');overlay(false);$('#companionWelcomeArt').innerHTML=art(chosen(),stage(),data.outfit);$('#companionReturn').hidden=false;$('#companionBegin').hidden=true}}}});
  mo.observe(app,{attributes:true,attributeFilter:['class']});
  // App might already be unlocked on a warm reload.
  if(!app.classList.contains('auth-locked')){dock.hidden=false;if(!data.introSeen)overlay(true);else renderBuddy()}
