@@ -233,3 +233,37 @@
 @keyframes pixel-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 @keyframes pixel-shadow{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.82)}}
 @media(prefers-reduced-motion:reduce){#companionArt svg.creature-pixel-art,#companionPanelArt svg.creature-pixel-art{animation:none!important}#companionBuddy:before{animation:none!important}}
+
+/* Pixel-world pass: crisp props, readable palette and character-specific silhouettes */
+#companionArt svg.creature-pixel-art,#companionPanelArt svg.creature-pixel-art,.room-pet-3d svg.creature-pixel-art,#habitatPet svg.creature-pixel-art{image-rendering:pixelated;shape-rendering:crispEdges;filter:drop-shadow(4px 5px 0 #111c35)!important;animation:pixel-idle 1.2s steps(2,end) infinite!important}
+.pixel-skyline{position:absolute;inset:0;overflow:hidden;image-rendering:pixelated}
+.pixel-cloud,.pixel-cloud-mini{position:absolute;width:28px;height:8px;background:#fff1d7;box-shadow:8px -6px #fff1d7,16px 0 #fff1d7,4px 8px #d9ecff;image-rendering:pixelated}
+.pixel-cloud.cloud-a{left:12%;top:22%}.pixel-cloud.cloud-b{right:12%;top:37%;transform:scale(.7)}
+.pixel-sun{position:absolute;right:16%;top:16%;width:16px;height:16px;background:#ffe38a;box-shadow:0 -6px #ffe38a,0 6px #ffe38a,6px 0 #ffe38a,-6px 0 #ffe38a}
+.pixel-star{display:inline-block;width:5px;height:5px;background:#fff4a3;box-shadow:5px 0 #fff4a3,0 5px #fff4a3,5px 5px #fff4a3}
+.pixel-skyline .star-a{position:absolute;left:32%;top:15%}.pixel-skyline .star-b{position:absolute;left:66%;top:29%}.pixel-skyline .star-c{position:absolute;left:82%;top:52%}
+.window-sky{display:flex!important;align-items:center;gap:8px;padding:8px}
+.pixel-cloud-mini{position:relative;display:inline-block;left:auto;top:auto;width:13px;height:5px;box-shadow:4px -4px #fff1d7,8px 0 #fff1d7,2px 5px #d9ecff}
+.window-hills{position:absolute;bottom:0;left:0;right:0;height:30%;background:#5e9c82;clip-path:polygon(0 100%,0 65%,22% 15%,38% 70%,63% 0,82% 60%,100% 30%,100% 100%);image-rendering:pixelated}
+.room-wall-poster{display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:#f8df9c!important;color:#38436f!important;border:4px solid #34365f;box-shadow:4px 4px 0 #34365f!important;border-radius:0!important}
+.pixel-emblem{font-size:18px;color:#bd5d6c;text-shadow:2px 2px #f4b85f}
+.room-shelf-3d{display:flex!important;align-items:flex-end;gap:4px;padding:5px!important;background:#87556c!important;border:3px solid #34365f;box-shadow:0 5px 0 #34365f!important;border-radius:0!important}
+.pixel-book{display:inline-block!important;width:9px;height:18px;background:#df6d68;border:2px solid #34365f;box-shadow:inset 2px 0 #f8c78d}
+.pixel-book.book-b{height:14px;background:#65b6a5}
+.pixel-book.book-night{width:13px;height:10px;background:#d86a66;border:2px solid #34365f}
+.pixel-plant{display:inline-block!important;position:relative;width:14px;height:15px;background:linear-gradient(90deg,#b86c55 0 100%);clip-path:polygon(12% 42%,88% 42%,76% 100%,24% 100%);border-radius:0!important}
+.pixel-plant:before{content:"";position:absolute;left:2px;top:-5px;width:5px;height:8px;background:#4b9b68;box-shadow:5px -3px #69b878,7px 2px #337b56}
+.pixel-trophy{display:inline-block!important;width:12px;height:13px;background:#f5ce66;clip-path:polygon(20% 0,80% 0,80% 30%,100% 30%,100% 60%,70% 70%,70% 85%,90% 85%,90% 100%,10% 100%,10% 85%,30% 85%,30% 70%,0 60%,0 30%,20% 30%)}
+.room-nightstand,.room-plant-3d,.room-lamp-3d{border-radius:0!important;image-rendering:pixelated}
+.habitat-house-icon{font-size:0!important}
+.habitat-house-icon:after{content:"★";font-size:18px;color:#fff0a6;text-shadow:3px 3px #7b4260;display:block}
+.habitat-house-roof,.habitat-house-body,.habitat-house-door,.habitat-house-window{border-radius:0!important;filter:none!important}
+.habitat-house-window{background:linear-gradient(90deg,#8ad7f4 0 42%,#34476e 42% 50%,#8ad7f4 50% 100%)!important}
+.habitat-house-body{background:repeating-linear-gradient(0deg,#f6d7a2 0 12px,#edc58b 12px 24px)!important}
+.habitat-house-roof{background:repeating-linear-gradient(90deg,#d95f68 0 12px,#ef9a70 12px 24px)!important}
+.habitat-interior .room-pet-3d{filter:none!important}
+.habitat-interior .room-pet-3d svg{filter:drop-shadow(3px 3px 0 #34365f)!important}
+.habitat-interior .room-decor-3d span{font-size:0!important}
+.habitat-interior .room-decor-3d .pixel-plant{font-size:initial!important}
+@keyframes pixel-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@media(prefers-reduced-motion:reduce){#companionArt svg.creature-pixel-art,#companionPanelArt svg.creature-pixel-art,.room-pet-3d svg.creature-pixel-art{animation:none!important}}
