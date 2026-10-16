@@ -140,3 +140,21 @@
 
 /* Keep the companion menu above the habitat when opened by a long press. */
 #companionPanel{z-index:1400}
+
+.companion-heroes-all{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px!important;max-height:min(45vh,430px);overflow:auto;padding:5px}
+.companion-heroes-all .companion-hero{min-width:0;padding:10px 7px;border-radius:18px;background:linear-gradient(160deg,#26395d,#18233d);border-color:#ffffff24}
+.companion-heroes-all .companion-hero svg{width:82px;height:94px;filter:drop-shadow(0 7px 8px #050b1c55)}
+.companion-heroes-all .companion-hero strong{font-size:13px;line-height:1.5}.companion-heroes-all .companion-hero small{font-size:10px;color:#c6d7f4}
+.companion-heroes-all .companion-hero.selected{border-color:#9ee8ff;background:linear-gradient(160deg,#375b83,#24385a);box-shadow:0 0 0 2px #7edcff35}
+.habitat-bottom{flex-wrap:wrap;justify-content:center}
+.habitat-interior{position:relative;min-height:220px;border-radius:20px;overflow:hidden;margin:14px 0;padding:18px;background:linear-gradient(#6c83aa 0%,#b9c6d4 53%,#c9b69c 54%,#8d6d57 100%);border:2px solid #ffffff30}
+.interior-window{position:absolute;top:12px;left:18px;width:76px;height:65px;border:5px solid #f1d7a2;border-radius:9px;background:linear-gradient(#9bd9ff,#eef6ff 60%,#8cb78c);text-align:center;padding-top:18px;color:#fff}
+.interior-shelf{position:absolute;top:20px;right:18px;background:#80573c;border:3px solid #d4ad7b;border-radius:6px;padding:8px;color:#fff;font-size:19px}
+.interior-bed{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);width:min(68%,260px);height:72px;border-radius:12px 12px 5px 5px;background:#76503e;border:4px solid #d8bd91;display:flex;align-items:center;justify-content:center;gap:10px;color:#fff}
+.interior-bed span{font-size:30px}.interior-bed b{font-size:11px}.interior-rug{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:75%;height:32px;border-radius:50%;background:#8b739f;border:2px solid #c7b1df}
+.interior-lamp{position:absolute;bottom:36px;right:12%;font-size:30px}.interior-decor{position:absolute;bottom:10px;left:12%;font-size:19px}
+.level-interior-0{filter:saturate(.55)}.level-interior-2{box-shadow:inset 0 0 0 3px #ffe1a8;background:linear-gradient(#637db5 0%,#c5d9f5 53%,#d6c1a4 54%,#a88364 100%)}.level-interior-3{box-shadow:inset 0 0 0 3px #f4d88c,0 0 24px #d5c3ff55;background:linear-gradient(#232f61 0%,#7f83bb 53%,#d6c3a5 54%,#7c5b69 100%)}
+.habitat-car-scene{height:125px;position:relative;overflow:hidden;border-radius:16px;margin:12px 0;background:linear-gradient(#8ec8ef 0 65%,#586d83 65% 100%)}
+.car-skyline{position:absolute;top:15px;left:0;right:0;text-align:center;font-size:26px}.car-road{position:absolute;bottom:22px;left:0;right:0;height:4px;background:repeating-linear-gradient(90deg,#fff 0 28px,transparent 28px 48px)}
+.car-show{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);font-size:54px;animation:car-bounce 1.8s ease-in-out infinite}@keyframes car-bounce{50%{transform:translate(-50%,-4px)}}
+@media(max-width:600px){.companion-heroes-all{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px!important}.companion-heroes-all .companion-hero{padding:7px 3px}.companion-heroes-all .companion-hero svg{width:62px;height:74px}.companion-heroes-all .companion-hero strong{font-size:11px}.companion-heroes-all .companion-hero small{font-size:9px}.habitat-bottom button{flex:1 1 28%}}
