@@ -137,3 +137,6 @@
 .habitat-shop-grid strong{font-size:11px;color:#ffdf83}
 .habitat-shop-note{font-size:12px}
 @media(max-width:600px){.habitat-top{padding-top:max(10px,env(safe-area-inset-top))}.habitat-home{bottom:21%}.habitat-pet{bottom:8%;width:76px;height:90px;left:calc(50% - 38px)}.habitat-bottom{gap:5px;padding-left:8px;padding-right:8px}.habitat-bottom button{padding:8px 3px;font-size:11px}.habitat-subpage{inset:70px 8px 78px;padding:14px}}
+
+/* Keep the companion menu above the habitat when opened by a long press. */
+#companionPanel{z-index:1400}
