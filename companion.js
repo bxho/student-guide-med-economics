@@ -227,18 +227,6 @@ function inject(){
 function showExtra(html){$('#companionExtra').innerHTML=html}
 function todayKey(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
 function ensureDailyMission(){if(data.missionDay!==todayKey()){data.missionDay=todayKey();data.missionDone=false;save()}}
-function chatReply(raw){
- const q=String(raw||'').trim().toLowerCase();
- const study=getStudy()||{tasks:[],sessions:0,cards:[],notes:[]};
- if(/قلق|خايف|متوتر|ضغط|تعب|محبط/.test(q))return 'خذ نفسًا ببطء. ما مطلوب منك تنجز كل شيء الآن؛ اختر جزءًا صغيرًا واشتغل عليه 10 دقائق، وبعدها قيّم شعورك.';
- if(/خطة|جدول|أبدأ|ابدأ|مذاكر/.test(q))return 'خلينا نبدأ بخطة بسيطة: 1) اختر موضوعًا واحدًا. 2) ذاكر 20 دقيقة. 3) أغلق المصدر واكتب 3 نقاط تتذكرها. 4) راجع ما فاتك لخمس دقائق.';
- if(/طب|تشريح|فسيولوج|دواء|مرض/.test(q))return 'للمواد الطبية: افهم الفكرة أولًا، ثم اربطها بسبب ونتيجة، وبعدها اختبر نفسك بأسئلة قصيرة. اكتب اسم الموضوع وسأساعدك في تنظيم طريقة مراجعته.';
- if(/اقتصاد|عرض|طلب|سوق|تكلفة|ناتج/.test(q))return 'للاقتصاد: عرّف المفهوم، اشرح آلية عمله، ثم طبّقه على مثال واقعي. جرّب رسم علاقة المتغيرات قبل حفظ التفاصيل.';
- if(/تركيز|مشتت|جوال|تشتت/.test(q))return 'جرّب مؤقت تركيز 20 دقيقة، أبعد الهاتف، وحدد نتيجة واحدة للجلسة. بعد ذلك خذ استراحة قصيرة.';
- if(/إنجاز|تقدم|مستوى|نقاط/.test(q))return 'تقدمك الحالي '+data.xp+' نقطة خبرة و'+data.coins+' عملة. المهام المكتملة في لوحة الدراسة: '+(study.tasks||[]).filter(t=>t.done).length+'. كل خطوة صغيرة تُحسب!';
- if(/مرحبا|السلام|هلا|أهل/.test(q))return 'أهلًا بك! 🌟 أنا معك خطوة بخطوة. ما الموضوع الذي تريد أن نبدأ به اليوم؟';
- return 'وصلتني رسالتك. جرّب أن تحدد المادة والجزء الصعب فيها، أو أخبرني هل تحتاج خطة مذاكرة أم طريقة تركيز أم تشجيعًا. ملاحظة: هذه نسخة إرشادية محلية وليست نموذج ذكاء اصطناعي متصلًا.';
-}
 function appendChat(text,who){
  const log=$('#companionChatLog');if(!log)return;
  const p=document.createElement('p');p.className='companion-chat-msg '+(who==='you'?'you-msg':'buddy-msg');p.textContent=text;log.appendChild(p);
