@@ -37,7 +37,7 @@ as $$
 declare requested_username text; requested_name text;
 begin
  requested_username:=lower(coalesce(new.raw_user_meta_data->>'username',''));
- requested_name:=left(coalesce(nullif(btrim(new.raw_user_meta_data->>'display_name'),''),'طالب'),50);
+ requested_name:=left(coalesce(nullif(btrim(new.raw_user_meta_data->>'display_name'),''),'طالب'),40);
  if requested_username !~ '^[a-z0-9_]{3,24}$' then
    requested_username:='student_'||replace(left(new.id::text,8),'-','');
  end if;
@@ -76,3 +76,13 @@ with check (
   ))
  )
 );
+
+insert into storage.buckets (id,name,public,file_size_limit,allowed_mime_types)
+values ('profile-avatars','profile-avatars',true,3145728,array['image/png','image/jpeg','image/webp'])
+on conflict (id) do update set public=true,file_size_limit=3145728,allowed_mime_types=array['image/png','image/jpeg','image/webp'];
+drop policy if exists "profile avatars are publicly readable" on storage.objects;
+create policy "profile avatars are publicly readable" on storage.objects for select using (bucket_id='profile-avatars');
+drop policy if exists "users upload their own profile avatar" on storage.objects;
+create policy "users upload their own profile avatar" on storage.objects for insert to authenticated with check (bucket_id='profile-avatars' and (storage.foldername(name))[1]=auth.uid()::text);
+drop policy if exists "users update their own profile avatar" on storage.objects;
+create policy "users update their own profile avatar" on storage.objects for update to authenticated using (bucket_id='profile-avatars' and (storage.foldername(name))[1]=auth.uid()::text) with check (bucket_id='profile-avatars' and (storage.foldername(name))[1]=auth.uid()::text);
