@@ -161,6 +161,7 @@ applyMajor();selectTimer('focus',25);
 const $=s=>document.querySelector(s), authBox=$('#studentCloudAuth'), appContent=$('#appContent'), msg=$('#cloudAuthMessage');
 const cfg=window.STUDENT_GUIDE_SUPABASE||{};
 let client=null, user=null, saveTimer=null, loadingCloud=false, demoMode=false;
+window.studentGuideGetAccessToken=async function(){if(demoMode||!client||!user)return null;try{const {data,error}=await client.auth.getSession();if(error||!data.session||data.session.user.id!==user.id)return null;return data.session.access_token||null}catch(_){return null}};
 function say(s){msg.textContent=s}
 function configured(){return typeof cfg.url==='string'&&cfg.url.startsWith('https://')&&typeof cfg.anonKey==='string'&&cfg.anonKey.length>20&&!cfg.url.includes('YOUR_PROJECT')&&!cfg.anonKey.includes('YOUR_SUPABASE')}
 function lock(){authBox.classList.remove('auth-hidden');appContent.classList.add('auth-locked')}
