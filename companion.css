@@ -327,3 +327,15 @@
 .care-actions button{padding:8px 4px;border:1px solid var(--line,#344155);border-radius:9px;background:var(--surface,#1b2433);color:var(--text,#eef3fb);font-size:11px}
 #careStatus{font-size:11px;color:var(--muted,#a4b2c7);margin:10px 0 0}
 @media(max-width:430px){.care-actions{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Companion chair: anchored seat under the home-screen pet */
+#companionBuddy{height:142px;overflow:visible}
+.companion-seat{position:absolute;inset:0;display:flex;align-items:flex-start;justify-content:center}
+#companionArt{position:relative;z-index:2;width:82px;height:92px;margin-top:0;transform:translateY(-2px)}
+.companion-chair{position:absolute;z-index:1;left:50%;bottom:3px;width:66px;height:56px;transform:translateX(-50%);pointer-events:none}
+.companion-chair i{position:absolute;left:7px;right:7px;top:0;height:31px;border:4px solid #b67b42;border-bottom:0;border-radius:8px 8px 2px 2px;background:linear-gradient(90deg,#8b542c,#d59a5d 50%,#9a6035);box-shadow:inset 0 0 0 2px #6f422b}
+.companion-chair b{position:absolute;left:1px;right:1px;top:26px;height:8px;border-radius:3px;background:linear-gradient(#e4b77b,#9b6536);border:2px solid #744627}
+.companion-chair em{position:absolute;left:8px;right:8px;top:32px;height:21px;border-left:4px solid #80502f;border-right:4px solid #80502f}
+.companion-chair:after{content:"";position:absolute;left:4px;right:4px;bottom:0;height:4px;border-radius:3px;background:#6c4228}
+#companionBuddy:before{z-index:0;bottom:1px;left:22%;right:22%;height:7px}
+#companionBuddy:after{display:none}
