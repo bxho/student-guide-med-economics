@@ -44,6 +44,15 @@ public sealed class AdvancedCompanionController : MonoBehaviour
     public AnimationState CurrentState => currentState;
     public event Action<int, EvolutionStage> ProgressChanged;
 
+    [Header("Autonomous movement")]
+    [SerializeField] private bool autonomousMovement = true;
+    [SerializeField, Min(0.1f)] private float roamRadius = 2f;
+    [SerializeField, Min(0.1f)] private float walkSpeed = 0.7f;
+    [SerializeField, Min(0.1f)] private float runSpeed = 1.35f;
+    private Vector3 homePosition;
+    private Vector3 roamTarget;
+    private float autonomyTimer;
+
     [Header("Pointer dragging")]
     [SerializeField, Min(0.01f)] private float dragSmoothTime = 0.08f;
     private SpriteRenderer spriteRenderer;
@@ -64,10 +73,17 @@ public sealed class AdvancedCompanionController : MonoBehaviour
         RebuildStageAnimations();
     }
 
-    private void Start() => PlayAnimation(AnimationState.Idle);
+    private void Start()
+    {
+        homePosition = transform.position;
+        roamTarget = homePosition;
+        autonomyTimer = UnityEngine.Random.Range(1f, 2.5f);
+        PlayAnimation(AnimationState.Idle);
+    }
 
     private void Update()
     {
+        UpdateAutonomy();
         AnimateFrames();
         if (dragging && mainCamera != null)
         {
@@ -80,6 +96,72 @@ public sealed class AdvancedCompanionController : MonoBehaviour
         }
     }
 
+    private void UpdateAutonomy()
+    {
+        if (!autonomousMovement || dragging) return;
+        autonomyTimer -= Time.deltaTime;
+
+        if (currentState == AnimationState.Walk || currentState == AnimationState.Run)
+        {
+            float speed = currentState == AnimationState.Run ? runSpeed : walkSpeed;
+            transform.position = Vector3.MoveTowards(transform.position, roamTarget, speed * Time.deltaTime);
+            Vector3 scale = transform.localScale;
+            if (Mathf.Abs(roamTarget.x - transform.position.x) > 0.02f)
+                scale.x = Mathf.Abs(scale.x) * (roamTarget.x < transform.position.x ? -1f : 1f);
+            transform.localScale = scale;
+            if (Vector2.Distance(transform.position, roamTarget) < 0.05f || autonomyTimer <= 0f)
+            {
+                PlayAnimation(AnimationState.Idle);
+                autonomyTimer = UnityEngine.Random.Range(1.2f, 3f);
+            }
+            return;
+        }
+
+        if (autonomyTimer > 0f) return;
+
+        switch (currentState)
+        {
+            case AnimationState.Jump:
+                PlayAnimation(AnimationState.Idle);
+                autonomyTimer = UnityEngine.Random.Range(1f, 2.2f);
+                break;
+            case AnimationState.Tired:
+                PlayAnimation(UnityEngine.Random.value < 0.35f ? AnimationState.Sleep : AnimationState.Idle);
+                autonomyTimer = currentState == AnimationState.Sleep ? 4f : UnityEngine.Random.Range(1f, 2.5f);
+                break;
+            case AnimationState.Sleep:
+                PlayAnimation(AnimationState.Idle);
+                autonomyTimer = UnityEngine.Random.Range(1.5f, 3f);
+                break;
+            default:
+                float roll = UnityEngine.Random.value;
+                if (roll < 0.48f)
+                {
+                    roamTarget = homePosition + new Vector3(UnityEngine.Random.Range(-roamRadius, roamRadius), 0f, 0f);
+                    roamTarget.y = homePosition.y;
+                    roamTarget.z = homePosition.z;
+                    PlayAnimation(roll < 0.14f ? AnimationState.Run : AnimationState.Walk);
+                    autonomyTimer = UnityEngine.Random.Range(1.2f, 3.2f);
+                }
+                else if (roll < 0.62f)
+                {
+                    PlayAnimation(AnimationState.Jump);
+                    autonomyTimer = 0.65f;
+                }
+                else if (roll < 0.73f)
+                {
+                    PlayAnimation(AnimationState.Tired);
+                    autonomyTimer = 2f;
+                }
+                else
+                {
+                    PlayAnimation(AnimationState.Idle);
+                    autonomyTimer = UnityEngine.Random.Range(1.3f, 3.4f);
+                }
+                break;
+        }
+    }
+
     private void OnMouseDown()
     {
         if (mainCamera == null) mainCamera = Camera.main;
@@ -88,6 +170,7 @@ public sealed class AdvancedCompanionController : MonoBehaviour
         mouse.z = Mathf.Abs(mainCamera.transform.position.z - transform.position.z);
         dragOffset = transform.position - mainCamera.ScreenToWorldPoint(mouse);
         dragging = true;
+        autonomyTimer = 0f;
         PlayAnimation(AnimationState.Dragged);
     }
 
@@ -95,6 +178,8 @@ public sealed class AdvancedCompanionController : MonoBehaviour
     {
         if (!dragging) return;
         dragging = false;
+        homePosition = transform.position;
+        autonomyTimer = UnityEngine.Random.Range(1f, 2.5f);
         PlayAnimation(AnimationState.Idle);
     }
 
