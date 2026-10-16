@@ -45,7 +45,7 @@
 @keyframes companion-walk{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-4px) rotate(3deg)}}
 @keyframes companion-sleep{0%,100%{transform:rotate(-4deg) translateY(4px)}50%{transform:rotate(4deg) translateY(4px)}}
 @keyframes companion-stars{from{transform:translateY(0)}to{transform:translateY(-28px)}}
-@media(max-width:600px){#companionDock{left:8px;bottom:10px;gap:6px}#companionBuddy{width:56px;height:68px}#companionLaunch{font-size:10px;padding:6px 8px}#companionPanel{left:8px;bottom:94px;width:min(246px,calc(100vw - 16px));max-height:calc(100dvh - 108px);padding:8px}#companionPanel .companion-message{font-size:11px;padding:7px;margin:6px 0}#companionPanel .companion-chat{margin-top:9px;padding-top:8px}.companion-hero{min-width:100px;padding:8px 10px}.companion-hero svg{width:64px;height:74px}}#companionBuddy{width:74px;height:90px}#companionLaunch{font-size:11px;padding:8px 10px}#companionPanel{left:9px;bottom:158px}.companion-hero{min-width:108px;padding:9px 12px}.companion-hero svg{width:70px;height:82px}}
+@media(max-width:600px){#companionDock{left:8px;bottom:10px;gap:6px}#companionBuddy{width:56px;height:68px}#companionLaunch{font-size:10px;padding:6px 8px}#companionPanel{left:8px;bottom:94px;width:min(246px,calc(100vw - 16px));max-height:calc(100dvh - 108px);padding:8px}#companionPanel .companion-message{font-size:11px;padding:7px;margin:6px 0}#companionPanel .companion-chat{margin-top:9px;padding-top:8px}.companion-hero{min-width:100px;padding:8px 10px}.companion-hero svg{width:64px;height:74px}}
 @media(prefers-reduced-motion:reduce){#companionBuddy,#companionOverlay:before{animation:none!important;transition:none!important}}
 
 .companion-chat{border-top:1px solid #e4eaf4;margin-top:14px;padding-top:12px}
