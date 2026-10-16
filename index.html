@@ -21,7 +21,86 @@
   </style>
   <link rel="stylesheet" href="./companion.css">
 <link rel="stylesheet" href="./social.css">
-<style>.signup-fields{display:grid;gap:5px;margin:8px 0;font-size:12px;color:var(--muted)}.signup-fields[hidden],#socialAvatarPreview[hidden]{display:none!important}.signup-fields input{width:100%;border:1px solid var(--line);background:#fff;color:#172b4d;border-radius:10px;padding:10px}.social-friends-list{display:grid;gap:8px;margin:12px 0}.social-friend-card{display:flex;align-items:center;gap:10px;width:100%;border:1px solid var(--line);background:var(--surface2);border-radius:12px;padding:10px;text-align:right;color:var(--text)}.social-friend-card img,.social-friend-card .avatar-placeholder{width:46px;height:46px;flex:0 0 46px;border-radius:50%;object-fit:cover;display:grid;place-items:center;background:var(--bluebg);font-size:22px}.social-friend-card span:nth-child(2){display:flex;flex-direction:column;gap:2px;flex:1}.social-friend-card small{color:var(--muted);font-size:10px}.social-id-fallback{margin:10px 0}.social-pet-avatar.social-user-photo{width:42px;height:42px;object-fit:cover;border-radius:50%;flex:0 0 42px}</style><style>.study-streak-panel{margin:16px 0}.streak-current{font-weight:800;color:#c76a18;background:#fff0d9;border-radius:999px;padding:7px 12px}.streak-badges{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}.streak-badge{display:grid;justify-items:start;gap:5px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--surface2)}.streak-badge.earned{background:linear-gradient(145deg,#fff7df,#fff);border-color:#efca77}.streak-badge.locked{opacity:.78}.streak-badge-icon{font-size:25px}.streak-badge strong{font-size:13px}.streak-badge small{color:var(--muted)}.streak-badge b{font-size:11px;color:var(--blue)}@media(max-width:520px){.streak-badges{grid-template-columns:1fr}}.social-friend-card{transition:transform .16s ease,box-shadow .16s ease}.social-friend-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px #14243d12}</style></head>
+<style>.signup-fields{display:grid;gap:5px;margin:8px 0;font-size:12px;color:var(--muted)}.signup-fields[hidden],#socialAvatarPreview[hidden]{display:none!important}.signup-fields input{width:100%;border:1px solid var(--line);background:#fff;color:#172b4d;border-radius:10px;padding:10px}.social-friends-list{display:grid;gap:8px;margin:12px 0}.social-friend-card{display:flex;align-items:center;gap:10px;width:100%;border:1px solid var(--line);background:var(--surface2);border-radius:12px;padding:10px;text-align:right;color:var(--text)}.social-friend-card img,.social-friend-card .avatar-placeholder{width:46px;height:46px;flex:0 0 46px;border-radius:50%;object-fit:cover;display:grid;place-items:center;background:var(--bluebg);font-size:22px}.social-friend-card span:nth-child(2){display:flex;flex-direction:column;gap:2px;flex:1}.social-friend-card small{color:var(--muted);font-size:10px}.social-id-fallback{margin:10px 0}.social-pet-avatar.social-user-photo{width:42px;height:42px;object-fit:cover;border-radius:50%;flex:0 0 42px}</style><style>.study-streak-panel{margin:16px 0}.streak-current{font-weight:800;color:#c76a18;background:#fff0d9;border-radius:999px;padding:7px 12px}.streak-badges{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}.streak-badge{display:grid;justify-items:start;gap:5px;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--surface2)}.streak-badge.earned{background:linear-gradient(145deg,#fff7df,#fff);border-color:#efca77}.streak-badge.locked{opacity:.78}.streak-badge-icon{font-size:25px}.streak-badge strong{font-size:13px}.streak-badge small{color:var(--muted)}.streak-badge b{font-size:11px;color:var(--blue)}@media(max-width:520px){.streak-badges{grid-template-columns:1fr}}.social-friend-card{transition:transform .16s ease,box-shadow .16s ease}.social-friend-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px #14243d12}</style>
+  <!-- Responsive refinements: phone, tablet, and laptop -->
+  <style id="responsive-device-layouts">
+    /* Laptop and wide desktop */
+    @media (min-width: 1024px) {
+      .shell {
+        max-width: 1500px;
+        grid-template-columns: 230px minmax(0, 1fr);
+        gap: clamp(20px, 2vw, 30px);
+      }
+      .content-grid {
+        grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr);
+      }
+      .panel { padding: clamp(18px, 1.6vw, 24px); }
+    }
+
+    /* Tablet: keep navigation visible, reduce columns and whitespace */
+    @media (min-width: 681px) and (max-width: 1023px) {
+      .shell {
+        grid-template-columns: 170px minmax(0, 1fr);
+        gap: 14px;
+        padding: 18px 16px;
+      }
+      .sidebar { gap: 5px; }
+      .nav { padding: 10px 9px; gap: 8px; font-size: 12px; }
+      .side-label { padding: 11px 9px 4px; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .content-grid { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+      .panel { padding: 16px; margin-bottom: 12px; }
+      .welcome { gap: 10px; }
+      .welcome h2 { font-size: 25px; }
+      .date-pill { font-size: 11px; padding: 8px 10px; }
+      .quick-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .library-list, .flash-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .topbar { padding: 0 18px; }
+    }
+
+    /* Phones: one-column flow and touch-friendly controls */
+    @media (max-width: 680px) {
+      .shell { padding: 15px 12px calc(92px + env(safe-area-inset-bottom)); }
+      .welcome { margin-bottom: 17px; }
+      .welcome h2 { font-size: clamp(21px, 6vw, 26px); }
+      .welcome p { font-size: 12px; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .stat { min-width: 0; padding: 12px; }
+      .stat-value { font-size: 23px; }
+      .content-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
+      .panel { padding: 14px; border-radius: 15px; margin-bottom: 12px; }
+      .task { align-items: flex-start; padding: 12px 10px; }
+      .task input { width: 20px; height: 20px; flex: 0 0 20px; margin-top: 2px; }
+      .tag { white-space: normal; text-align: center; }
+      .form-row { gap: 8px; }
+      .field { min-height: 42px; }
+      .btn, .iconbtn, .chip { min-height: 42px; }
+      .mobile-nav { gap: 2px; }
+      .mobile-nav .nav { flex: 1 1 0; min-width: 0; min-height: 54px; }
+      .mobile-nav .nav.active { border-radius: 10px; }
+      .mobile-nav .nav .ico { width: auto; }
+      .week { gap: 4px; }
+      .day { overflow: hidden; }
+      .library-list, .flash-list { grid-template-columns: minmax(0, 1fr); }
+      .clock { font-size: clamp(42px, 13vw, 58px); }
+    }
+
+    /* Very narrow phones */
+    @media (max-width: 360px) {
+      .topbar { padding: 0 10px; }
+      .brand { gap: 7px; }
+      .brand-mark { width: 32px; height: 32px; }
+      .brand h1 { font-size: 12px; }
+      .top-actions { gap: 4px; }
+      .stats { gap: 6px; }
+      .stat { padding: 10px; }
+      .stat-value { font-size: 21px; }
+      .panel { padding: 11px; }
+      .mobile-nav .nav { font-size: 7px; padding: 5px 2px; }
+    }
+  </style>
+
+</head>
 <body>
 <div id="bxSplash" aria-label="دليل الطالب"><div class="bx-logo"><span>b</span><span>x</span></div><div class="bx-splash-title">دليل الطالب</div><div class="bx-splash-line"></div></div>
 <div id="studentCloudAuth" dir="rtl">
