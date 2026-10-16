@@ -34,8 +34,26 @@ function renderBuddy(){
  $('#companionArt').innerHTML=art(chosen(),stage(),data.outfit);
  $('#companionLabel').textContent=chosen()==='medicine'?'الفهد الطبي':'الثعلب الاقتصادي';
  $('#companionLevel').textContent=rank()+' · '+data.xp+' XP';
- $('#companionXp').style.width=Math.min(100,(data.xp%100))+'%';
  $('#companionStage').textContent='المستوى '+(stage()+1)+' من 4';
+}
+const cheers=['أنت قادر عليها! ابدأ بخمس دقائق فقط.','كل صفحة تفهمها تقرّبك من هدفك.','لا تحتاج للكمال؛ المهم أن تواصل.','خذ نفسًا عميقًا، ثم أنجز خطوة صغيرة.','تقدّمك ولو كان بسيطًا يستحق الفخر.','هل نراجع سؤالًا واحدًا معًا؟','استراحة قصيرة ثم نعود أقوى!','أنت تبني مستقبلك خطوة خطوة.'];
+let wanderTimer=null, cheerTimer=null, wandering=false;
+function encourage(){if(document.hidden||$('#companionDock')?.hidden||$('#companionOverlay')&&!$('#companionOverlay').hidden)return;bubble(cheers[Math.floor(Math.random()*cheers.length)])}
+function wander(){
+ const buddy=$('#companionBuddy'),dock=$('#companionDock');if(!buddy||!dock||dock.hidden||document.hidden||panelOpen||$('#companionOverlay')&&!$('#companionOverlay').hidden){scheduleWander(3500);return}
+ if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){scheduleWander(9000);return}
+ const w=buddy.offsetWidth||96,h=buddy.offsetHeight||112;
+ const maxX=Math.max(8,innerWidth-w-8),maxY=Math.max(72,innerHeight-h-12);
+ const x=8+Math.random()*Math.max(1,maxX-8), y=Math.max(72,Math.random()*(maxY-72));
+ buddy.style.position='fixed';buddy.style.bottom='auto';buddy.style.left=x+'px';buddy.style.top=y+'px';buddy.style.zIndex='801';
+ buddy.classList.add('walking');wandering=true;
+ setTimeout(()=>{buddy.classList.remove('walking');wandering=false;scheduleWander(5000+Math.random()*6500)},1800+Math.random()*900);
+}
+function scheduleWander(ms){clearTimeout(wanderTimer);wanderTimer=setTimeout(wander,ms)}
+function startAutonomy(){
+ scheduleWander(2200);
+ clearTimeout(cheerTimer);
+ const nextCheer=()=>{cheerTimer=setTimeout(()=>{encourage();nextCheer()},32000+Math.random()*22000)};nextCheer();
 }
 function openPanel(){panelOpen=true;$('#companionPanel').hidden=false;refreshPanel()}
 function closePanel(){panelOpen=false;$('#companionPanel').hidden=true}
@@ -88,9 +106,9 @@ function bind(){
  document.querySelectorAll('[data-companion-choice]').forEach(btn=>btn.addEventListener('click',()=>{selected=btn.dataset.companionChoice;document.querySelectorAll('[data-companion-choice]').forEach(b=>{const on=b===btn;b.classList.toggle('selected',on);b.setAttribute('aria-pressed',String(on))});$('#companionBegin').textContent='اختيار '+(selected==='medicine'?'الفهد':'الثعلب')+' ←'}));
  // Drag the mascot within the viewport.
  const buddy=$('#companionBuddy');let drag=null;
- buddy.addEventListener('pointerdown',e=>{if(e.button!==0&&e.pointerType==='mouse')return;const r=buddy.getBoundingClientRect();drag={x:e.clientX-r.left,y:e.clientY-r.top};buddy.setPointerCapture(e.pointerId)});
- buddy.addEventListener('pointermove',e=>{if(!drag)return;const x=Math.max(0,Math.min(innerWidth-buddy.offsetWidth,e.clientX-drag.x));const y=Math.max(60,Math.min(innerHeight-buddy.offsetHeight,e.clientY-drag.y));buddy.style.position='fixed';buddy.style.left=x+'px';buddy.style.top=y+'px';buddy.style.zIndex='801'});
- const end=()=>{drag=null};buddy.addEventListener('pointerup',end);buddy.addEventListener('pointercancel',end);
+ buddy.addEventListener('pointerdown',e=>{if(e.button!==0&&e.pointerType==='mouse')return;const r=buddy.getBoundingClientRect();drag={x:e.clientX-r.left,y:e.clientY-r.top};clearTimeout(wanderTimer);buddy.setPointerCapture(e.pointerId)});
+ buddy.addEventListener('pointermove',e=>{if(!drag)return;const x=Math.max(0,Math.min(innerWidth-buddy.offsetWidth,e.clientX-drag.x));const y=Math.max(60,Math.min(innerHeight-buddy.offsetHeight,e.clientY-drag.y));buddy.style.position='fixed';buddy.style.bottom='auto';buddy.style.left=x+'px';buddy.style.top=y+'px';buddy.style.zIndex='801'});
+ const end=()=>{drag=null;scheduleWander(2800)};buddy.addEventListener('pointerup',end);buddy.addEventListener('pointercancel',end);
  document.addEventListener('click',e=>{if(e.target.closest('#appContent button, #appContent form'))syncLater()});
  document.addEventListener('submit',e=>{if(e.target.closest('#appContent'))syncLater()});
  const app=$('#appContent');
@@ -100,7 +118,7 @@ function bind(){
  if(!app.classList.contains('auth-locked')){dock.hidden=false;if(!data.introSeen)overlay(true);else renderBuddy()}
 }
 function init(){
- inject();bind();renderBuddy();
+ inject();bind();renderBuddy();startAutonomy();
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{}); 
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
