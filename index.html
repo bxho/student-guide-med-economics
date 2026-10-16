@@ -114,7 +114,7 @@ function loadState(){try{return {...defaultState,...JSON.parse(localStorage.getI
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));$('#saveStatus').textContent='● حُفظ محلياً';if(window.studentCloudSave)window.studentCloudSave(state)}catch(e){$('#saveStatus').textContent='! مساحة التخزين ممتلئة';toast('تعذّر الحفظ: مساحة المتصفح قد تكون ممتلئة. صدّر بياناتك أو احذف ملفات كبيرة.')}}
 window.studentGuideExportState=function(){return JSON.parse(JSON.stringify(state))};
 window.studentGuideImportState=function(next){if(!next||typeof next!=='object')return;state={...defaultState,...next};try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}applyMajor();render();$('#saveStatus').textContent='● تمت المزامنة السحابية'};
-window.studentGuideExportState=function(){return JSON.parse(JSON.stringify(state))};
+
 function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>el.classList.remove('show'),2600)}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function subjectOptions(){return state.major==='medicine'?['تشريح','فسيولوجيا','كيمياء حيوية','أنسجة','أجنة','مصطلحات طبية','مراجعة عامة']:['اقتصاد جزئي','اقتصاد كلي','رياضيات للاقتصاد','إحصاء','محاسبة','اقتصاد قياسي','مراجعة عامة']}
