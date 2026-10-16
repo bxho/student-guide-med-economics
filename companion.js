@@ -189,7 +189,7 @@ function startAutonomy(){
  clearTimeout(cheerTimer);
  const nextCheer=()=>{cheerTimer=setTimeout(()=>{encourage();nextCheer()},32000+Math.random()*22000)};nextCheer();
 }
-function openPanel(){panelOpen=true;$('#companionPanel').hidden=false;refreshPanel()}
+function openPanel(){const app=document.querySelector('#appContent');if(app&&app.classList.contains('auth-locked')){panelOpen=false;const panel=$('#companionPanel');if(panel)panel.hidden=true;return false}panelOpen=true;$('#companionPanel').hidden=false;refreshPanel();return true}
 function closePanel(){panelOpen=false;$('#companionPanel').hidden=true}
 function refreshPanel(){
  const s=getStudy()||{tasks:[],sessions:0,cards:[]},done=(s.tasks||[]).filter(t=>t.done).length,total=(s.tasks||[]).length;
