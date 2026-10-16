@@ -28,16 +28,7 @@ function art(kind,stage=0,outfit=0){
  let p='';
  // Shadow and pixel feet/body: deliberate square silhouettes, no smooth gradients.
  // Distinct pixel silhouettes: Riko is a tall mech; others have role-specific builds.
- if(false&&kind==='robot'){
-   p+=R(35,137,58,5,'#101b32','opacity=".45"');
-   p+=R(43,102,13,25,'#536d8b')+R(67,102,13,25,'#536d8b')+R(39,125,21,8,'#1b304d')+R(64,125,21,8,'#1b304d');
-   p+=R(34,53,12,34,'#7e9bb8')+R(82,53,12,34,'#7e9bb8')+R(29,61,10,15,'#168fbd')+R(89,61,10,15,'#168fbd');
-   p+=R(39,67,50,39,'#c9d9e8')+R(34,73,60,24,'#168fbd')+R(44,74,40,7,'#e8f4ff');
-   p+=R(48,82,32,15,'#102c50')+R(53,86,22,5,'#44d8ff')+R(58,94,12,5,'#e8f4ff');
-   p+=R(35,103,12,10,'#263b65')+R(81,103,12,10,'#263b65');
-   p+=R(37,111,8,17,'#44d8ff')+R(83,111,8,17,'#44d8ff')+R(39,128,4,5,'#d8fbff')+R(85,128,4,5,'#d8fbff');
-   p+=R(31,112,7,8,'#ffe27a')+R(90,112,7,8,'#ffe27a');
- } else if(kind==='hijab'){
+ if(kind==='hijab'){
    p+=R(25,101,46,6,'#101b32','opacity=".25"');
    p+=R(30,80,17,22,'#263b65')+R(51,80,17,22,'#263b65')+R(25,96,25,7,'#172640')+R(49,96,25,7,'#172640');
    p+=R(23,69,52,30,coat)+R(28,73,42,24,coat)+R(33,70,32,6,c.accent);
