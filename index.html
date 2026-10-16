@@ -182,5 +182,10 @@ $('#cloudSignoutBtn').addEventListener('click',async()=>{if(demoMode){demoMode=f
 start();
 })();
 </script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(err => console.error('PWA service worker registration failed:', err)));
+  }
+  </script>
   <script src="./companion.js"></script>
 </body></html>
