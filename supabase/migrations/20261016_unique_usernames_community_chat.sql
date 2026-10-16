@@ -55,7 +55,8 @@ begin
   on conflict (id) do nothing;
   return new;
 end;
-$$;
+$;
+revoke all on function public.student_guide_create_profile() from public, anon, authenticated;
 drop trigger if exists on_auth_user_created_student_profile on auth.users;
 create trigger on_auth_user_created_student_profile after insert on auth.users
 for each row execute procedure public.student_guide_create_profile();
@@ -116,3 +117,11 @@ begin
  if not exists(select 1 from pg_publication_tables where pubname='supabase_realtime' and schemaname='public' and tablename='community_messages') then alter publication supabase_realtime add table public.community_messages; end if;
  if not exists(select 1 from pg_publication_tables where pubname='supabase_realtime' and schemaname='public' and tablename='direct_messages') then alter publication supabase_realtime add table public.direct_messages; end if;
 end $$;
+
+grant usage on schema public to authenticated;
+grant select, insert, update on public.profiles to authenticated;
+grant select, insert, delete on public.friendships to authenticated;
+grant select, insert on public.community_messages to authenticated;
+grant select, insert on public.direct_messages to authenticated;
+grant usage, select on sequence public.community_messages_id_seq to authenticated;
+grant usage, select on sequence public.direct_messages_id_seq to authenticated;
