@@ -7,17 +7,41 @@ const load=()=>{try{return {...{chosen:null,introSeen:false,xp:0,coins:0,outfit:
 let data=load(), panelOpen=false, selected='medicine', miniScore=0, syncTimer=null;
 const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(data))}catch(_){bubble('مساحة الحفظ المحلي ممتلئة؛ صدّر بيانات دليل الطالب كنسخة احتياطية.')}};
 const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const COMPANIONS={
+ medicine:{name:'الفهد الطبي',coat:'#3478b9',fur:'#d6a15e',accent:'#eaf4ff',kind:'animal',emoji:'⚕'},
+ economics:{name:'الثعلب الاقتصادي',coat:'#23866c',fur:'#ed963f',accent:'#fff0cf',kind:'animal',emoji:'📈'},
+ robot:{name:'ريكو',coat:'#168fbd',fur:'#e8f4ff',accent:'#44d8ff',kind:'robot',emoji:'⚡'},
+ lina:{name:'لينا',coat:'#8053a6',fur:'#d6a27e',accent:'#f6d7ec',kind:'hijab',emoji:'📚'},
+ kai:{name:'كاي',coat:'#0f8b83',fur:'#c9a17f',accent:'#59e0c4',kind:'headphones',emoji:'🎵'},
+ mimi:{name:'ميمي',coat:'#d88722',fur:'#eaa04c',accent:'#ffe4a4',kind:'cat',emoji:'🐾'},
+ zayd:{name:'زيد',coat:'#26724e',fur:'#b98057',accent:'#a9e6bf',kind:'glasses',emoji:'🧠'},
+ sara:{name:'سارة',coat:'#bd466d',fur:'#c98a62',accent:'#ffb0c8',kind:'cap',emoji:'♥'},
+ adam:{name:'آدم',coat:'#344da8',fur:'#c28b69',accent:'#9eb6ff',kind:'dark',emoji:'★'}
+};
+function companionName(kind){return (COMPANIONS[kind]||COMPANIONS.medicine).name}
 function art(kind,stage=0,outfit=0){
- const fox=kind==='economics', coat=fox?'#39866b':['#dcecff','#4b77ca','#f0f4ff','#263d71'][outfit%4], fur=fox?'#ed963f':'#d5a23e', ear=fox?'#e98734':'#c9922d', muzzle='#fff4df';
- const spots=fox?'':'<circle cx="35" cy="48" r="2.2" fill="#5a3b20"/><circle cx="61" cy="48" r="2.2" fill="#5a3b20"/><circle cx="30" cy="58" r="2" fill="#5a3b20"/><circle cx="66" cy="58" r="2" fill="#5a3b20"/>';
- const hat=outfit===1?'<path d="M23 32 Q48 12 73 32 L68 38 L28 38Z" fill="#fff"/><path d="M19 37 H77" stroke="#75a9e8" stroke-width="5"/>':'';
- const age=stage===0?0:stage===1?3:stage===2?6:9, scale=stage===0?.88:stage===1?.96:stage===2?1.03:1.08;
- return '<svg viewBox="0 0 96 112" role="img" aria-label="'+(fox?'الثعلب الاقتصادي':'الفهد الطبي')+'" xmlns="http://www.w3.org/2000/svg"><g transform="translate(48 57) scale('+scale+') translate(-48 -57)"><ellipse cx="48" cy="103" rx="25" ry="5" fill="#172b4b" opacity=".12"/><path d="M29 78 Q9 78 15 59 Q20 49 28 59" fill="none" stroke="'+fur+'" stroke-width="9" stroke-linecap="round"/><path d="M31 75 L25 93 L40 93 L45 78 M53 78 L57 93 L72 93 L65 75" fill="'+coat+'" stroke="#25395c" stroke-width="2"/><path d="M29 72 Q48 62 67 72 L65 89 Q48 98 31 89Z" fill="'+coat+'" stroke="#25395c" stroke-width="2"/><path d="M35 86 L61 86" stroke="#fff" stroke-width="2" opacity=".8"/><path d="M28 42 L23 18 L42 31 M54 31 L73 18 L68 43" fill="'+ear+'" stroke="#5a3b20" stroke-width="2" stroke-linejoin="round"/><path d="M29 25 L34 36 M65 25 L60 36" stroke="#f6c0b1" stroke-width="5"/><ellipse cx="48" cy="48" rx="'+(28+age*.35)+'" ry="'+(27+age*.25)+'" fill="'+fur+'" stroke="#5a3b20" stroke-width="2"/>'+spots+'<ellipse cx="48" cy="58" rx="19" ry="13" fill="'+muzzle+'"/><ellipse cx="39" cy="48" rx="4" ry="5" fill="#172033"/><ellipse cx="57" cy="48" rx="4" ry="5" fill="#172033"/><circle cx="40" cy="46" r="1.3" fill="#fff"/><circle cx="58" cy="46" r="1.3" fill="#fff"/><path d="M44 57 Q48 61 52 57" fill="none" stroke="#583d32" stroke-width="2" stroke-linecap="round"/><path d="M38 63 Q48 70 58 63" fill="none" stroke="#8c5e4c" stroke-width="2" stroke-linecap="round"/>'+hat+(fox?'<path d="M37 76 L48 83 L59 76" fill="none" stroke="#e3c65e" stroke-width="3"/>':'<path d="M48 72 L42 80 L48 87 L54 80Z" fill="#fff" stroke="#7e9bc8" stroke-width="1.5"/>')+(stage>=3?'<path d="M16 42 Q5 29 18 21 M78 42 Q91 29 78 21" fill="none" stroke="#ffe58b" stroke-width="3" stroke-linecap="round"/>':'')+'</g></svg>';
+ const c=COMPANIONS[kind]||COMPANIONS.medicine, coat=['#dcecff','#4b77ca','#f0f4ff','#263d71'][outfit%4]||c.coat;
+ const age=stage===0?0:stage===1?3:stage===2?6:9, scale=stage===0?.92:stage===1?.97:stage===2?1.03:1.08;
+ const ears=c.kind==='cat'||c.kind==='animal'?'<path d="M28 42 L23 18 L42 31 M54 31 L73 18 L68 43" fill="'+c.fur+'" stroke="#553b32" stroke-width="2" stroke-linejoin="round"/><path d="M29 25 L34 36 M65 25 L60 36" stroke="#f6c0b1" stroke-width="5"/>':'';
+ const face=c.kind==='robot'?'<rect x="23" y="28" width="50" height="43" rx="13" fill="#d9f4ff" stroke="#456b8e" stroke-width="3"/><rect x="29" y="35" width="38" height="28" rx="9" fill="#102c50"/><path d="M37 48 Q40 43 43 48 M53 48 Q56 43 59 48" stroke="'+c.accent+'" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M48 28 V19" stroke="'+c.accent+'" stroke-width="3"/><circle cx="48" cy="16" r="4" fill="'+c.accent+'"/>':
+ c.kind==='hijab'?'<path d="M20 48 Q17 14 48 15 Q79 14 76 48 L70 77 Q48 91 26 77Z" fill="'+c.coat+'" stroke="#4b345d" stroke-width="2"/><ellipse cx="48" cy="49" rx="20" ry="25" fill="'+c.fur+'"/>':
+ '<ellipse cx="48" cy="48" rx="'+(27+age*.35)+'" ry="'+(27+age*.25)+'" fill="'+c.fur+'" stroke="#5a3b20" stroke-width="2"/>';
+ const eyes=c.kind==='robot'?'':'<ellipse cx="39" cy="48" rx="4" ry="5" fill="#172033"/><ellipse cx="57" cy="48" rx="4" ry="5" fill="#172033"/><circle cx="40" cy="46" r="1.3" fill="#fff"/><circle cx="58" cy="46" r="1.3" fill="#fff"/>';
+ const hair=c.kind==='dark'?'<path d="M22 47 Q17 17 45 17 Q73 15 75 43 L68 36 L61 29 L54 38 L42 29 L32 41 L28 52Z" fill="#20283b" stroke="#141b2a" stroke-width="2"/>':
+ c.kind==='cap'?'<path d="M22 35 Q48 8 72 34 L66 42 L29 42Z" fill="#d84e65"/><path d="M18 41 Q47 37 78 43 L70 48 L25 48Z" fill="#f28ba0"/>':
+ c.kind==='glasses'?'<path d="M22 44 Q18 17 47 19 Q73 18 74 43 L65 36 L55 31 L45 39 L34 32Z" fill="#242d32"/>':'';
+ const glasses=c.kind==='glasses'?'<rect x="30" y="42" width="16" height="13" rx="4" fill="none" stroke="#182a37" stroke-width="2.5"/><rect x="50" y="42" width="16" height="13" rx="4" fill="none" stroke="#182a37" stroke-width="2.5"/><path d="M46 47 H50" stroke="#182a37" stroke-width="2"/>':'';
+ const headphones=c.kind==='headphones'?'<path d="M23 49 V42 A25 25 0 0 1 73 42 V49" fill="none" stroke="#202a3c" stroke-width="6"/><rect x="18" y="44" width="10" height="18" rx="4" fill="'+c.accent+'"/><rect x="68" y="44" width="10" height="18" rx="4" fill="'+c.accent+'"/>':'';
+ const muzzle=c.kind==='robot'||c.kind==='hijab'?'':'<ellipse cx="48" cy="58" rx="19" ry="13" fill="#fff4df"/>';
+ const mouth=c.kind==='robot'?'':'<path d="M44 58 Q48 62 52 58 M38 63 Q48 70 58 63" fill="none" stroke="#754d42" stroke-width="2" stroke-linecap="round"/>';
+ const collar=c.kind==='cat'?'<path d="M37 76 L48 83 L59 76" fill="none" stroke="#e3c65e" stroke-width="3"/>':'<path d="M48 72 L42 80 L48 87 L54 80Z" fill="'+c.accent+'" stroke="#fff" stroke-width="1.5"/>';
+ const extra=c.kind==='animal'?'<circle cx="35" cy="48" r="2" fill="#5a3b20"/><circle cx="61" cy="48" r="2" fill="#5a3b20"/>':'';
+ return '<svg viewBox="0 0 96 112" role="img" aria-label="'+c.name+'" xmlns="http://www.w3.org/2000/svg"><g transform="translate(48 57) scale('+scale+') translate(-48 -57)"><ellipse cx="48" cy="103" rx="25" ry="5" fill="#172b4b" opacity=".12"/><path d="M29 78 Q9 78 15 59 Q20 49 28 59" fill="none" stroke="'+c.fur+'" stroke-width="9" stroke-linecap="round"/><path d="M31 75 L25 93 L40 93 L45 78 M53 78 L57 93 L72 93 L65 75" fill="'+coat+'" stroke="#25395c" stroke-width="2"/><path d="M29 72 Q48 62 67 72 L65 89 Q48 98 31 89Z" fill="'+coat+'" stroke="#25395c" stroke-width="2"/><path d="M35 86 L61 86" stroke="#fff" stroke-width="2" opacity=".8"/>'+ears+face+extra+eyes+muzzle+mouth+hair+glasses+headphones+collar+(stage>=3?'<path d="M16 42 Q5 29 18 21 M78 42 Q91 29 78 21" fill="none" stroke="#ffe58b" stroke-width="3" stroke-linecap="round"/>':'')+'</g></svg>';
 }
 function stage(){return data.xp>=700?3:data.xp>=300?2:data.xp>=100?1:0}
 function rank(){return ['صغير','يافع','بالغ','أسطوري'][stage()]}
 function levelProgress(){const starts=[0,100,300,700],ends=[100,300,700,1000],i=stage();return i===3?100:Math.max(0,Math.min(100,Math.round((data.xp-starts[i])/(ends[i]-starts[i])*100)))}
-function chosen(){return data.chosen==='economics'?'economics':'medicine'}
+function chosen(){return COMPANIONS[data.chosen]?data.chosen:'medicine'}
 function getStudy(){try{return window.studentGuideExportState?window.studentGuideExportState():null}catch(_){return null}}
 function computeProgress(){
  const s=getStudy(); if(!s)return;
@@ -33,7 +57,7 @@ function greeting(){const s=getStudy(),done=s?(s.tasks||[]).filter(t=>t.done).le
 function renderBuddy(){
  const dock=$('#companionDock');if(!dock)return;
  $('#companionArt').innerHTML=art(chosen(),stage(),data.outfit);
- $('#companionLabel').textContent=chosen()==='medicine'?'الفهد الطبي':'الثعلب الاقتصادي';
+ $('#companionLabel').textContent=companionName(chosen());
  $('#companionLevel').textContent=rank()+' · '+data.xp+' XP';
  $('#companionStage').textContent='المستوى '+(stage()+1)+' من 4';
 }
@@ -61,7 +85,7 @@ function closePanel(){panelOpen=false;$('#companionPanel').hidden=true}
 function refreshPanel(){
  const s=getStudy()||{tasks:[],sessions:0,cards:[]},done=(s.tasks||[]).filter(t=>t.done).length,total=(s.tasks||[]).length;
  $('#companionPanelArt').innerHTML=art(chosen(),stage(),data.outfit);
- $('#companionPanelName').textContent=chosen()==='medicine'?'الفهد الطبي':'الثعلب الاقتصادي';
+ $('#companionPanelName').textContent=companionName(chosen());
  $('#companionRank').textContent=rank()+' · '+data.xp+' نقطة خبرة';
  $('#companionTaskStat').textContent=done+'/'+total;$('#companionCoinStat').textContent=data.coins;$('#companionSessionStat').textContent=s.sessions||0;
  $('#companionPanelXp').style.width=levelProgress()+'%';
@@ -127,7 +151,8 @@ function bind(){
  $('#companionMove').addEventListener('click',()=>{const el=$('#companionBuddy');el.classList.remove('sleeping');el.classList.add('walking');bubble('جولة قصيرة! خذ نفسًا ثم ارجع لمهمتك.');setTimeout(()=>el.classList.remove('walking'),1800)});
  $('#companionSleep').addEventListener('click',()=>{const el=$('#companionBuddy');el.classList.toggle('sleeping');bubble(el.classList.contains('sleeping')?'غفوة قصيرة... أنا جاهز لما ترجع.':'صحيت! نكمل؟')});
  $('#companionOutfit').addEventListener('click',()=>{if(data.coins<3){bubble('تحتاج 3 عملات لتغيير الزي. أنجز مهمة اليوم أو لعبة النجوم أولًا.');return}data.coins-=3;data.outfit=(data.outfit+1)%4;save();renderBuddy();refreshPanel();bubble('زي جديد! أنفقت 3 عملات من رصيدك.')});
- $('#companionSwitch').addEventListener('click',()=>{data.chosen=chosen()==='medicine'?'economics':'medicine';selected=data.chosen;save();renderBuddy();refreshPanel();bubble('أهلًا برفيقك الجديد! تذكّر: التقدم محفوظ على هذا الجهاز.')});
+ $('#companionSwitch').textContent='✨ رفيق مختلف';
+ $('#companionSwitch').addEventListener('click',()=>{const keys=Object.keys(COMPANIONS),i=keys.indexOf(chosen());data.chosen=keys[(i+1)%keys.length];selected=data.chosen;save();renderBuddy();refreshPanel();$('#companionSwitch').textContent='✨ التالي: '+companionName(keys[(keys.indexOf(data.chosen)+1)%keys.length]);bubble('تم اختيار '+companionName(data.chosen)+'! لكل رفيق شكل ولون وشخصية مختلفة.')});
  $('#companionRoom').addEventListener('click',()=>{if(data.coins<3){bubble('تحتاج 3 عملات لإضافة ديكور. أكمل مهمة اليوم أو لعبة النجوم.');return}data.coins-=3;data.roomItems++;save();refreshPanel();$('#companionRoomNote').textContent='غرفتك فيها الآن '+data.roomItems+' قطع ديكور.';showExtra('<strong>🏠 غرفتك تتطور</strong><span>🪴 🛋️ 🖼️ ✨</span><span>أضفت قطعة ديكور رقم '+data.roomItems+'. رصيدك '+data.coins+' عملة.</span>')});
  $('#companionMiniGame').addEventListener('click',()=>{miniScore=0;showExtra('<strong>اجمع 5 نجوم!</strong> <span id="miniScore">0/5</span><button type="button" id="miniStar">⭐ اجمع نجمة</button>');$('#miniStar').addEventListener('click',()=>{if(miniScore>=5)return;miniScore++;$('#miniScore').textContent=miniScore+'/5';if(miniScore>=5){data.coins+=5;data.xp+=10;save();renderBuddy();refreshPanel();showExtra('<strong>أحسنت! +5 عملات و+10 XP 🎉</strong>')}})});
  $('#companionAchievements').addEventListener('click',()=>showExtra('<strong>إنجازاتك</strong><span>📘 '+((getStudy()?.tasks||[]).filter(t=>t.done).length)+' مهمة دراسية</span><span>🌟 '+data.xp+' XP · 🪙 '+data.coins+' عملة</span><span>🏅 '+(Array.isArray(data.badges)?data.badges.length:0)+' شارات</span><span>'+ (data.secret?'✨ التحول السري مفتوح':'🔒 التحول السري عند 700 XP')+'</span>'));
@@ -144,7 +169,7 @@ function bind(){
  document.addEventListener('click',e=>{if(e.target.closest('#appContent button, #appContent form'))syncLater()});
  document.addEventListener('submit',e=>{if(e.target.closest('#appContent'))syncLater()});
  const app=$('#appContent');
- const mo=new MutationObserver(()=>{const visible=!app.classList.contains('auth-locked');$('#companionDock').hidden=!visible;if(visible){computeProgress();if(!data.introSeen){selected=data.chosen||'medicine';data.introSeen=true;save();renderBuddy();bubble('أهلًا! أنا رفيقك الدراسي. اضغط «رفيقي» لفتح أدواتي.')}else{renderBuddy();if(!sessionStorage.getItem('companionWelcomeSeen')){sessionStorage.setItem('companionWelcomeSeen','1');overlay(false);$('#companionWelcomeArt').innerHTML=art(chosen(),stage(),data.outfit);$('#companionReturn').hidden=false;$('#companionBegin').hidden=true}}}});
+ const mo=new MutationObserver(()=>{const visible=!app.classList.contains('auth-locked');$('#companionDock').hidden=!visible;if(visible){computeProgress();renderBuddy();if(!data.introSeen){selected=data.chosen||'medicine';data.introSeen=true;save();bubble('أهلًا! أنا رفيقك الدراسي. اضغط «رفيقي» لفتح أدواتي.')}else if(!sessionStorage.getItem('companionWelcomeSeen')){sessionStorage.setItem('companionWelcomeSeen','1');bubble('أهلًا بعودتك! اضغط «رفيقي» لفتح أدواتك دون تعطيل الصفحة.')}}});
  mo.observe(app,{attributes:true,attributeFilter:['class']});
  // App might already be unlocked on a warm reload.
  if(!app.classList.contains('auth-locked')){dock.hidden=false;if(!data.introSeen){data.introSeen=true;save();renderBuddy();bubble('أهلًا! أنا رفيقك الدراسي. اضغط «رفيقي» لفتح أدواتي.')}else renderBuddy()}
