@@ -7,7 +7,6 @@
 #companionBuddy:active{cursor:grabbing}
 #companionBuddy svg{width:100%;height:100%;overflow:visible}
 #companionBuddy.walking{animation:companion-walk .32s ease-in-out infinite alternate}
-#companionBuddy.sleeping{animation:companion-sleep 3s ease-in-out infinite}
 #companionBubble{position:absolute;bottom:100%;left:0;max-width:220px;background:#fff;border:1px solid #dce5f5;color:#26344e;padding:9px 12px;border-radius:14px 14px 4px 14px;box-shadow:0 8px 24px #17203318;font-size:12px;line-height:1.6;margin-bottom:5px;display:none}
 #companionBubble.show{display:block}
 #companionOverlay{position:fixed;inset:0;z-index:1200;background:radial-gradient(ellipse at 50% 42%,#233c74 0,#10192e 62%,#080e1b 100%);color:#fff;display:grid;place-items:center;padding:20px;font-family:Tahoma,Arial,sans-serif;overflow:auto}
@@ -43,7 +42,6 @@
 .companion-mini button{border:1px solid #dbe5f5;background:#f7f9fd;border-radius:10px;padding:8px;cursor:pointer}
 @keyframes companion-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 @keyframes companion-walk{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-4px) rotate(3deg)}}
-@keyframes companion-sleep{0%,100%{transform:rotate(-4deg) translateY(4px)}50%{transform:rotate(4deg) translateY(4px)}}
 @keyframes companion-stars{from{transform:translateY(0)}to{transform:translateY(-28px)}}
 @media(max-width:600px){#companionDock{left:8px;bottom:10px;gap:6px}#companionBuddy{width:56px;height:68px}#companionLaunch{font-size:10px;padding:6px 8px}#companionPanel{left:8px;bottom:94px;width:min(246px,calc(100vw - 16px));max-height:calc(100dvh - 108px);padding:8px}#companionPanel .companion-message{font-size:11px;padding:7px;margin:6px 0}#companionPanel .companion-chat{margin-top:9px;padding-top:8px}.companion-hero{min-width:100px;padding:8px 10px}.companion-hero svg{width:64px;height:74px}}
 @media(prefers-reduced-motion:reduce){#companionBuddy,#companionOverlay:before{animation:none!important;transition:none!important}}
@@ -179,7 +177,6 @@
 #companionBuddy:after{content:"";position:absolute;z-index:-1;inset:12% 9% 22%;border-radius:50%;background:radial-gradient(ellipse,#80d9ff1b,transparent 68%);pointer-events:none}
 #companionArt svg{filter:drop-shadow(0 7px 0 #15284a2b) drop-shadow(0 10px 8px #06142c3c)}
 #companionBuddy.walking #companionArt svg{animation:creature-3d-walk .32s ease-in-out infinite alternate}
-#companionBuddy.sleeping #companionArt svg{animation:creature-3d-sleep 3s ease-in-out infinite}
 #companionPanelArt svg{width:100%;height:100%}
 .companion-hero svg{filter:drop-shadow(0 8px 5px #07132c65)}
 .habitat-interior .room-pet-3d{width:64px;height:78px;filter:drop-shadow(0 9px 5px #211b4a88)}
@@ -187,7 +184,6 @@
 @keyframes creature-3d-float{0%,100%{transform:translateY(0) rotateY(-4deg) rotateZ(-1deg)}50%{transform:translateY(-5px) rotateY(5deg) rotateZ(1deg)}}
 @keyframes creature-shadow{0%,100%{transform:scaleX(1);opacity:.8}50%{transform:scaleX(.75);opacity:.45}}
 @keyframes creature-3d-walk{from{transform:translateY(1px) rotateZ(-4deg) rotateY(-6deg)}to{transform:translateY(-2px) rotateZ(4deg) rotateY(6deg)}}
-@keyframes creature-3d-sleep{0%,100%{transform:rotateZ(-4deg) translateY(3px) rotateY(-2deg)}50%{transform:rotateZ(4deg) translateY(4px) rotateY(2deg)}}
 @media(max-width:600px){#companionBuddy{width:72px;height:84px}.habitat-interior .room-pet-3d{width:48px;height:60px}}
 @media(prefers-reduced-motion:reduce){#companionArt svg,.companion-hero svg,#companionPanelArt svg,.habitat-interior .room-pet-3d svg,#companionBuddy:before{animation:none!important}}
 
