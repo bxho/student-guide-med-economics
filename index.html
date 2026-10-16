@@ -60,6 +60,7 @@ body{background:var(--bg);font-size:14px}
   <style>
   #studentCloudAuth{max-width:480px;margin:24px auto;padding:24px;background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}#studentCloudAuth h2{margin:0 0 8px}#studentCloudAuth p{color:var(--muted);font-size:13px}#studentCloudAuth form{display:grid;gap:10px;margin-top:16px}#studentCloudAuth input{width:100%;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:10px;padding:12px}#studentCloudAuth .auth-actions{display:flex;gap:8px;flex-wrap:wrap}#studentCloudAuth .auth-message{min-height:20px;color:var(--blue)}#studentCloudAuth .auth-hidden{display:none!important}#appContent.auth-locked{display:none}
   </style>
+  <link rel="stylesheet" href="./companion.css">
 </head>
 <body>
 <div id="studentCloudAuth" dir="rtl">
@@ -148,4 +149,5 @@ $('#cloudSignoutBtn').addEventListener('click',async()=>{if(!client)return;const
 start();
 })();
 </script>
+  <script src="./companion.js"></script>
 </body></html>
