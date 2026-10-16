@@ -4,7 +4,7 @@
 const STORE='studentGuideCompanion_v2';
 const $=(s,root=document)=>root.querySelector(s);
 const load=()=>{try{const prev=JSON.parse(localStorage.getItem('studentGuideCompanion_v1')||'{}'),now=JSON.parse(localStorage.getItem(STORE)||'{}');const merged={...{chosen:null,introSeen:false,xp:0,coins:0,outfit:0,mood:'happy',roomItems:0,secret:false,missionDay:'',missionDone:false,badges:[],streak:0,lastCheckin:''},...prev,...now};delete merged.hunger;delete merged.cleanliness;delete merged.happiness;delete merged.energy;delete merged.careDay;delete merged.careActions;delete merged.lastCareAt;delete merged.car;return merged}catch(_){return {chosen:null,introSeen:false,xp:0,coins:0,outfit:0,mood:'happy',roomItems:0,secret:false,missionDay:'',missionDone:false,badges:[],streak:0,lastCheckin:''}}};
-let data=load(), panelOpen=false, selected='medicine', miniScore=0, syncTimer=null;
+let data=load(), panelOpen=false, selected='medicine';
 const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(data))}catch(_){bubble('مساحة الحفظ المحلي ممتلئة؛ صدّر بيانات دليل الطالب كنسخة احتياطية.')}};
 const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const COMPANIONS={
@@ -287,7 +287,7 @@ function bind(){
 window.addEventListener('student-guide-companion-customized',()=>{try{Object.assign(data,JSON.parse(localStorage.getItem('studentGuideCompanion_v2')||'{}'));renderBuddy();refreshPanel();if(!$('#companionHabitat')?.hidden)renderHabitat()}catch(_){}});
 function init(){
  inject();bind();renderBuddy();startAutonomy();
- const moods=['happy','curious','excited','sleepy'];let moodIndex=0;setInterval(()=>{if(document.hidden)return;moodIndex=(moodIndex+1)%moods.length;data.mood=moods[moodIndex];renderBuddy();if(!$('#companionHabitat')?.hidden)$('#habitatPet').innerHTML=art(chosen(),stage(),data.outfit);if(!$('#companionOverlay')?.hidden)$('#companionChoose').querySelectorAll('[data-companion-choice]').forEach(b=>{const k=b.dataset.companionChoice;b.querySelector('span').innerHTML=art(k,0,0)});},3200);
+ const moods=['happy','curious','excited'];let moodIndex=0;setInterval(()=>{if(document.hidden)return;moodIndex=(moodIndex+1)%moods.length;data.mood=moods[moodIndex];renderBuddy();if(!$('#companionHabitat')?.hidden)$('#habitatPet').innerHTML=art(chosen(),stage(),data.outfit);if(!$('#companionOverlay')?.hidden)$('#companionChoose').querySelectorAll('[data-companion-choice]').forEach(b=>{const k=b.dataset.companionChoice;b.querySelector('span').innerHTML=art(k,0,0)});},3200);
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{}); 
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
