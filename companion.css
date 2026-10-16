@@ -12,7 +12,7 @@
 #companionBubble.show{display:block}
 #companionOverlay{position:fixed;inset:0;z-index:1200;background:radial-gradient(ellipse at 50% 42%,#233c74 0,#10192e 62%,#080e1b 100%);color:#fff;display:grid;place-items:center;padding:20px;font-family:Tahoma,Arial,sans-serif;overflow:auto}
 #companionOverlay:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 15% 25%,#75c8ff44 0 2px,transparent 3px),radial-gradient(circle at 78% 22%,#f6d77b66 0 2px,transparent 3px),radial-gradient(circle at 68% 76%,#9eafff55 0 2px,transparent 3px);background-size:160px 150px,210px 190px,170px 180px;animation:companion-stars 9s linear infinite}
-.companion-card{position:relative;width:min(520px,100%);max-height:calc(100dvh - 28px);overflow-y:auto;border:1px solid #ffffff30;background:#111c34eF;border-radius:22px;padding:clamp(14px,3vw,24px);box-shadow:0 24px 90px #0007;text-align:center;overflow:hidden}
+.companion-card{position:relative;width:min(680px,100%);border:1px solid #ffffff30;background:#111c34eF;border-radius:28px;padding:clamp(20px,5vw,42px);box-shadow:0 24px 90px #0007;text-align:center;overflow:hidden}
 .companion-kicker{font-size:12px;letter-spacing:.12em;color:#a8caff;margin:0 0 8px}
 .companion-card h2{font-size:clamp(24px,4vw,38px);margin:0 0 10px}
 .companion-card p{color:#d3ddf3;line-height:1.8;margin:8px auto 18px;max-width:520px}
@@ -26,18 +26,18 @@
 .companion-secondary{background:transparent;color:#fff;border:1px solid #ffffff45}
 .companion-skip{position:absolute;top:14px;left:14px;background:transparent;border:0;color:#d4def1;text-decoration:underline;cursor:pointer}
 .companion-stage{font-size:12px;color:#b8c9e8;margin-top:12px}
-#companionPanel{position:fixed;z-index:1100;left:12px;bottom:112px;width:min(300px,calc(100vw - 24px));max-height:calc(100dvh - 132px);overflow-y:auto;background:#fff;color:#1a2944;border:1px solid #dce5f5;border-radius:16px;padding:12px;box-shadow:0 12px 34px #10254a30;direction:rtl;font-family:Tahoma,Arial,sans-serif}
+#companionPanel{position:fixed;z-index:1100;left:12px;bottom:104px;width:min(264px,calc(100vw - 24px));max-height:calc(100dvh - 140px);overflow-y:auto;background:#fff;color:#1a2944;border:1px solid #dce5f5;border-radius:14px;padding:9px;box-shadow:0 12px 34px #10254a30;direction:rtl;font-family:Tahoma,Arial,sans-serif}
 #companionPanel[hidden]{display:none!important}
 .companion-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.companion-panel-head h3{margin:0;font-size:17px}
+.companion-panel-head h3{margin:0;font-size:15px}
 .companion-x{border:0;background:#f1f5fb;border-radius:9px;padding:5px 9px;cursor:pointer}
 .companion-meter{height:9px;border-radius:99px;background:#e8eef8;overflow:hidden;margin:9px 0}
 .companion-meter span{display:block;height:100%;width:0;background:linear-gradient(90deg,#4e78db,#55c4a1);transition:width .3s}
-.companion-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0}
-.companion-stat{background:#f5f8fd;border-radius:12px;padding:8px;text-align:center;font-size:11px;color:#687793}
-.companion-stat strong{display:block;font-size:17px;color:#20385f}
-.companion-panel-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
-.companion-panel-actions button{border:1px solid #dbe5f5;background:#f7f9fd;color:#21385d;border-radius:10px;padding:8px 10px;cursor:pointer}
+.companion-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:8px 0}
+.companion-stat{background:#f5f8fd;border-radius:10px;padding:6px 4px;text-align:center;font-size:10px;color:#687793}
+.companion-stat strong{display:block;font-size:15px;color:#20385f}
+.companion-panel-actions{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.companion-panel-actions button{border:1px solid #dbe5f5;background:#f7f9fd;color:#21385d;border-radius:8px;padding:6px 7px;font-size:11px;cursor:pointer}
 .companion-message{font-size:13px;line-height:1.7;color:#52617a;background:#f7f9fd;border-radius:12px;padding:10px;margin:8px 0}
 .companion-mini{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .companion-mini button{border:1px solid #dbe5f5;background:#f7f9fd;border-radius:10px;padding:8px;cursor:pointer}
@@ -45,12 +45,12 @@
 @keyframes companion-walk{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-4px) rotate(3deg)}}
 @keyframes companion-sleep{0%,100%{transform:rotate(-4deg) translateY(4px)}50%{transform:rotate(4deg) translateY(4px)}}
 @keyframes companion-stars{from{transform:translateY(0)}to{transform:translateY(-28px)}}
-@media(max-width:600px){#companionDock{left:8px;bottom:14px}#companionPanel{left:8px;bottom:106px;width:min(290px,calc(100vw - 16px));max-height:calc(100dvh - 122px);padding:10px}#companionBuddy{width:64px;height:78px}#companionLaunch{font-size:11px;padding:8px 10px}#companionPanel{left:9px;bottom:158px}.companion-hero{min-width:108px;padding:9px 12px}.companion-hero svg{width:70px;height:82px}}
+@media(max-width:600px){#companionDock{left:8px;bottom:10px;gap:6px}#companionBuddy{width:56px;height:68px}#companionLaunch{font-size:10px;padding:6px 8px}#companionPanel{left:8px;bottom:94px;width:min(246px,calc(100vw - 16px));max-height:calc(100dvh - 108px);padding:8px}#companionPanel .companion-message{font-size:11px;padding:7px;margin:6px 0}#companionPanel .companion-chat{margin-top:9px;padding-top:8px}.companion-hero{min-width:100px;padding:8px 10px}.companion-hero svg{width:64px;height:74px}}
 @media(prefers-reduced-motion:reduce){#companionBuddy,#companionOverlay:before{animation:none!important;transition:none!important}}
 
 .companion-chat{border-top:1px solid #e4eaf4;margin-top:14px;padding-top:12px}
 .companion-chat h4{font-size:13px;margin:0 0 8px;color:#21385d}
-.companion-chat-log{display:flex;flex-direction:column;gap:7px;max-height:190px;overflow:auto;padding:2px 1px}
+.companion-chat-log{display:flex;flex-direction:column;gap:6px;max-height:120px;overflow:auto;padding:2px 1px}
 .companion-chat-msg{max-width:95%;padding:8px 10px;border-radius:12px;font-size:12px;line-height:1.7;margin:0;overflow-wrap:anywhere}
 .companion-chat-msg.buddy-msg{align-self:flex-start;background:#eef4ff;color:#24395e;border-bottom-right-radius:4px}
 .companion-chat-msg.you-msg{align-self:flex-end;background:#e5f7f0;color:#175b4b;border-bottom-left-radius:4px}
