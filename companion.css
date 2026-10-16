@@ -315,3 +315,17 @@
 .dream-portal-label{border-radius:0!important;border:3px solid #30345f!important;background:#20285d!important;box-shadow:3px 3px 0 #11182e!important;text-shadow:none!important;padding:4px 7px!important}
 @keyframes pixel-portal{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
 @media(prefers-reduced-motion:reduce){.dream-portal-ring{animation:none!important}}
+
+
+/* Home companion chair: decorative seat stays behind the companion. */
+#companionDock{position:fixed;isolation:isolate}
+#companionChair{position:absolute;left:27px;bottom:0;width:78px;height:65px;pointer-events:none;z-index:0}
+#companionChair .companion-chair-back{position:absolute;left:13px;top:0;width:53px;height:35px;border:4px solid #74452f;border-bottom:0;border-radius:12px 12px 3px 3px;background:linear-gradient(135deg,#b97a4d,#8b5438);box-shadow:inset 0 0 0 3px #d59a64,0 3px 4px #15203325}
+#companionChair .companion-chair-seat{position:absolute;left:7px;top:30px;width:65px;height:13px;border:3px solid #74452f;border-radius:6px;background:linear-gradient(#d79a61,#a96640);box-shadow:0 3px 0 #68402f}
+#companionChair .companion-chair-leg{position:absolute;top:42px;width:6px;height:20px;border-radius:2px;background:linear-gradient(90deg,#74452f,#bd8050,#74452f)}
+#companionChair .chair-leg-a{left:17px;transform:rotate(3deg)}
+#companionChair .chair-leg-b{right:15px;transform:rotate(-3deg)}
+#companionBuddy{z-index:1;transform-origin:50% 100%;margin-bottom:1px}
+#companionBuddy:not(.walking):not(.sleeping){animation:companion-chair-idle 2.8s ease-in-out infinite}
+@keyframes companion-chair-idle{0%,100%{translate:0 0}50%{translate:0 2px}}
+@media(max-width:480px){#companionChair{left:17px;transform:scale(.9);transform-origin:bottom left}}
