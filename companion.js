@@ -226,8 +226,12 @@ function bind(){
  const end=()=>{drag=null;scheduleWander(2800)};buddy.addEventListener('pointerup',end);buddy.addEventListener('pointercancel',end);
 }
 function init(){
- inject();bind();renderBuddy();startAutonomy();
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{}); 
+ inject();
+ const app=document.querySelector('#appContent');
+ const syncDockVisibility=()=>{const dock=$('#companionDock');if(!dock)return;dock.hidden=app?app.classList.contains('auth-locked'):false;};
+ syncDockVisibility();
+ if(app){new MutationObserver(syncDockVisibility).observe(app,{attributes:true,attributeFilter:['class']});}
+ bind();renderBuddy();startAutonomy();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
