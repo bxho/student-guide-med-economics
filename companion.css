@@ -140,3 +140,45 @@
 
 /* Keep the companion menu above the habitat when opened by a long press. */
 #companionPanel{z-index:1400}
+
+/* Fixed chair and platform: only the companion artwork animates. */
+#companionDock{align-items:end;gap:10px;padding-bottom:0}
+.companion-stage-platform{position:relative;order:0;width:116px;height:112px;flex:0 0 116px;align-self:end;overflow:visible}
+.companion-chair{position:absolute;left:34px;bottom:20px;width:48px;height:22px;border-radius:7px 7px 4px 4px;background:linear-gradient(145deg,#e4c18d,#95673f);border:2px solid #6e4d36;box-shadow:inset 0 2px #f8e1b9;z-index:1}
+.companion-chair:before{content:"";position:absolute;left:-2px;right:-2px;top:-31px;height:31px;border-radius:10px 10px 3px 3px;background:linear-gradient(145deg,#e4c18d,#9b6b42);border:2px solid #6e4d36}
+.companion-chair:after{content:"";position:absolute;left:6px;right:6px;bottom:-14px;height:14px;border-left:4px solid #6e4d36;border-right:4px solid #6e4d36}
+.companion-platform-base{position:absolute;left:0;right:0;bottom:0;height:12px;border-radius:50%;background:linear-gradient(#e9eef8,#8fa1bb);border:2px solid #7185a3;box-shadow:0 5px 0 #526681,0 8px 14px #1b2b4825;z-index:0}
+#companionBuddy{position:absolute;left:11px;bottom:26px;width:94px;height:90px;z-index:2;cursor:pointer;touch-action:manipulation;transition:none}
+#companionBuddy:active{cursor:pointer}
+#companionBuddy.walking{animation:companion-walk .32s ease-in-out infinite alternate}
+#companionDock #companionLaunch{position:relative;z-index:3;align-self:center;order:1}
+#companionSocial{position:fixed;inset:0;z-index:1500;display:flex;flex-direction:column;background:#f5f8fd;color:#172b4d;font-family:Tahoma,Arial,sans-serif}
+#companionSocial[hidden]{display:none!important}
+.social-head{display:flex;align-items:center;gap:12px;padding:14px 18px;background:#fff;border-bottom:1px solid #e1e8f2}
+.social-head button,.social-tabs button,.social-compose button,.social-add button,.social-profile-form>button{border:1px solid #d9e3f1;border-radius:10px;padding:9px 12px;background:#edf3fc;color:#174a91;font:inherit;cursor:pointer}
+.social-head strong{flex:1}.social-head span{font-size:12px;color:#63738d}
+.social-tabs{display:flex;gap:8px;padding:10px 14px;background:#fff;border-bottom:1px solid #e1e8f2}
+.social-tabs button.active{background:#174a91;color:#fff}
+.social-body{width:min(860px,100%);margin:0 auto;padding:16px;overflow:auto;flex:1;min-height:0}
+.social-body h3{font-size:16px;margin:0 0 8px}.social-log{display:flex;flex-direction:column;gap:10px;min-height:150px;max-height:calc(100dvh - 285px);overflow:auto;padding:10px;border:1px solid #e1e8f2;border-radius:14px;background:#fff}
+.social-message{max-width:88%;padding:10px 12px;border-radius:13px;background:#f0f4fb;align-self:flex-start;overflow-wrap:anywhere}
+.social-message.own{align-self:flex-end;background:#e5f6ef}
+.social-message-head{display:flex;align-items:center;gap:7px;font-size:11px}.social-message-head time{margin-right:auto;color:#74839a;font-size:9px}
+.social-message p{font-size:13px;line-height:1.7;margin:7px 0 0;white-space:pre-wrap}
+.social-avatar{width:38px;height:38px;object-fit:cover;border-radius:50%;display:inline-grid;place-items:center;flex:0 0 38px;background:#e5edf9;color:#174a91}
+.social-avatar-fallback{font-size:19px}
+.social-compose,.social-add{display:flex;gap:8px;margin-top:10px}
+.social-compose input,.social-add input,.social-profile-form input{min-width:0;flex:1;border:1px solid #d9e3f1;border-radius:10px;padding:11px;background:#fff;color:#172b4d;font:inherit}
+.social-friend-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.social-friend{display:flex;align-items:center;gap:10px;text-align:right;border:1px solid #e1e8f2;background:#fff;border-radius:13px;padding:10px;color:#172b4d;cursor:pointer;width:100%}
+.social-friend-name{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}.social-friend small{font-size:10px;color:#7b899f;overflow-wrap:anywhere}.social-friend-open{font-size:10px;color:#174a91;white-space:nowrap}
+#directChatBox{margin-top:16px;padding-top:15px;border-top:1px solid #e1e8f2}
+.social-chat-title{display:flex;align-items:center;gap:8px;margin-bottom:9px}.social-chat-title>span{display:flex;flex-direction:column;gap:2px}.social-chat-title small{font-weight:normal;color:#74839a}
+.social-profile-form{display:grid;gap:13px;background:#fff;border:1px solid #e1e8f2;border-radius:14px;padding:16px}
+.social-profile-form label{display:grid;gap:7px;font-size:12px;font-weight:bold}
+.social-profile-form input[type=file]{width:100%}
+#socialAvatarPreview{width:100px;height:100px;object-fit:cover;border-radius:50%;border:3px solid #e1e8f2}
+#socialAvatarPreview[hidden]{display:none!important}
+#socialStatus{font-size:12px;line-height:1.7;color:#174a91;overflow-wrap:anywhere}
+.social-hint{font-size:11px;line-height:1.8;color:#6d7d95}
+@media(max-width:600px){#companionDock{left:8px;bottom:10px;gap:3px}.companion-stage-platform{transform:scale(.82);transform-origin:bottom left;margin-right:-19px}#companionBuddy{left:10px;bottom:25px;width:76px;height:78px}#companionDock #companionLaunch{font-size:10px;padding:6px 8px}.social-head{padding:10px;gap:8px}.social-head span{display:none}.social-body{padding:10px}.social-tabs{gap:5px;padding:8px}.social-tabs button{padding:8px;font-size:12px}.social-log{max-height:calc(100dvh - 300px)}.social-friend-open{display:none}}
