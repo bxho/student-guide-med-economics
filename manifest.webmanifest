@@ -1,5 +1,5 @@
 {
-  "name": "دليل الطالب | طب واقتصاد",
+  "name": "دليل الطالب",
   "short_name": "دليل الطالب",
   "description": "مكتبتك ومحاضراتك ومهامك في مكان واحد",
   "lang": "ar",
@@ -8,8 +8,8 @@
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#233f9a",
-  "theme_color": "#233f9a",
+  "background_color": "#030508",
+  "theme_color": "#030508",
   "icons": [
     {
       "src": "./student-guide-icon.svg",
