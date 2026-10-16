@@ -309,3 +309,9 @@
 .habitat-bottom{z-index:4!important;background:#fffdf7!important;border-top:1px solid #d8e5d3!important}
 .habitat-bottom button{border-radius:12px!important;background:#f0f7eb!important;color:#315d3d!important;border:1px solid #d5e7cd!important}
 @media(prefers-reduced-motion:reduce){.habitat-home,.habitat-house-window{animation:none!important}}
+
+
+/* Keep the companion panel close control unmistakable and easy to tap. */
+#companionPanel .companion-panel-head{position:sticky;top:-9px;z-index:3;background:#fff;padding:4px 0 8px}
+#companionPanel button.companion-x{display:inline-flex!important;align-items:center;justify-content:center;flex:0 0 38px;width:38px;min-width:38px;height:38px;padding:0!important;border:2px solid #4775bf!important;border-radius:10px;background:#dbeafe!important;color:#12336b!important;font-size:21px;font-weight:900;line-height:1;opacity:1;visibility:visible;position:relative;z-index:5;box-shadow:0 2px 8px #17203325}
+#companionPanel button.companion-x:focus-visible{outline:3px solid #17866c;outline-offset:2px}
