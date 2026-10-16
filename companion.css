@@ -29,15 +29,15 @@
 #companionPanel{position:fixed;z-index:1100;left:18px;bottom:142px;width:min(340px,calc(100vw - 32px));background:#fff;color:#1a2944;border:1px solid #dce5f5;border-radius:20px;padding:16px;box-shadow:0 16px 50px #10254a30;direction:rtl;font-family:Tahoma,Arial,sans-serif}
 #companionPanel[hidden]{display:none!important}
 .companion-panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.companion-panel-head h3{margin:0;font-size:17px}
+.companion-panel-head h3{margin:0;font-size:15px}
 .companion-x{border:0;background:#f1f5fb;border-radius:9px;padding:5px 9px;cursor:pointer}
 .companion-meter{height:9px;border-radius:99px;background:#e8eef8;overflow:hidden;margin:9px 0}
 .companion-meter span{display:block;height:100%;width:0;background:linear-gradient(90deg,#4e78db,#55c4a1);transition:width .3s}
-.companion-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0}
-.companion-stat{background:#f5f8fd;border-radius:12px;padding:8px;text-align:center;font-size:11px;color:#687793}
-.companion-stat strong{display:block;font-size:17px;color:#20385f}
-.companion-panel-actions{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
-.companion-panel-actions button{border:1px solid #dbe5f5;background:#f7f9fd;color:#21385d;border-radius:10px;padding:8px 10px;cursor:pointer}
+.companion-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:8px 0}
+.companion-stat{background:#f5f8fd;border-radius:10px;padding:6px 4px;text-align:center;font-size:10px;color:#687793}
+.companion-stat strong{display:block;font-size:15px;color:#20385f}
+.companion-panel-actions{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.companion-panel-actions button{border:1px solid #dbe5f5;background:#f7f9fd;color:#21385d;border-radius:8px;padding:6px 7px;font-size:11px;cursor:pointer}
 .companion-message{font-size:13px;line-height:1.7;color:#52617a;background:#f7f9fd;border-radius:12px;padding:10px;margin:8px 0}
 .companion-mini{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .companion-mini button{border:1px solid #dbe5f5;background:#f7f9fd;border-radius:10px;padding:8px;cursor:pointer}
@@ -50,7 +50,7 @@
 
 .companion-chat{border-top:1px solid #e4eaf4;margin-top:14px;padding-top:12px}
 .companion-chat h4{font-size:13px;margin:0 0 8px;color:#21385d}
-.companion-chat-log{display:flex;flex-direction:column;gap:7px;max-height:190px;overflow:auto;padding:2px 1px}
+.companion-chat-log{display:flex;flex-direction:column;gap:6px;max-height:120px;overflow:auto;padding:2px 1px}
 .companion-chat-msg{max-width:95%;padding:8px 10px;border-radius:12px;font-size:12px;line-height:1.7;margin:0;overflow-wrap:anywhere}
 .companion-chat-msg.buddy-msg{align-self:flex-start;background:#eef4ff;color:#24395e;border-bottom-right-radius:4px}
 .companion-chat-msg.you-msg{align-self:flex-end;background:#e5f7f0;color:#175b4b;border-bottom-left-radius:4px}
