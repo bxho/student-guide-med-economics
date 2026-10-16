@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#174ea6">
+<title>دليل الطالب | طب واقتصاد</title>
+<style>
+:root{--blue:#174ea6;--blue2:#2563eb;--ink:#172b4d;--muted:#64748b;--line:#e5eaf2;--bg:#f5f8fd;--card:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif;line-height:1.7}
+header{background:var(--blue);color:white;padding:26px max(20px,calc((100% - 1050px)/2)) 24px}
+.brand{font-size:13px;opacity:.85}h1{font-size:clamp(25px,4vw,36px);margin:5px 0}.sub{opacity:.88;margin:0}
+main{max-width:1050px;margin:auto;padding:22px 18px 48px}
+.switch{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}.switch button,.nav button{border:1px solid var(--line);background:white;color:var(--ink);padding:10px 16px;border-radius:12px;font:inherit;cursor:pointer}
+.switch button.active{background:var(--blue);color:white;border-color:var(--blue)}
+.nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}.nav button{font-size:14px}.nav button.active{border-color:#9dbcf4;background:#eaf1ff;color:var(--blue)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 4px 16px #17365d08}.card h2{font-size:17px;margin:0 0 8px}.card p{margin:0;color:var(--muted);font-size:14px}.eyebrow{font-size:12px;color:var(--blue);font-weight:bold}.section-title{font-size:22px;margin:8px 0 14px}.welcome{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px}.welcome p{color:var(--muted);margin:4px 0}.pill{background:#eaf1ff;color:var(--blue);padding:5px 10px;border-radius:99px;font-size:12px;white-space:nowrap}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:11px 10px;border-bottom:1px solid var(--line);text-align:right}th{color:var(--muted);font-weight:normal;background:#f8faff}.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:white}
+a{color:var(--blue)}.empty{padding:25px;text-align:center;color:var(--muted)}footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+@media(max-width:520px){header{padding:22px 18px}.welcome{align-items:flex-start;flex-direction:column}.card{padding:15px}}
+</style>
+</head>
+<body>
+<header><div class="brand">جامعة الخرطوم · دليل الطالب</div><h1>دليلك الجامعي، في مكان واحد</h1><p class="sub">مساحة بسيطة لتنظيم الدراسة والمواد والملفات.</p></header>
+<main>
+<div class="switch" aria-label="اختيار التخصص"><button class="active" data-track="medicine">الطب</button><button data-track="economics">الاقتصاد</button></div>
+<div class="welcome"><div><div class="eyebrow">مرحباً بك</div><h2 id="trackTitle" style="margin:2px 0">دليل طالب الطب</h2><p id="trackDesc">نظّم أسبوعك واحتفظ بمواردك الدراسية في مكان واحد.</p></div><span class="pill">نسخة تجريبية</span></div>
+<nav class="nav" aria-label="التنقل"><button class="active" data-page="home">الرئيسية</button><button data-page="schedule">الجدول الأسبوعي</button><button data-page="resources">الموارد الدراسية</button><button data-page="about">عن الدليل</button></nav>
+<section id="content"></section>
+</main><footer>دليل الطالب — طب واقتصاد · جامعة الخرطوم</footer>
+<script>
+const data={
+medicine:{title:"دليل طالب الطب",desc:"نظّم أسبوعك واحتفظ بمواردك الدراسية في مكان واحد.",cards:[["المحاضرات","رتّب المحاضرات والملاحظات حسب المقرر."],["المراجع","اجمع الكتب والروابط العلمية التي تعتمد عليها."],["المراجعة","قسّم المذاكرة إلى جلسات قصيرة قابلة للإنجاز."]]},
+economics:{title:"دليل طالب الاقتصاد",desc:"تابع المقررات والقراءات والمهام الأكاديمية بسهولة.",cards:[["المقررات","رتّب مواد الاقتصاد حسب الفصل الدراسي."],["القراءات","اجمع المقالات والكتب ومصادر البيانات."],["التكليفات","تابع الواجبات ومواعيد التسليم."]]}
+};
+let track="medicine",page="home";
+function render(){document.querySelector("#trackTitle").textContent=data[track].title;document.querySelector("#trackDesc").textContent=data[track].desc;let c=document.querySelector("#content");
+if(page==="home"){c.innerHTML='<h2 class="section-title">مساحتك الدراسية</h2><div class="grid">'+data[track].cards.map((x,i)=>'<article class="card"><div class="eyebrow">0'+(i+1)+'</div><h2>'+x[0]+'</h2><p>'+x[1]+'</p></article>').join("")+'</div><h2 class="section-title" style="margin-top:26px">نظرة سريعة على الأسبوع</h2>'+scheduleTable()}
+else if(page==="schedule"){c.innerHTML='<h2 class="section-title">الجدول الأسبوعي</h2><p style="color:var(--muted)">عدّل الجدول ليناسب محاضراتك. تُحفظ التغييرات على هذا الجهاز.</p><div class="table-wrap"><table><thead><tr><th>اليوم</th><th>المقرر / النشاط</th><th>الوقت</th></tr></thead><tbody>'+["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس"].map((d,i)=>'<tr><td>'+d+'</td><td><input aria-label="النشاط يوم '+d+'" data-day="'+i+'" value="'+(localStorage.getItem(track+"day"+i)||"—")+'" style="border:1px solid var(--line);border-radius:8px;padding:8px;width:100%;font:inherit"></td><td>—</td></tr>').join("")+'</tbody></table></div>';c.querySelectorAll("input").forEach(el=>el.addEventListener("change",()=>localStorage.setItem(track+"day"+el.dataset.day,el.value)))}
+else if(page==="resources"){c.innerHTML='<h2 class="section-title">الموارد الدراسية</h2><div class="card"><h2>روابط وملفاتك</h2><p>أضف هنا روابط المحاضرات والمراجع التي تستخدمها. لم تُضف مصادر رسمية بعد.</p></div>'}
+else{c.innerHTML='<div class="card"><h2>عن دليل الطالب</h2><p>واجهة أولية خفيفة لدليل الطالب في تخصصي الطب والاقتصاد. المحتوى الأكاديمي الرسمي يحتاج إلى إضافته والتحقق منه قبل الاعتماد عليه.</p></div>'}}
+function scheduleTable(){return '<div class="table-wrap"><table><thead><tr><th>اليوم</th><th>الخطة</th></tr></thead><tbody>'+["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس"].map((d,i)=>'<tr><td>'+d+'</td><td>'+(localStorage.getItem(track+"day"+i)||"لم تُضف خطة بعد")+'</td></tr>').join("")+'</tbody></table></div>'}
+document.querySelectorAll("[data-track]").forEach(b=>b.addEventListener("click",()=>{track=b.dataset.track;document.querySelectorAll("[data-track]").forEach(x=>x.classList.toggle("active",x===b));render()}));
+document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>{page=b.dataset.page;document.querySelectorAll("[data-page]").forEach(x=>x.classList.toggle("active",x===b));render()}));render();
+</script>
+</body></html>
