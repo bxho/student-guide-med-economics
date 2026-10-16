@@ -86,6 +86,8 @@ function art(kind,stage=0,outfit=0){
  } else if(c.kind==='robot'){
    p+=R(20,39,7,18,'#456b8e')+R(69,39,7,18,'#456b8e');
    p+=R(39,13,18,6,c.accent)+R(44,7,8,7,c.accent);
+   p+=R(15,46,10,8,'#6b879f')+R(71,46,10,8,'#6b879f')+R(12,54,9,12,'#168fbd')+R(75,54,9,12,'#168fbd');
+   p+=R(10,66,7,8,'#44d8ff')+R(79,66,7,8,'#44d8ff')+R(12,74,4,5,'#d8fbff')+R(80,74,4,5,'#d8fbff');
  } else if(c.kind==='hijab'){
    p+=R(20,30,56,34,c.coat)+R(24,22,48,34,c.coat)+R(29,17,38,12,c.coat);
    p+=R(20,49,9,21,c.coat)+R(67,49,9,21,c.coat)+R(28,63,40,8,c.coat);
@@ -147,6 +149,14 @@ function art(kind,stage=0,outfit=0){
  if(tier>=5){p+=R(15,30,4,4,'#ffe58b')+R(19,26,4,4,'#ffe58b')+R(76,35,4,4,'#ffe58b')+R(80,31,4,4,'#ffe58b');}
  if(tier>=6){p+=R(40,7,16,4,'#ffd66e')+R(36,11,24,4,'#ffd66e')+R(44,3,8,4,'#fff4bd');}
  if(tier>=7){p+=R(8,48,4,8,'#ffd66e')+R(12,44,4,8,'#ffd66e')+R(84,48,4,8,'#ffd66e')+R(80,44,4,8,'#ffd66e')+R(28,5,4,4,'#fff')+R(64,5,4,4,'#fff');}
+ if(kind==='robot'&&tier>=3){
+   p+=R(27,33,8,8,'#44d8ff')+R(77,33,8,8,'#44d8ff')+R(23,41,8,9,'#168fbd')+R(81,41,8,9,'#168fbd');
+   p+=R(18,57,8,7,'#44d8ff')+R(76,57,8,7,'#44d8ff')+R(17,64,5,7,'#d8fbff')+R(80,64,5,7,'#d8fbff');
+ }
+ if(kind==='robot'&&tier>=5){
+   p+=R(23,88,8,7,'#ffe27a')+R(73,88,8,7,'#ffe27a')+R(19,95,6,8,'#44d8ff')+R(79,95,6,8,'#44d8ff');
+   p+=R(34,60,8,4,'#fff')+R(58,60,8,4,'#fff');
+ }
  return '<svg class="creature-pixel-art" viewBox="0 0 96 112" role="img" aria-label="'+escapeHtml(c.name)+'، الطور السحري '+tier+' من 7" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" style="image-rendering:pixelated"><g>'+p+'</g></svg>';
 }
 function stage(){return data.xp>=700?3:data.xp>=300?2:data.xp>=100?1:0}
