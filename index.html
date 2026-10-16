@@ -68,6 +68,7 @@ body{background:var(--bg);font-size:14px}
 <link rel="stylesheet" href="./social.css">
 </head>
 <body>
+<div id="bxSplash" aria-label="دليل الطالب"><div class="bx-logo"><span>b</span><span>x</span></div><div class="bx-splash-title">دليل الطالب</div><div class="bx-splash-line"></div></div>
 <div id="studentCloudAuth" dir="rtl">
   <div class="brand"><div class="brand-mark">د</div><div><h1>دليل الطالب</h1><p>مساحة دراستك السحابية الخاصة</p></div></div>
   <h2 id="cloudAuthTitle">تسجيل الدخول</h2><p>أنشئ حسابًا أو سجّل الدخول لمزامنة بياناتك الخاصة بين أجهزتك.</p>
@@ -190,8 +191,9 @@ $('#cloudSignupBtn').addEventListener('click',async()=>{if(!client)return;const 
 $('#cloudLocalBackupBtn').addEventListener('click',()=>{try{const raw=localStorage.getItem('medEcoGuidePrototype_v1_precloud_backup')||localStorage.getItem('medEcoGuidePrototype_v1');if(!raw){say('لا توجد بيانات محلية محفوظة في هذا المتصفح.');return}const blob=new Blob([raw],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='student-guide-local-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);say('تم تنزيل نسخة من البيانات المحلية الحالية.')}catch(e){say('تعذر تنزيل النسخة المحلية.')}});
 $('#cloudResetBtn').addEventListener('click',async()=>{if(!client)return;const email=$('#cloudEmail').value.trim();if(!email){say('اكتب بريدك الإلكتروني أولاً.');return}try{const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:'https://bxho.github.io/student-guide-med-economics/'});if(error)throw error;say('إذا كان البريد مسجلاً، ستصلك رسالة لاستعادة كلمة المرور.')}catch(err){say(err.message||'تعذر إرسال رسالة الاستعادة.')}});
 $('#cloudSignoutBtn').addEventListener('click',async()=>{if(demoMode){demoMode=false;user=null;lock();$('#cloudUserEmail').textContent='';say('تم الخروج من وضع المعاينة.');return}if(!client)return;const {error}=await client.auth.signOut();if(error)say(error.message);else{user=null;lock();say('تم تسجيل الخروج.')}});
-start();
+window.studentGuideGetSupabaseClient=()=>client;window.studentGuideGetUser=()=>user;start();
 })();
+(function(){const key="studentGuideTheme";const apply=t=>{document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;const b=document.getElementById("themeToggle");if(b)b.textContent=t==="dark"?"☀️ النمط النهاري":"🌙 النمط الليلي"};let saved=localStorage.getItem(key);if(!saved)saved=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";apply(saved);document.addEventListener("click",e=>{if(e.target.closest("#themeToggle")){saved=saved==="dark"?"light":"dark";localStorage.setItem(key,saved);apply(saved)}});window.addEventListener("load",()=>setTimeout(()=>document.getElementById("bxSplash")?.classList.add("bx-splash-out"),1250));})();
 </script>
   <script>
   if ('serviceWorker' in navigator) {
