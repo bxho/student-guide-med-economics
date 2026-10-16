@@ -151,7 +151,7 @@ function computeProgress(){
  const sessions=Number(s.sessions||0), cards=(s.cards||[]).length, notes=(s.notes||[]).length;
  const reviewed=(s.cards||[]).reduce((sum,c)=>sum+Number(c.reps||0),0);
  const xp=tasks*25; // الخبرة من المهام الدراسية المكتملة فقط.
- if(xp>data.xp){data.xp=xp;data.coins=Math.max(data.coins,Math.floor(xp/10));if(data.xp>=700)data.secret=true;save();renderBuddy();}
+ if(xp!==data.xp){data.xp=xp;data.coins=Math.max(data.coins,Math.floor(xp/10));if(data.xp>=700)data.secret=true;save();renderBuddy();}
 }
 function syncLater(){clearTimeout(syncTimer);syncTimer=setTimeout(computeProgress,220)}
 function bubble(msg){const b=$('#companionBubble');if(!b)return;b.textContent=msg;b.classList.add('show');clearTimeout(bubble.t);bubble.t=setTimeout(()=>b.classList.remove('show'),4300)}
