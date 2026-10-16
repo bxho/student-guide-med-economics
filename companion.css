@@ -59,3 +59,12 @@
 .companion-chat-form button{border:1px solid #3157a4;background:#3157a4;color:#fff;border-radius:10px;padding:8px 11px;font:inherit;font-size:12px}
 .companion-chat-note{font-size:10px;color:#78869b;line-height:1.5;margin-top:6px}
 @media(prefers-reduced-motion:reduce){#companionBuddy{transition:none!important}}
+
+/* Keep the pet from intercepting unrelated application controls. */
+#companionBuddy{z-index:1;touch-action:auto;cursor:default}
+#companionBuddy.manual-move{cursor:grab;touch-action:none;z-index:801}
+#companionBuddy.manual-move:active{cursor:grabbing}
+#companionDock{pointer-events:none}
+#companionDock #companionLaunch,#companionDock #companionBuddy{pointer-events:auto}
+#companionBuddy.surprised svg{filter:drop-shadow(0 0 5px #ffd66b)}
+#companionBuddy.sleeping:after{content:"Zzz";position:absolute;top:0;right:4px;color:#536a9b;font-weight:bold;font-size:13px}
