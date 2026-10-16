@@ -21,8 +21,9 @@ function getStudy(){try{return window.studentGuideExportState?window.studentGuid
 function computeProgress(){
  const s=getStudy(); if(!s)return;
  const tasks=(s.tasks||[]).filter(t=>t.done).length;
- const sessions=Number(s.sessions||0), cards=(s.cards||[]).length;
- const xp=tasks*25+sessions*10+cards*3;
+ const sessions=Number(s.sessions||0), cards=(s.cards||[]).length, notes=(s.notes||[]).length;
+ const reviewed=(s.cards||[]).reduce((sum,c)=>sum+Number(c.reps||0),0);
+ const xp=tasks*25+sessions*10+cards*3+notes*5+reviewed*2;
  if(xp>data.xp){data.xp=xp;data.coins=Math.max(data.coins,Math.floor(xp/10));if(data.xp>=700)data.secret=true;save();renderBuddy();}
 }
 function syncLater(){clearTimeout(syncTimer);syncTimer=setTimeout(computeProgress,220)}
@@ -57,7 +58,7 @@ function overlay(first){
 }
 function finishIntro(){
  if(!data.chosen)data.chosen=selected;
- const s=getStudy();if(s&&s.major!==(data.chosen==='medicine'?'medicine':'economics')){const next={...s,major:data.chosen};if(window.studentGuideImportState)window.studentGuideImportState(next);if(window.studentCloudSave)window.studentCloudSave(next)}
+ // Companion choice is cosmetic and must not overwrite the student's academic major.
  data.introSeen=true;save();$('#companionOverlay').hidden=true;renderBuddy();bubble(greeting());syncLater();
 }
 function inject(){
