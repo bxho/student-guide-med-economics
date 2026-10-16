@@ -37,6 +37,8 @@ public sealed class AdvancedCompanionController : MonoBehaviour
     [Header("Study progress only")]
     [SerializeField, Min(1)] private int baseXPNeeded = 100;
     [SerializeField] private int currentXP;
+    [SerializeField] private string saveKey = "StudentGuide.Companion";
+    private readonly HashSet<string> completedTaskIds = new HashSet<string>();
     public int CurrentXP => currentXP;
     public EvolutionStage CurrentStage => currentStage;
     public AnimationState CurrentState => currentState;
@@ -58,6 +60,7 @@ public sealed class AdvancedCompanionController : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         mainCamera = Camera.main;
+        LoadProgress();
         RebuildStageAnimations();
     }
 
@@ -124,12 +127,15 @@ public sealed class AdvancedCompanionController : MonoBehaviour
     }
 
     /// <summary>
-    /// Call once only when a study task becomes completed for the first time.
-    /// Do not call for focus sessions, notes, cards, daily prompts, or feeding.
+    /// Awards XP once per unique study-task ID. Call only after the app confirms
+    /// the task transitioned from incomplete to completed.
     /// </summary>
-    public void AddCompletedStudyTaskXP(int xpAmount)
+    public bool AddCompletedStudyTaskXP(string taskId, int xpAmount)
     {
-        if (xpAmount <= 0) return;
+        if (string.IsNullOrWhiteSpace(taskId) || xpAmount <= 0) return false;
+        taskId = taskId.Trim();
+        if (!completedTaskIds.Add(taskId)) return false;
+
         currentXP = Mathf.Max(0, currentXP + xpAmount);
         while ((int)currentStage < (int)EvolutionStage.Stage7 &&
                currentXP >= XPRequiredForCurrentStage())
@@ -139,7 +145,31 @@ public sealed class AdvancedCompanionController : MonoBehaviour
             RebuildStageAnimations();
             PlayAnimation(AnimationState.Idle);
         }
+
+        SaveProgress();
         ProgressChanged?.Invoke(currentXP, currentStage);
+        return true;
+    }
+
+    private void SaveProgress()
+    {
+        PlayerPrefs.SetInt(saveKey + ".xp", currentXP);
+        PlayerPrefs.SetInt(saveKey + ".stage", (int)currentStage);
+        PlayerPrefs.SetString(saveKey + ".tasks", string.Join("\n", completedTaskIds));
+        PlayerPrefs.Save();
+    }
+
+    private void LoadProgress()
+    {
+        currentXP = Mathf.Max(0, PlayerPrefs.GetInt(saveKey + ".xp", currentXP));
+        currentStage = (EvolutionStage)Mathf.Clamp(
+            PlayerPrefs.GetInt(saveKey + ".stage", (int)currentStage),
+            (int)EvolutionStage.Stage1, (int)EvolutionStage.Stage7);
+        string savedTasks = PlayerPrefs.GetString(saveKey + ".tasks", "");
+        foreach (string id in savedTasks.Split('\n'))
+        {
+            if (!string.IsNullOrWhiteSpace(id)) completedTaskIds.Add(id);
+        }
     }
 
     private int XPRequiredForCurrentStage()
@@ -160,9 +190,14 @@ public sealed class AdvancedCompanionController : MonoBehaviour
 
 #if UNITY_WEBGL && !UNITY_EDITOR
     // Called by the page bridge when the web app confirms a completed task.
-    public void OnStudyTaskCompleted(string xpText)
+    public void OnStudyTaskCompleted(string payload)
     {
-        if (int.TryParse(xpText, out int xp)) AddCompletedStudyTaskXP(xp);
+        // Expected payload: uniqueTaskId|xpAmount. A stable task ID prevents
+        // duplicate XP when the bridge fires twice or the page is refreshed.
+        if (string.IsNullOrWhiteSpace(payload)) return;
+        string[] parts = payload.Split('|');
+        if (parts.Length != 2 || !int.TryParse(parts[1], out int xp)) return;
+        AddCompletedStudyTaskXP(parts[0], xp);
     }
 #endif
 }
