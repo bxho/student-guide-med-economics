@@ -339,3 +339,15 @@
 .companion-chair:after{content:"";position:absolute;left:4px;right:4px;bottom:0;height:4px;border-radius:3px;background:#6c4228}
 #companionBuddy:before{z-index:0;bottom:1px;left:22%;right:22%;height:7px}
 #companionBuddy:after{display:none}
+
+/* Fixed platform and chair; mascot motion stays inside the platform. */
+#companionDock{align-items:end;gap:10px;padding-bottom:0}
+.companion-stage-platform{position:relative;order:0;width:118px;height:116px;flex:0 0 118px;align-self:end;overflow:visible}
+.companion-stage-platform .companion-chair{position:absolute;left:35px;bottom:22px;width:48px;height:22px;z-index:1;pointer-events:none}
+.companion-platform-base{position:absolute;left:0;right:0;bottom:0;height:12px;border-radius:50%;background:linear-gradient(#e9eef8,#8fa1bb);border:2px solid #7185a3;box-shadow:0 5px 0 #526681,0 8px 14px #1b2b4825;z-index:0;pointer-events:none}
+#companionDock #companionBuddy{position:absolute;left:11px;bottom:27px;width:94px;height:88px;z-index:2;cursor:pointer;touch-action:manipulation;transition:none}
+#companionDock #companionBuddy:active{cursor:pointer}
+#companionDock #companionBuddy.walking{animation:companion-walk .32s ease-in-out infinite alternate}
+#companionDock #companionLaunch{position:relative;z-index:3;align-self:center;order:1}
+#companionSocialOpen{background:#edf4ff!important;color:#174a91!important;border-color:#d9e5fa!important}
+@media(max-width:600px){.companion-stage-platform{transform:scale(.82);transform-origin:bottom left;margin-right:-20px}#companionDock #companionBuddy{left:10px;bottom:25px;width:76px;height:78px}}
