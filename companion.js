@@ -18,7 +18,7 @@ const COMPANIONS={
  sara:{name:'سارة',coat:'#bd466d',fur:'#c98a62',accent:'#ffb0c8',kind:'cap',emoji:'♥'},
  adam:{name:'آدم',coat:'#344da8',fur:'#c28b69',accent:'#9eb6ff',kind:'dark',emoji:'★'}
 };
-function companionName(kind){return (COMPANIONS[kind]||COMPANIONS.medicine).name}
+function companionName(kind){return data.customName||((COMPANIONS[kind]||COMPANIONS.medicine).name)}
 function art(kind,stage=0,outfit=0){
  const c=COMPANIONS[kind]||COMPANIONS.medicine;
  const coat=['#dcecff','#4b77ca','#f0f4ff','#263d71'][outfit%4]||c.coat;
