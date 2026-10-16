@@ -63,24 +63,11 @@
 /* Dream portal: replaces the companion's static home/sleep look with a small magical gateway. */
 #companionPortal{position:fixed;z-index:805;width:112px;height:146px;padding:0;border:0;background:transparent;color:#e9f4ff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;filter:drop-shadow(0 8px 14px #050a244d);font-family:Tahoma,Arial,sans-serif}
 #companionPortal[hidden]{display:none!important}
-.dream-portal-ring{position:relative;width:82px;height:112px;border-radius:48% 48% 42% 42%;padding:5px;display:grid;place-items:center;background:linear-gradient(145deg,#b9f4ff,#887bff 40%,#f1c7ff 68%,#65d7d0);box-shadow:0 0 10px #8deaffaa,0 0 28px #8b7bff88,inset 0 0 0 2px #ffffffb8;animation:portal-pulse 2.8s ease-in-out infinite}
-.dream-portal-core{position:absolute;inset:6px;border-radius:48% 48% 42% 42%;overflow:hidden;background:radial-gradient(ellipse at 50% 25%,#b7eaff 0,#6d73cf 36%,#20285d 70%,#11182e 100%);box-shadow:inset 0 0 20px #a8eaff77,inset 0 0 4px #fff}
-.dream-portal-core:before{content:"";position:absolute;inset:-20%;background:repeating-conic-gradient(from 0deg at 50% 50%,#ffffff00 0deg 12deg,#d9faff88 14deg 16deg,#ffffff00 18deg 32deg);animation:portal-swirl 8s linear infinite;mask-image:radial-gradient(ellipse,#000 10%,#0008 55%,transparent 76%)}
-.dream-portal-core:after{content:"";position:absolute;inset:12px 17px;border:1px solid #d4faff77;border-radius:50%;box-shadow:0 0 12px #a8f2ff88;transform:rotate(25deg) scaleX(.55)}
-.dream-portal-spark{position:absolute;top:11px;right:7px;color:#fff6bd;font-size:20px;text-shadow:0 0 10px #fff}
-.dream-portal-label{font-size:10px;font-weight:700;white-space:nowrap;text-shadow:0 2px 7px #080d20;background:#121a3dcc;border:1px solid #d9edff44;border-radius:99px;padding:4px 8px}
-#companionBuddy.entering-portal{animation:buddy-enter-portal .95s cubic-bezier(.55,0,.8,.3) forwards!important;pointer-events:none}
-#companionBuddy.emerging-portal{animation:buddy-emerge-portal .85s cubic-bezier(.2,.75,.25,1) both!important}
-#companionPortal.portal-opening .dream-portal-ring{animation:portal-open .9s ease-out both}
-#companionPortal.portal-sleeping .dream-portal-ring{animation:portal-pulse 3.8s ease-in-out infinite}
-#companionPortal.portal-waking .dream-portal-ring{animation:portal-open .8s ease-in reverse both}
 @keyframes portal-pulse{0%,100%{transform:translateY(0) scale(1);filter:brightness(1)}50%{transform:translateY(-3px) scale(1.035);filter:brightness(1.18)}}
 @keyframes portal-swirl{to{transform:rotate(360deg)}}
 @keyframes portal-open{0%{transform:scale(.2);opacity:0;filter:brightness(2)}55%{transform:scale(1.15);opacity:1}100%{transform:scale(1);opacity:1;filter:brightness(1)}}
 @keyframes buddy-enter-portal{0%{transform:translateY(0) scale(1);opacity:1}45%{transform:translateY(12px) scale(.75);opacity:.95}100%{transform:translateY(24px) scale(.05);opacity:0}}
 @keyframes buddy-emerge-portal{0%{transform:translateY(24px) scale(.05);opacity:0}65%{transform:translateY(-5px) scale(1.06);opacity:1}100%{transform:translateY(0) scale(1);opacity:1}}
-@media(max-width:600px){#companionPortal{width:86px;height:118px}.dream-portal-ring{width:64px;height:86px}.dream-portal-label{font-size:9px}}
-@media(prefers-reduced-motion:reduce){#companionPortal .dream-portal-ring,#companionPortal .dream-portal-core:before{animation:none!important}#companionBuddy.entering-portal,#companionBuddy.emerging-portal{animation:none!important}}
 
 /* Companion habitat view */
 #companionHabitat{position:fixed;inset:0;z-index:1300;display:flex;flex-direction:column;overflow:hidden;background:#121b32;color:#f4f7ff;font-family:Tahoma,Arial,sans-serif}
@@ -306,26 +293,8 @@
 
 /* Dream portal itself uses chunky pixel-art geometry, not smooth glass gradients */
 #companionPortal{filter:drop-shadow(5px 5px 0 #11182e)!important;image-rendering:pixelated}
-.dream-portal-ring{border-radius:0!important;padding:8px!important;background:repeating-linear-gradient(0deg,#b9f4ff 0 8px,#887bff 8px 16px,#f1c7ff 16px 24px,#65d7d0 24px 32px)!important;box-shadow:inset 0 0 0 5px #30345f,6px 0 #30345f,-6px 0 #30345f,0 6px #30345f,0 -6px #30345f!important;animation:pixel-portal 1.5s steps(2,end) infinite!important}
-.dream-portal-core{inset:9px!important;border-radius:0!important;background:repeating-linear-gradient(90deg,#20285d 0 8px,#333c80 8px 16px,#20285d 16px 24px)!important;box-shadow:inset 0 0 0 3px #9eeeff!important;overflow:hidden}
-.dream-portal-core:before{inset:0!important;background:repeating-conic-gradient(from 0deg at 50% 50%,#ffffff00 0deg 18deg,#d9faffbb 18deg 24deg,#ffffff00 24deg 42deg)!important;mask-image:none!important;image-rendering:pixelated}
-.dream-portal-core:after{inset:15px 18px!important;border:4px solid #d4faff!important;border-radius:0!important;box-shadow:4px 4px 0 #5d65bd!important;transform:none!important}
-.dream-portal-spark{top:4px!important;right:3px!important;color:#fff6bd!important;font-size:16px!important;text-shadow:3px 3px #6457a7!important}
-.dream-portal-label{border-radius:0!important;border:3px solid #30345f!important;background:#20285d!important;box-shadow:3px 3px 0 #11182e!important;text-shadow:none!important;padding:4px 7px!important}
-@keyframes pixel-portal{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
-@media(prefers-reduced-motion:reduce){.dream-portal-ring{animation:none!important}}
 
 /* Offline companion care meters */
-.companion-care{margin-top:14px;padding:13px;border:1px solid var(--line,#344155);background:var(--surface2,#222e40);border-radius:13px}
-.companion-care h4{margin:0 0 12px}
-.care-meter{display:grid;grid-template-columns:85px minmax(50px,1fr) 38px;align-items:center;gap:8px;margin:9px 0;font-size:12px}
-.care-meter>div{height:8px;background:#101827;border-radius:0;overflow:hidden}
-.care-meter i{display:block;width:80%;height:100%;background:linear-gradient(90deg,#26d99a,#3285ff);transition:width .25s}
-.care-meter b{text-align:left;font-variant-numeric:tabular-nums}
-.care-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:12px}
-.care-actions button{padding:8px 4px;border:1px solid var(--line,#344155);border-radius:9px;background:var(--surface,#1b2433);color:var(--text,#eef3fb);font-size:11px}
-#careStatus{font-size:11px;color:var(--muted,#a4b2c7);margin:10px 0 0}
-@media(max-width:430px){.care-actions{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
 
 #companionSocialOpen{background:#edf4ff!important;color:#174a91!important;border-color:#d9e5fa!important}
