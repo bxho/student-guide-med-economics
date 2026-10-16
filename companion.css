@@ -304,3 +304,14 @@
 .city-street span.pixel-vehicle{font-size:initial!important}
 .room-floor-grid{background-image:linear-gradient(#8c5f7833 2px,transparent 2px),linear-gradient(90deg,#8c5f7833 2px,transparent 2px);background-size:16px 16px!important}
 .habitat-house-roof,.habitat-house-body,.habitat-house-door,.habitat-house-window,.room-window-3d,.room-wall-poster,.room-shelf-3d,.room-rug-3d,.bed-headboard,.bed-pillow,.bed-blanket,.bed-foot{border-radius:0!important}
+
+/* Dream portal itself uses chunky pixel-art geometry, not smooth glass gradients */
+#companionPortal{filter:drop-shadow(5px 5px 0 #11182e)!important;image-rendering:pixelated}
+.dream-portal-ring{border-radius:0!important;padding:8px!important;background:repeating-linear-gradient(0deg,#b9f4ff 0 8px,#887bff 8px 16px,#f1c7ff 16px 24px,#65d7d0 24px 32px)!important;box-shadow:inset 0 0 0 5px #30345f,6px 0 #30345f,-6px 0 #30345f,0 6px #30345f,0 -6px #30345f!important;animation:pixel-portal 1.5s steps(2,end) infinite!important}
+.dream-portal-core{inset:9px!important;border-radius:0!important;background:repeating-linear-gradient(90deg,#20285d 0 8px,#333c80 8px 16px,#20285d 16px 24px)!important;box-shadow:inset 0 0 0 3px #9eeeff!important;overflow:hidden}
+.dream-portal-core:before{inset:0!important;background:repeating-conic-gradient(from 0deg at 50% 50%,#ffffff00 0deg 18deg,#d9faffbb 18deg 24deg,#ffffff00 24deg 42deg)!important;mask-image:none!important;image-rendering:pixelated}
+.dream-portal-core:after{inset:15px 18px!important;border:4px solid #d4faff!important;border-radius:0!important;box-shadow:4px 4px 0 #5d65bd!important;transform:none!important}
+.dream-portal-spark{top:4px!important;right:3px!important;color:#fff6bd!important;font-size:16px!important;text-shadow:3px 3px #6457a7!important}
+.dream-portal-label{border-radius:0!important;border:3px solid #30345f!important;background:#20285d!important;box-shadow:3px 3px 0 #11182e!important;text-shadow:none!important;padding:4px 7px!important}
+@keyframes pixel-portal{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+@media(prefers-reduced-motion:reduce){.dream-portal-ring{animation:none!important}}
