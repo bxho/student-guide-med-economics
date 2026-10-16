@@ -150,7 +150,7 @@ function computeProgress(){
  const tasks=(s.tasks||[]).filter(t=>t.done).length;
  const sessions=Number(s.sessions||0), cards=(s.cards||[]).length, notes=(s.notes||[]).length;
  const reviewed=(s.cards||[]).reduce((sum,c)=>sum+Number(c.reps||0),0);
- const xp=tasks*25+sessions*10+cards*3+notes*5+reviewed*2;
+ const xp=tasks*25; // الخبرة من المهام الدراسية المكتملة فقط.
  if(xp>data.xp){data.xp=xp;data.coins=Math.max(data.coins,Math.floor(xp/10));if(data.xp>=700)data.secret=true;save();renderBuddy();}
 }
 function syncLater(){clearTimeout(syncTimer);syncTimer=setTimeout(computeProgress,220)}
@@ -233,7 +233,7 @@ function dailyMission(){
  if(data.missionDone){showExtra('<strong>أنجزت مهمة اليوم بالفعل! 🏆</strong><span>ارجع غدًا لتحدٍ جديد، أو اختر مهمة من قائمة الدراسة.</span>');return}
  const tasks=(getStudy()?.tasks||[]),done=tasks.filter(t=>t.done).length;
  showExtra('<strong>🎯 مهمة اليوم</strong><span>اختر موضوعًا واحدًا وذاكره 15 دقيقة، ثم اكتب 3 نقاط تتذكرها.</span><button type="button" id="companionCompleteMission">أنجزت المهمة</button><span>مهمات الدراسة المكتملة حاليًا: '+done+'</span>');
- $('#companionCompleteMission').addEventListener('click',()=>{ensureDailyMission();if(data.missionDone)return;data.missionDone=true;data.xp+=25;data.coins+=3;data.badges=Array.isArray(data.badges)?data.badges:[];if(!data.badges.includes('first-mission'))data.badges.push('first-mission');save();renderBuddy();refreshPanel();showExtra('<strong>أحسنت! +25 XP و+3 عملات 🎉</strong><span>شهادة الاستمرار: '+data.badges.length+' شارة</span>');bubble('فخور بك! أنجزت مهمة اليوم. خذ لحظة للاحتفال بتقدمك.');});
+ $('#companionCompleteMission').addEventListener('click',()=>{ensureDailyMission();if(data.missionDone)return;data.missionDone=true;data.badges=Array.isArray(data.badges)?data.badges:[];if(!data.badges.includes('first-mission'))data.badges.push('first-mission');save();renderBuddy();refreshPanel();showExtra('<strong>أحسنت! أنجزت مهمة اليوم 🎉</strong><span>الخبرة تُمنح للمهام الدراسية التي تضيفها وتكملها من قائمة الدراسة.</span><span>شارات الرفيق: '+data.badges.length+'</span>');bubble('فخور بك! أنجزت مهمة اليوم. خذ لحظة للاحتفال بتقدمك.');});
 }
 function studyStreakStats(byDay={}){return window.studentGuideStudyStreakStats?window.studentGuideStudyStreakStats(byDay):{current:0,best:0}}function showStudyAchievements(){const s=getStudy()||{},st=studyStreakStats(s.focusByDay||{}),badges=Array.isArray(data.badges)?data.badges.length:0;showExtra('<strong>إنجازات المذاكرة</strong><span>📘 '+((s.tasks||[]).filter(t=>t.done).length)+' مهمة دراسية مكتملة</span><span>🌟 '+data.xp+' XP</span><span>🔥 سلسلة المذاكرة الحالية: '+st.current+' يوم</span><span>🏅 شارة 10 أيام: '+(st.best>=10?'مفتوحة 🔥':'مقفلة 🔒')+'</span><span>💎 شارة 100 يوم: '+(st.best>=100?'مفتوحة':'مقفلة 🔒')+'</span><span>✨ '+badges+' شارات رفيق إضافية</span>')}
 function bind(){
