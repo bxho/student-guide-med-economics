@@ -209,6 +209,7 @@ public static class StudentGuideCompanionDemoBuilder
             camera.transform.position = new Vector3(0, 0, -10);
             camera.backgroundColor = new Color(0.08f, 0.11f, 0.2f);
             camera.clearFlags = CameraClearFlags.SolidColor;
+            camera.gameObject.AddComponent<StudentGuideCompanionDemoUI>();
         }
 
         var companion = new GameObject("StudentGuideCompanion");
@@ -219,6 +220,7 @@ public static class StudentGuideCompanionDemoBuilder
         var controller = companion.AddComponent<AdvancedCompanionController>();
 
         var serialized = new SerializedObject(controller);
+        serialized.FindProperty("saveKey").stringValue = "StudentGuide.Companion.Demo";
         var stages = serialized.FindProperty("allStagesData");
         stages.arraySize = 7;
         for (int s = 0; s < 7; s++)
