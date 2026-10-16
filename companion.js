@@ -157,7 +157,7 @@ function art(kind,stage=0,outfit=0){
    p+=R(23,88,8,7,'#ffe27a')+R(73,88,8,7,'#ffe27a')+R(19,95,6,8,'#44d8ff')+R(79,95,6,8,'#44d8ff');
    p+=R(34,60,8,4,'#fff')+R(58,60,8,4,'#fff');
  }
- return '<svg class="creature-pixel-art" viewBox="0 0 96 112" role="img" aria-label="'+escapeHtml(c.name)+'، الطور السحري '+tier+' من 7" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" style="image-rendering:pixelated"><g>'+p+'</g></svg>';
+ return '<svg class="creature-pixel-art '+(kind==='robot'?'pixel-tall-robot':'pixel-standard-body')+'" viewBox="'+(kind==='robot'?'0 0 112 142':'0 0 96 112')+'" role="img" aria-label="'+escapeHtml(c.name)+'، الطور السحري '+tier+' من 7" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" style="image-rendering:pixelated"><g>'+p+'</g></svg>';
 }
 function stage(){return data.xp>=700?3:data.xp>=300?2:data.xp>=100?1:0}
 function rank(){return ['صغير','يافع','بالغ','أسطوري'][stage()]}
