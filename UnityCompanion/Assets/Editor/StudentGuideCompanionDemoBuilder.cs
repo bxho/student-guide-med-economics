@@ -34,8 +34,9 @@ public static class StudentGuideCompanionDemoBuilder
                 for (int frame = 0; frame < 3; frame++)
                 {
                     string path = stateFolder + "/frame_" + frame + ".png";
-                    File.WriteAllBytes(path, DrawFrame(stage, state, frame).EncodeToPNG());
-                    UnityEngine.Object.DestroyImmediate(LoadTextureForDestroy(path));
+                    Texture2D texture = DrawFrame(stage, state, frame);
+                    File.WriteAllBytes(path, texture.EncodeToPNG());
+                    UnityEngine.Object.DestroyImmediate(texture);
                     AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
                     ConfigureSprite(path);
                 }
@@ -47,11 +48,6 @@ public static class StudentGuideCompanionDemoBuilder
         Debug.Log("Student Guide companion demo created. Open Assets/StudentGuideCompanionDemo/CompanionDemo.unity and press Play.");
     }
 
-    private static Texture2D LoadTextureForDestroy(string path)
-    {
-        // Textures are not loaded by EncodeToPNG; this method is a harmless null guard.
-        return null;
-    }
 
     private static void ConfigureSprite(string path)
     {
