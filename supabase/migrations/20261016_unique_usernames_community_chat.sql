@@ -60,7 +60,11 @@ select u.id,
 from auth.users u
 on conflict (user_id) do nothing;
 grant select,insert,update on public.student_profiles to authenticated;
-grant select,insert,delete on public.student_friends to authenticated;
+grant select,insert,update,delete on public.student_friends to authenticated;
+drop policy if exists "Users update own friend list" on public.student_friends;
+create policy "Users update own friend list" on public.student_friends for update to authenticated
+using (user_id=auth.uid()) with check (user_id=auth.uid());
+grant select,insert on public.student_social_messages to authenticated;
 drop policy if exists "Users send messages as themselves" on public.student_social_messages;
 create policy "Users send messages as themselves" on public.student_social_messages for insert to authenticated
 with check (
