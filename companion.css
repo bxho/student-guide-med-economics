@@ -60,11 +60,83 @@
 .companion-chat-note{font-size:10px;color:#78869b;line-height:1.5;margin-top:6px}
 @media(prefers-reduced-motion:reduce){#companionBuddy{transition:none!important}}
 
-/* Keep the pet from intercepting unrelated application controls. */
-#companionBuddy{z-index:1;touch-action:auto;cursor:default}
-#companionBuddy.manual-move{cursor:grab;touch-action:none;z-index:801}
-#companionBuddy.manual-move:active{cursor:grabbing}
-#companionDock{pointer-events:none}
-#companionDock #companionLaunch,#companionDock #companionBuddy{pointer-events:auto}
-#companionBuddy.surprised svg{filter:drop-shadow(0 0 5px #ffd66b)}
-#companionBuddy.sleeping:after{content:"Zzz";position:absolute;top:0;right:4px;color:#536a9b;font-weight:bold;font-size:13px}
+/* Dream portal: replaces the companion's static home/sleep look with a small magical gateway. */
+#companionPortal{position:fixed;z-index:805;width:112px;height:146px;padding:0;border:0;background:transparent;color:#e9f4ff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;filter:drop-shadow(0 8px 14px #050a244d);font-family:Tahoma,Arial,sans-serif}
+#companionPortal[hidden]{display:none!important}
+.dream-portal-ring{position:relative;width:82px;height:112px;border-radius:48% 48% 42% 42%;padding:5px;display:grid;place-items:center;background:linear-gradient(145deg,#b9f4ff,#887bff 40%,#f1c7ff 68%,#65d7d0);box-shadow:0 0 10px #8deaffaa,0 0 28px #8b7bff88,inset 0 0 0 2px #ffffffb8;animation:portal-pulse 2.8s ease-in-out infinite}
+.dream-portal-core{position:absolute;inset:6px;border-radius:48% 48% 42% 42%;overflow:hidden;background:radial-gradient(ellipse at 50% 25%,#b7eaff 0,#6d73cf 36%,#20285d 70%,#11182e 100%);box-shadow:inset 0 0 20px #a8eaff77,inset 0 0 4px #fff}
+.dream-portal-core:before{content:"";position:absolute;inset:-20%;background:repeating-conic-gradient(from 0deg at 50% 50%,#ffffff00 0deg 12deg,#d9faff88 14deg 16deg,#ffffff00 18deg 32deg);animation:portal-swirl 8s linear infinite;mask-image:radial-gradient(ellipse,#000 10%,#0008 55%,transparent 76%)}
+.dream-portal-core:after{content:"";position:absolute;inset:12px 17px;border:1px solid #d4faff77;border-radius:50%;box-shadow:0 0 12px #a8f2ff88;transform:rotate(25deg) scaleX(.55)}
+.dream-portal-spark{position:absolute;top:11px;right:7px;color:#fff6bd;font-size:20px;text-shadow:0 0 10px #fff}
+.dream-portal-label{font-size:10px;font-weight:700;white-space:nowrap;text-shadow:0 2px 7px #080d20;background:#121a3dcc;border:1px solid #d9edff44;border-radius:99px;padding:4px 8px}
+#companionBuddy.entering-portal{animation:buddy-enter-portal .95s cubic-bezier(.55,0,.8,.3) forwards!important;pointer-events:none}
+#companionBuddy.emerging-portal{animation:buddy-emerge-portal .85s cubic-bezier(.2,.75,.25,1) both!important}
+#companionPortal.portal-opening .dream-portal-ring{animation:portal-open .9s ease-out both}
+#companionPortal.portal-sleeping .dream-portal-ring{animation:portal-pulse 3.8s ease-in-out infinite}
+#companionPortal.portal-waking .dream-portal-ring{animation:portal-open .8s ease-in reverse both}
+@keyframes portal-pulse{0%,100%{transform:translateY(0) scale(1);filter:brightness(1)}50%{transform:translateY(-3px) scale(1.035);filter:brightness(1.18)}}
+@keyframes portal-swirl{to{transform:rotate(360deg)}}
+@keyframes portal-open{0%{transform:scale(.2);opacity:0;filter:brightness(2)}55%{transform:scale(1.15);opacity:1}100%{transform:scale(1);opacity:1;filter:brightness(1)}}
+@keyframes buddy-enter-portal{0%{transform:translateY(0) scale(1);opacity:1}45%{transform:translateY(12px) scale(.75);opacity:.95}100%{transform:translateY(24px) scale(.05);opacity:0}}
+@keyframes buddy-emerge-portal{0%{transform:translateY(24px) scale(.05);opacity:0}65%{transform:translateY(-5px) scale(1.06);opacity:1}100%{transform:translateY(0) scale(1);opacity:1}}
+@media(max-width:600px){#companionPortal{width:86px;height:118px}.dream-portal-ring{width:64px;height:86px}.dream-portal-label{font-size:9px}}
+@media(prefers-reduced-motion:reduce){#companionPortal .dream-portal-ring,#companionPortal .dream-portal-core:before{animation:none!important}#companionBuddy.entering-portal,#companionBuddy.emerging-portal{animation:none!important}}
+
+/* Companion habitat view */
+#companionHabitat{position:fixed;inset:0;z-index:1300;display:flex;flex-direction:column;overflow:hidden;background:#121b32;color:#f4f7ff;font-family:Tahoma,Arial,sans-serif}
+#companionHabitat[hidden]{display:none!important}
+.habitat-top{position:relative;z-index:2;display:flex;align-items:center;gap:12px;padding:12px max(14px,env(safe-area-inset-left)) 12px max(14px,env(safe-area-inset-right));background:#10182beF;border-bottom:1px solid #ffffff1c}
+.habitat-top button,.habitat-bottom button,.habitat-subpage button{border:1px solid #ffffff2b;border-radius:12px;background:#ffffff12;color:#fff;padding:9px 12px;font:inherit;cursor:pointer}
+.habitat-title{display:flex;flex-direction:column;gap:3px;flex:1}.habitat-title strong{font-size:16px}.habitat-title small{font-size:11px;color:#b9c9e7}
+.habitat-wallet{background:#ffffff12;border:1px solid #ffffff20;border-radius:99px;padding:7px 11px;font-weight:700}
+.habitat-scene{position:relative;isolation:isolate;flex:1;min-height:0;overflow:hidden;background:linear-gradient(#536d91 0%,#b5c3c8 55%,#647b62 56%,#314a42 100%);transition:background .5s}
+.habitat-sky{position:absolute;inset:0 0 35%;overflow:hidden;color:#fff7c8;font-size:28px}
+.habitat-cloud{position:absolute;opacity:.7;text-shadow:0 5px 14px #26375055}.cloud-one{left:12%;top:17%}.cloud-two{right:15%;top:30%;font-size:38px}
+.habitat-sparkle{position:absolute;top:13%;left:50%;transform:translateX(-50%);white-space:nowrap;color:#fff0ad;text-shadow:0 0 12px #fff2a6}
+.habitat-moon{position:absolute;right:12%;top:9%;font-size:52px;text-shadow:0 0 28px #fff0ac}
+.habitat-lamp{position:absolute;left:15%;top:30%;color:#fff1a8;text-shadow:0 0 20px #ffec9c}
+.habitat-ground{position:absolute;z-index:-1;bottom:0;left:-10%;width:120%;height:30%;background:linear-gradient(165deg,#536b50,#2c493c);border-radius:50% 50% 0 0}
+.habitat-home{position:absolute;z-index:1;left:50%;bottom:19%;width:min(58vw,310px);height:clamp(190px,35vh,310px);transform:translateX(-50%);display:flex;align-items:center;justify-content:center;flex-direction:column;filter:drop-shadow(0 18px 20px #11182d55)}
+.habitat-house-roof{position:absolute;top:0;width:100%;height:43%;background:#4b3a3b;clip-path:polygon(50% 0,100% 100%,0 100%);border-bottom:5px solid #302b3b}
+.habitat-house-body{position:absolute;bottom:0;width:78%;height:68%;border:4px solid #554a4b;background:#a9a39a;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 4px #ffffff20}
+.habitat-house-icon{font-size:clamp(35px,8vw,64px);filter:drop-shadow(0 4px 5px #0003);margin-top:-25px}
+.habitat-house-door{position:absolute;bottom:0;left:calc(50% - 19px);width:38px;height:57px;border-radius:12px 12px 0 0;background:#4b3430;border:3px solid #d1b98c}
+.habitat-house-window{position:absolute;top:22%;width:28px;height:34px;border:4px solid #eee0ba;background:#273a4a}
+.window-one{left:8%}.window-two{right:8%}
+.habitat-house-caption{position:absolute;bottom:-31px;background:#111b2dcc;border:1px solid #ffffff30;border-radius:99px;padding:5px 12px;font-size:11px;white-space:nowrap;color:#e6eeff}
+.habitat-home.home-poor{width:min(45vw,210px);height:clamp(135px,23vh,195px);bottom:20%;filter:drop-shadow(0 8px 9px #12182b55)}
+.home-poor .habitat-house-roof{background:#5b514d;clip-path:polygon(15% 5%,95% 20%,100% 100%,0 100%);border-bottom:3px solid #3e3b39}
+.home-poor .habitat-house-body{background:#82796e;border-color:#6a625a;width:95%;height:70%;box-shadow:inset 0 0 0 3px #5c554d}
+.home-poor .habitat-house-icon{font-size:40px;opacity:.85}
+.home-poor .habitat-house-window{display:none}.home-poor .habitat-house-door{width:31px;height:49px;background:#3c302a;border-color:#6d5b4c}
+.habitat-home.home-cabin{width:min(52vw,260px);height:clamp(160px,29vh,245px)}
+.home-cabin .habitat-house-roof{background:#6b473b}.home-cabin .habitat-house-body{background:#b89a72;border-color:#775641}.home-cabin .habitat-house-icon{font-size:54px}
+.habitat-home.home-comfort{width:min(58vw,300px);height:clamp(190px,34vh,285px)}
+.home-comfort .habitat-house-roof{background:#4b6380}.home-comfort .habitat-house-body{background:#e1d5bd;border-color:#b9c4d2;box-shadow:0 0 30px #ffdf8c44,inset 0 0 0 4px #ffffff66}
+.home-comfort .habitat-house-window{background:#f8d98b;box-shadow:0 0 14px #ffe9a3}
+.habitat-home.home-royal{width:min(70vw,350px);height:clamp(220px,40vh,340px);filter:drop-shadow(0 0 25px #bba8ff88)}
+.home-royal .habitat-house-roof{background:linear-gradient(135deg,#8773c6,#453d7e);clip-path:polygon(0 100%,8% 30%,20% 65%,32% 0,50% 55%,68% 0,80% 65%,92% 30%,100% 100%)}
+.home-royal .habitat-house-body{background:linear-gradient(90deg,#b8c9ee,#f0e5ff,#9db8e6);border-color:#e2d8ff;box-shadow:0 0 22px #bba8ff77,inset 0 0 0 5px #ffffff77}
+.home-royal .habitat-house-icon{font-size:68px}.home-royal .habitat-house-window{background:#fff1a3;box-shadow:0 0 18px #fff1a3}
+.habitat-pet{position:absolute;z-index:3;left:calc(50% - 46px);bottom:8%;width:92px;height:108px;animation:companion-bob 2.3s ease-in-out infinite;filter:drop-shadow(0 8px 9px #12182d66)}
+.habitat-pet svg{width:100%;height:100%}
+.scene-level-0{background:linear-gradient(#75818b 0%,#b5b4a9 55%,#77715f 56%,#48483f 100%)}
+.scene-level-0 .habitat-ground{background:linear-gradient(165deg,#746d5e,#48473e)}
+.scene-level-1{background:linear-gradient(#617c9c 0%,#c4c8c1 55%,#73876a 56%,#405b45 100%)}
+.scene-level-2{background:linear-gradient(#476ca0 0%,#9fcde0 55%,#75a06e 56%,#31563e 100%)}
+.scene-level-3{background:linear-gradient(#141f54 0%,#433d83 56%,#3b4b83 57%,#1c2d4a 100%)}
+.scene-level-3 .habitat-ground{background:linear-gradient(165deg,#6561b1,#252b56)}
+.habitat-bottom{z-index:3;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:12px 12px max(12px,env(safe-area-inset-bottom));background:#10182beF;border-top:1px solid #ffffff1c}
+.habitat-bottom button{min-height:48px;font-size:13px;background:linear-gradient(145deg,#263b61,#1b2a47)}
+.habitat-subpage{position:absolute;z-index:5;inset:74px 12px 82px;padding:18px;overflow:auto;border:1px solid #ffffff28;border-radius:20px;background:#111b30f5;box-shadow:0 20px 60px #0007}
+.habitat-subpage[hidden]{display:none!important}
+.habitat-subpage h3{margin:0 0 12px}.habitat-subpage p{line-height:1.8;color:#d0dcf3;font-size:13px}
+.habitat-city-art{display:flex;align-items:end;justify-content:space-around;gap:8px;min-height:100px;padding:12px;border-radius:14px;background:linear-gradient(#506a92,#a5b8c4 70%,#536b50 70%);font-size:32px}
+.habitat-shop-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.habitat-shop-grid button{display:flex;flex-direction:column;align-items:center;gap:8px;min-height:94px;background:#253758}
+.habitat-shop-grid strong{font-size:11px;color:#ffdf83}
+.habitat-shop-note{font-size:12px}
+@media(max-width:600px){.habitat-top{padding-top:max(10px,env(safe-area-inset-top))}.habitat-home{bottom:21%}.habitat-pet{bottom:8%;width:76px;height:90px;left:calc(50% - 38px)}.habitat-bottom{gap:5px;padding-left:8px;padding-right:8px}.habitat-bottom button{padding:8px 3px;font-size:11px}.habitat-subpage{inset:70px 8px 78px;padding:14px}}
+
+/* Keep the companion menu above the habitat when opened by a long press. */
+#companionPanel{z-index:1400}
