@@ -203,3 +203,33 @@
 @keyframes creature-3d-sleep{0%,100%{transform:rotateZ(-4deg) translateY(3px) rotateY(-2deg)}50%{transform:rotateZ(4deg) translateY(4px) rotateY(2deg)}}
 @media(max-width:600px){#companionBuddy{width:72px;height:84px}.habitat-interior .room-pet-3d{width:48px;height:60px}}
 @media(prefers-reduced-motion:reduce){#companionArt svg,.companion-hero svg,#companionPanelArt svg,.habitat-interior .room-pet-3d svg,#companionBuddy:before{animation:none!important}}
+
+/* Complete pixel-art visual reset for the companion, house, and room */
+#companionArt svg.creature-pixel-art,#companionPanelArt svg.creature-pixel-art,.companion-hero svg.creature-pixel-art,.room-pet-3d svg.creature-pixel-art{image-rendering:pixelated;shape-rendering:crispEdges;filter:drop-shadow(4px 5px 0 #111c35)!important;animation:pixel-idle 1.2s steps(2,end) infinite!important;overflow:visible}
+#companionArt svg.creature-3d-art,#companionPanelArt svg.creature-3d-art{display:none!important}
+#companionBuddy{image-rendering:pixelated;filter:none!important}
+#companionBuddy:before{background:radial-gradient(ellipse,#263d62 0 35%,transparent 72%);filter:none;animation:pixel-shadow 1.2s steps(2,end) infinite}
+#companionBuddy:after{display:none}
+#companionArt svg.creature-pixel-art rect,#companionPanelArt svg.creature-pixel-art rect{shape-rendering:crispEdges}
+.habitat-house-roof{border-radius:0!important;clip-path:polygon(0 30%,12% 30%,12% 15%,25% 15%,25% 0,75% 0,75% 15%,88% 15%,88% 30%,100% 30%,100% 100%,0 100%);border:4px solid #242946!important;background:repeating-linear-gradient(90deg,#d95f68 0 16px,#ef9a70 16px 32px,#d95f68 32px 48px)!important;box-shadow:0 8px 0 #242946!important;filter:none!important}
+.habitat-house-body{border-radius:0!important;border:5px solid #242946!important;background:repeating-linear-gradient(0deg,#f6d7a2 0 16px,#edc58b 16px 32px)!important;box-shadow:inset -10px 0 #bd8b79,0 8px 0 #242946!important;transform:none!important}
+.habitat-house-door{border-radius:0!important;border:4px solid #242946!important;background:repeating-linear-gradient(0deg,#79485b 0 8px,#9e5b62 8px 16px)!important;box-shadow:4px 4px 0 #242946!important}
+.habitat-house-window{border-radius:0!important;border:5px solid #242946!important;background:linear-gradient(0deg,#77bde5 0 50%,#c7efff 50% 100%)!important;box-shadow:inset 4px 0 #fff0c9,0 5px 0 #242946!important}
+.anime-3d-room{border-radius:0!important;border:4px solid #242946!important;box-shadow:8px 8px 0 #121b34!important;perspective:none!important}
+.anime-3d-room .room-back-wall{background:repeating-linear-gradient(0deg,#8b9ed6 0 24px,#8294ce 24px 48px)!important;box-shadow:inset 0 -8px 0 #34365f!important}
+.anime-3d-room .room-side-wall{background:repeating-linear-gradient(0deg,#7a73b4 0 24px,#6e67a5 24px 48px)!important;clip-path:none!important;border-left:4px solid #34365f!important}
+.anime-3d-room .room-window-3d{border-radius:0!important;border:6px solid #34365f!important;box-shadow:5px 5px 0 #34365f!important}
+.anime-3d-room .room-wall-poster{border-radius:0!important;box-shadow:4px 4px 0 #34365f!important}
+.anime-3d-room .room-shelf-3d{border-radius:0!important;box-shadow:0 6px 0 #34365f!important}
+.anime-3d-room .room-floor-3d{background:repeating-linear-gradient(0deg,#b77f87 0 24px,#a96f7c 24px 48px)!important;box-shadow:inset 0 8px 0 #f5d49c!important}
+.anime-3d-room .room-rug-3d{border-radius:0!important;transform:none!important;border:4px solid #34365f!important;box-shadow:5px 5px 0 #34365f!important;background:repeating-linear-gradient(0deg,#8e90d4 0 12px,#b58bd1 12px 24px)!important}
+.anime-3d-room .room-bed-3d{transform:none!important;filter:none!important}
+.anime-3d-room .bed-headboard,.anime-3d-room .bed-pillow,.anime-3d-room .bed-blanket,.anime-3d-room .bed-foot{border-radius:0!important;box-shadow:4px 4px 0 #34365f!important}
+.anime-3d-room .bed-headboard{background:repeating-linear-gradient(90deg,#87556c 0 12px,#a76b79 12px 24px)!important}
+.anime-3d-room .bed-blanket{background:repeating-linear-gradient(0deg,#6d78bd 0 12px,#8797df 12px 24px)!important}
+.anime-3d-room .room-nightstand,.anime-3d-room .room-level-plaque{border-radius:0!important;box-shadow:4px 4px 0 #34365f!important}
+.anime-3d-room .room-pet-3d{filter:none!important}
+.anime-3d-room .room-pet-3d svg{filter:drop-shadow(3px 3px 0 #34365f)!important}
+@keyframes pixel-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes pixel-shadow{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.82)}}
+@media(prefers-reduced-motion:reduce){#companionArt svg.creature-pixel-art,#companionPanelArt svg.creature-pixel-art{animation:none!important}#companionBuddy:before{animation:none!important}}

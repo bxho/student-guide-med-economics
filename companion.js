@@ -20,32 +20,88 @@ const COMPANIONS={
 };
 function companionName(kind){return (COMPANIONS[kind]||COMPANIONS.medicine).name}
 function art(kind,stage=0,outfit=0){
- const c=COMPANIONS[kind]||COMPANIONS.medicine, coat=['#dcecff','#4b77ca','#f0f4ff','#263d71'][outfit%4]||c.coat;
- const age=stage===0?0:stage===1?3:stage===2?6:9, scale=stage===0?.92:stage===1?.97:stage===2?1.03:1.08;
- const ears=c.kind==='cat'||c.kind==='animal'?'<path d="M28 42 L23 18 L42 31 M54 31 L73 18 L68 43" fill="'+c.fur+'" stroke="#553b32" stroke-width="2" stroke-linejoin="round"/><path d="M29 25 L34 36 M65 25 L60 36" stroke="#f6c0b1" stroke-width="5"/>':'';
- const face=c.kind==='robot'?'<rect x="23" y="28" width="50" height="43" rx="13" fill="#d9f4ff" stroke="#456b8e" stroke-width="3"/><rect x="29" y="35" width="38" height="28" rx="9" fill="#102c50"/><path d="M37 48 Q40 43 43 48 M53 48 Q56 43 59 48" stroke="'+c.accent+'" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M48 28 V19" stroke="'+c.accent+'" stroke-width="3"/><circle cx="48" cy="16" r="4" fill="'+c.accent+'"/>':
- c.kind==='hijab'?'<path d="M20 48 Q17 14 48 15 Q79 14 76 48 L70 77 Q48 91 26 77Z" fill="'+c.coat+'" stroke="#4b345d" stroke-width="2"/><ellipse cx="48" cy="49" rx="20" ry="25" fill="'+c.fur+'"/>':
- '<ellipse cx="48" cy="48" rx="'+(27+age*.35)+'" ry="'+(27+age*.25)+'" fill="'+c.fur+'" stroke="#5a3b20" stroke-width="2"/>';
- const mood=data.mood||'happy';
- const eyes=c.kind==='robot'?'':'<ellipse cx="39" cy="48" rx="6" ry="'+(mood==='sleepy'?1.8:7)+'" fill="#fff" stroke="#49362f" stroke-width="1.5"/><ellipse cx="57" cy="48" rx="6" ry="'+(mood==='sleepy'?1.8:7)+'" fill="#fff" stroke="#49362f" stroke-width="1.5"/>'+(mood==='sleepy'?'':'<ellipse cx="40" cy="49" rx="3.4" ry="4.5" fill="#27354d"/><ellipse cx="58" cy="49" rx="3.4" ry="4.5" fill="#27354d"/><circle cx="41" cy="47" r="1.8" fill="#fff"/><circle cx="59" cy="47" r="1.8" fill="#fff"/>')+'<path d="'+(mood==='curious'?'M32 39 Q39 34 44 39 M52 39 Q59 32 64 38':mood==='sleepy'?'M33 43 Q39 40 44 43 M52 43 Q57 40 63 43':'M33 41 Q39 37 44 41 M52 41 Q57 37 63 41')+'" fill="none" stroke="#51372f" stroke-width="2.4" stroke-linecap="round"/>';
- const hair=c.kind==='dark'?'<path d="M22 47 Q17 17 45 17 Q73 15 75 43 L68 36 L61 29 L54 38 L42 29 L32 41 L28 52Z" fill="#20283b" stroke="#141b2a" stroke-width="2"/>':
- c.kind==='cap'?'<path d="M22 35 Q48 8 72 34 L66 42 L29 42Z" fill="#d84e65"/><path d="M18 41 Q47 37 78 43 L70 48 L25 48Z" fill="#f28ba0"/>':
- c.kind==='glasses'?'<path d="M22 44 Q18 17 47 19 Q73 18 74 43 L65 36 L55 31 L45 39 L34 32Z" fill="#242d32"/>':'';
- const glasses=c.kind==='glasses'?'<rect x="30" y="42" width="16" height="13" rx="4" fill="none" stroke="#182a37" stroke-width="2.5"/><rect x="50" y="42" width="16" height="13" rx="4" fill="none" stroke="#182a37" stroke-width="2.5"/><path d="M46 47 H50" stroke="#182a37" stroke-width="2"/>':'';
- const headphones=c.kind==='headphones'?'<path d="M23 49 V42 A25 25 0 0 1 73 42 V49" fill="none" stroke="#202a3c" stroke-width="6"/><rect x="18" y="44" width="10" height="18" rx="4" fill="'+c.accent+'"/><rect x="68" y="44" width="10" height="18" rx="4" fill="'+c.accent+'"/>':'';
- const muzzle=c.kind==='robot'||c.kind==='hijab'?'':'<ellipse cx="48" cy="58" rx="19" ry="13" fill="#fff4df"/>';
- const mouth=c.kind==='robot'?'':'<ellipse cx="32" cy="59" rx="5" ry="2.5" fill="#f39b9f" opacity=".65"/><ellipse cx="64" cy="59" rx="5" ry="2.5" fill="#f39b9f" opacity=".65"/>'+(mood==='sleepy'?'<path d="M43 61 Q48 59 53 61" fill="none" stroke="#754d42" stroke-width="2.4" stroke-linecap="round"/>':mood==='curious'?'<ellipse cx="48" cy="62" rx="3" ry="4" fill="#754d42"/>':mood==='excited'?'<path d="M39 59 Q48 75 57 59Z" fill="#a83d58" stroke="#754d42" stroke-width="1.8"/>':'<path d="M38 59 Q48 72 58 59 Q48 64 38 59Z" fill="#a83d58" stroke="#754d42" stroke-width="1.8"/>');
- const collar=c.kind==='cat'?'<path d="M37 76 L48 83 L59 76" fill="none" stroke="#e3c65e" stroke-width="3"/>':'<path d="M48 72 L42 80 L48 87 L54 80Z" fill="'+c.accent+'" stroke="#fff" stroke-width="1.5"/>';
- const extra=c.kind==='animal'?'<circle cx="35" cy="48" r="2" fill="#5a3b20"/><circle cx="61" cy="48" r="2" fill="#5a3b20"/>':'';
+ const c=COMPANIONS[kind]||COMPANIONS.medicine;
+ const coat=['#dcecff','#4b77ca','#f0f4ff','#263d71'][outfit%4]||c.coat;
  const tier=Math.min(7,1+Math.floor(Math.max(0,Number(data.xp)||0)/100));
- const magicalFx='<ellipse cx="48" cy="103" rx="25" ry="5" fill="#9f8cff" opacity=".35"/>'+
-   (tier>=2?'<path d="M28 72 Q9 59 16 43 Q28 49 31 62 M68 72 Q87 59 80 43 Q68 49 65 62" fill="#7ce7ff" fill-opacity=".55" stroke="#7ce7ff" stroke-width="2"/>':'')+
-   (tier>=3?'<ellipse cx="48" cy="25" rx="29" ry="7" fill="none" stroke="#8feaff" stroke-width="2" opacity=".9"/><circle cx="20" cy="24" r="2.5" fill="#fff0a6"/><circle cx="76" cy="24" r="2.5" fill="#fff0a6"/>':'')+
-   (tier>=4?'<path d="M36 91 Q29 101 38 105 Q40 99 44 96 M52 96 Q58 101 57 106 Q68 100 60 91" fill="#42d9ff" stroke="#d5fbff" stroke-width="1.5"><animate attributeName="opacity" values=".65;1;.65" dur=".7s" repeatCount="indefinite"/></path>':'')+
-   (tier>=5?'<path d="M16 30 l3 -6 l3 6 l-3 3Z M75 38 l3 -6 l3 6 l-3 3Z M47 10 l3 -6 l3 6 l-3 3Z" fill="#ffe58b"/>':'')+
-   (tier>=6?'<path d="M24 15 Q48 -1 72 15" fill="none" stroke="#ffd66e" stroke-width="3" stroke-linecap="round"/><circle cx="48" cy="9" r="4" fill="#fff4bd" stroke="#ffd66e" stroke-width="2"/>':'')+
-   (tier>=7?'<circle cx="48" cy="53" r="43" fill="none" stroke="#ffd66e" stroke-width="1.5" stroke-dasharray="3 5" opacity=".9"/><path d="M10 54 l5 -8 l5 8 l-5 8Z M76 54 l5 -8 l5 8 l-5 8Z" fill="#ffd66e"/>':'');
- return '<svg class="creature-3d-art" viewBox="0 0 96 112" role="img" aria-label="'+c.name+'، الطور السحري '+tier+' من 7" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="furLight" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff4dc"/><stop offset=".38" stop-color="'+c.fur+'"/><stop offset="1" stop-color="#704d45"/></linearGradient><linearGradient id="coatLight" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".18" stop-color="'+coat+'"/><stop offset="1" stop-color="#172b4b"/></linearGradient><radialGradient id="faceGlow" cx=".32" cy=".2" r=".9"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset=".48" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="#17213b" stop-opacity=".3"/></radialGradient><filter id="creatureDepth" x="-40%" y="-30%" width="180%" height="190%"><feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="blur"/><feOffset dy="3" dx="2" result="offset"/><feComponentTransfer><feFuncA type="linear" slope=".28"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g filter="url(#creatureDepth)" transform="translate(48 57) scale('+scale+') translate(-48 -57)"><ellipse cx="48" cy="103" rx="25" ry="5" fill="#172b4b" opacity=".18"/><path d="M29 78 Q9 78 15 59 Q20 49 28 59" fill="none" stroke="'+c.fur+'" stroke-width="10" stroke-linecap="round"/><path d="M29 77 Q13 77 17 60" fill="none" stroke="#fff" stroke-width="2.5" opacity=".28" stroke-linecap="round"/><path d="M31 75 L25 93 L40 93 L45 78 M53 78 L57 93 L72 93 L65 75" fill="url(#coatLight)" stroke="#25395c" stroke-width="2"/><path d="M31 77 L37 80 L33 91 L28 91Z M59 80 L64 77 L69 91 L62 91Z" fill="#101b36" opacity=".35"/><path d="M29 72 Q48 62 67 72 L65 89 Q48 98 31 89Z" fill="url(#coatLight)" stroke="#25395c" stroke-width="2"/><path d="M34 74 Q48 66 62 74" fill="none" stroke="#fff" stroke-width="3" opacity=".42" stroke-linecap="round"/><path d="M35 86 L61 86" stroke="#fff" stroke-width="2" opacity=".65"/><path d="M29 57 Q48 70 67 57" fill="none" stroke="#172b4b" stroke-width="2" opacity=".18"/>'+ears+face+'<ellipse cx="48" cy="49" rx="26" ry="27" fill="url(#faceGlow)" pointer-events="none"/>'+extra+eyes+muzzle+mouth+hair+glasses+headphones+collar+(stage>=3?'<path d="M16 42 Q5 29 18 21 M78 42 Q91 29 78 21" fill="none" stroke="#ffe58b" stroke-width="3" stroke-linecap="round"/>':'')+magicalFx+'</g></svg>';
+ const mood=data.mood||'happy';
+ const R=(x,y,w,h,fill,extra='')=>'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="'+fill+'" '+extra+'/>';
+ let p='';
+ // Shadow and pixel feet/body: deliberate square silhouettes, no smooth gradients.
+ p+=R(28,101,40,6,'#101b32','opacity=".3"');
+ p+=R(29,82,14,17,'#263b65')+R(53,82,14,17,'#263b65');
+ p+=R(25,94,20,7,'#172640')+R(51,94,20,7,'#172640');
+ p+=R(29,72,38,18,coat)+R(24,76,48,11,coat)+R(32,71,32,7,c.accent);
+ p+=R(34,75,5,14,'#ffffff','opacity=".65"')+R(57,75,5,14,'#172b4b','opacity=".3"');
+ // Ears and silhouette vary by creature type.
+ if(c.kind==='animal'||c.kind==='cat'){
+   p+=R(24,25,8,20,c.fur)+R(28,17,8,13,c.fur)+R(32,25,8,8,c.fur);
+   p+=R(64,25,8,20,c.fur)+R(60,17,8,13,c.fur)+R(56,25,8,8,c.fur);
+   p+=R(29,24,4,8,'#f6c0b1')+R(63,24,4,8,'#f6c0b1');
+ } else if(c.kind==='robot'){
+   p+=R(20,39,7,18,'#456b8e')+R(69,39,7,18,'#456b8e');
+   p+=R(39,13,18,6,c.accent)+R(44,7,8,7,c.accent);
+ } else if(c.kind==='hijab'){
+   p+=R(20,30,56,34,c.coat)+R(24,22,48,34,c.coat)+R(29,17,38,12,c.coat);
+   p+=R(20,49,9,21,c.coat)+R(67,49,9,21,c.coat)+R(28,63,40,8,c.coat);
+ }
+ // Main pixel head.
+ const headColor=c.kind==='robot'?'#d9f4ff':(c.kind==='hijab'?c.fur:c.fur);
+ p+=R(28,30,40,34,headColor)+R(32,24,32,8,headColor)+R(24,38,8,20,headColor)+R(64,38,8,20,headColor);
+ p+=R(32,30,32,4,'#fff4dc','opacity=".55"')+R(28,46,4,12,'#704d45','opacity=".22"')+R(64,46,4,12,'#704d45','opacity=".28"');
+ // Species-specific hair/cap and accessories.
+ if(c.kind==='dark'){
+   p+=R(24,26,48,10,'#20283b')+R(28,20,40,9,'#20283b')+R(32,16,30,7,'#141b2a')+R(24,31,8,12,'#20283b');
+ } else if(c.kind==='cap'){
+   p+=R(28,20,40,7,'#d84e65')+R(24,27,48,7,'#d84e65')+R(20,32,56,5,'#f28ba0')+R(27,29,42,3,'#ffb0c8');
+ } else if(c.kind==='glasses'){
+   p+=R(27,23,42,8,'#242d32')+R(32,19,32,7,'#242d32')+R(24,30,10,7,'#242d32');
+ } else if(c.kind==='cat'){
+   p+=R(32,23,32,6,'#fff0c9')+R(36,19,24,5,c.fur);
+ } else if(c.kind==='animal'){
+   p+=R(32,23,32,6,'#fff0c9')+R(36,19,24,5,c.fur);
+ } else if(c.kind==='headphones'){
+   p+=R(24,29,7,23,'#202a3c')+R(65,29,7,23,'#202a3c')+R(20,42,8,14,c.accent)+R(68,42,8,14,c.accent);
+ } else if(c.kind==='hijab'){
+   p+=R(24,27,8,34,c.coat)+R(64,27,8,34,c.coat)+R(28,21,40,7,c.coat);
+ }
+ if(c.kind==='robot'){
+   p+=R(28,34,40,25,'#102c50')+R(34,41,8,7,c.accent)+R(54,41,8,7,c.accent);
+   p+=R(38,52,20,3,'#ffffff')+R(42,56,12,3,c.accent);
+ } else {
+   // Eyes and eyebrows, pixelated expressions.
+   if(mood==='sleepy'){
+     p+=R(34,42,10,3,'#49362f')+R(52,42,10,3,'#49362f');
+   } else {
+     p+=R(34,39,10,12,'#fff')+R(52,39,10,12,'#fff');
+     p+=R(37,42,5,8,'#27354d')+R(55,42,5,8,'#27354d');
+     p+=R(38,42,2,3,'#fff')+R(56,42,2,3,'#fff');
+     p+=R(32,35,13,3,'#51372f')+R(51,35,13,3,'#51372f');
+   }
+   if(c.kind==='glasses'){
+     p+=R(30,38,17,3,'#182a37')+R(30,38,3,12,'#182a37')+R(44,38,3,12,'#182a37')+R(32,47,13,3,'#182a37');
+     p+=R(50,38,17,3,'#182a37')+R(50,38,3,12,'#182a37')+R(64,38,3,12,'#182a37')+R(52,47,13,3,'#182a37')+R(47,41,4,3,'#182a37');
+   }
+   if(c.kind!=='hijab'){
+     p+=R(34,54,8,4,'#fff0dc')+R(54,54,8,4,'#fff0dc');
+   }
+   if(mood==='sleepy') p+=R(42,57,12,3,'#754d42');
+   else if(mood==='curious') p+=R(45,56,6,7,'#754d42');
+   else if(mood==='excited') p+=R(40,56,16,7,'#a83d58')+R(43,56,10,3,'#fff');
+   else p+=R(41,57,5,3,'#754d42')+R(46,60,5,3,'#754d42')+R(51,57,5,3,'#754d42');
+ }
+ // Neckwear and unique role badges.
+ p+=R(42,68,12,6,c.accent)+R(45,73,6,6,'#fff0a6');
+ if(c.kind==='medicine') p+=R(45,77,6,10,'#fff')+R(42,80,12,4,'#e84b60');
+ if(c.kind==='economics') p+=R(43,78,4,8,'#fff0a6')+R(47,75,4,11,'#fff0a6')+R(51,72,4,14,'#fff0a6');
+ if(c.kind==='robot') p+=R(36,78,24,5,'#102c50')+R(42,79,12,3,c.accent);
+ // Seven visible upgrade stages use stronger pixel effects rather than smooth SVG gradients.
+ if(tier>=2){p+=R(13,57,7,8,'#7ce7ff')+R(17,49,7,8,'#7ce7ff')+R(76,57,7,8,'#7ce7ff')+R(72,49,7,8,'#7ce7ff');}
+ if(tier>=3){p+=R(28,13,40,4,'#8feaff')+R(20,17,8,4,'#8feaff')+R(68,17,8,4,'#8feaff');}
+ if(tier>=4){p+=R(31,91,6,6,'#42d9ff')+R(35,97,6,5,'#d5fbff')+R(59,91,6,6,'#42d9ff')+R(55,97,6,5,'#d5fbff');}
+ if(tier>=5){p+=R(15,30,4,4,'#ffe58b')+R(19,26,4,4,'#ffe58b')+R(76,35,4,4,'#ffe58b')+R(80,31,4,4,'#ffe58b');}
+ if(tier>=6){p+=R(40,7,16,4,'#ffd66e')+R(36,11,24,4,'#ffd66e')+R(44,3,8,4,'#fff4bd');}
+ if(tier>=7){p+=R(8,48,4,8,'#ffd66e')+R(12,44,4,8,'#ffd66e')+R(84,48,4,8,'#ffd66e')+R(80,44,4,8,'#ffd66e')+R(28,5,4,4,'#fff')+R(64,5,4,4,'#fff');}
+ return '<svg class="creature-pixel-art" viewBox="0 0 96 112" role="img" aria-label="'+escapeHtml(c.name)+'، الطور السحري '+tier+' من 7" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" style="image-rendering:pixelated"><g>'+p+'</g></svg>';
 }
 function stage(){return data.xp>=700?3:data.xp>=300?2:data.xp>=100?1:0}
 function rank(){return ['صغير','يافع','بالغ','أسطوري'][stage()]}
