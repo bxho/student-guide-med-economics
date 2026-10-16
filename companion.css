@@ -315,3 +315,15 @@
 .dream-portal-label{border-radius:0!important;border:3px solid #30345f!important;background:#20285d!important;box-shadow:3px 3px 0 #11182e!important;text-shadow:none!important;padding:4px 7px!important}
 @keyframes pixel-portal{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
 @media(prefers-reduced-motion:reduce){.dream-portal-ring{animation:none!important}}
+
+/* Offline companion care meters */
+.companion-care{margin-top:14px;padding:13px;border:1px solid var(--line,#344155);background:var(--surface2,#222e40);border-radius:13px}
+.companion-care h4{margin:0 0 12px}
+.care-meter{display:grid;grid-template-columns:85px minmax(50px,1fr) 38px;align-items:center;gap:8px;margin:9px 0;font-size:12px}
+.care-meter>div{height:8px;background:#101827;border-radius:0;overflow:hidden}
+.care-meter i{display:block;width:80%;height:100%;background:linear-gradient(90deg,#26d99a,#3285ff);transition:width .25s}
+.care-meter b{text-align:left;font-variant-numeric:tabular-nums}
+.care-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:12px}
+.care-actions button{padding:8px 4px;border:1px solid var(--line,#344155);border-radius:9px;background:var(--surface,#1b2433);color:var(--text,#eef3fb);font-size:11px}
+#careStatus{font-size:11px;color:var(--muted,#a4b2c7);margin:10px 0 0}
+@media(max-width:430px){.care-actions{grid-template-columns:repeat(2,minmax(0,1fr))}}
