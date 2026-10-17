@@ -34,13 +34,18 @@ const COMPANIONS={
 function companionName(kind){return data.customName||((COMPANIONS[kind]||COMPANIONS.medicine).name)}
 function art(kind,stage=0,outfit=0){
  const c=COMPANIONS[kind]||COMPANIONS.medicine;
- if(String(kind).startsWith('anime-')){
+ if(String(c.kind).startsWith('anime-')){
+  kind=c.kind; // COMPANIONS is keyed by luffy/zoro/etc.; art needs the visual kind.
   const palettes={'anime-luffy':['#f2c6a4','#30231e','#c93336','#f6d15c'],'anime-zoro':['#f0c6a4','#659b5a','#356c4b','#d6e5a0'],'anime-sanji':['#f0c5a3','#e8c65d','#28364b','#f4dfad'],'anime-naruto':['#f2c6a2','#f0b32e','#e87924','#f4d65d'],'anime-sasuke':['#f0c3a1','#222938','#343e58','#94a9dd'],'anime-mech':['#e0edf5','#f1f8ff','#347ba6','#58e9ff'],'anime-bruce':['#e9c09d','#252329','#d7a52b','#f8d75c'],'anime-batman':['#e7c4a3','#1c2230','#343b4c','#f5d15f'],'anime-levi':['#f0c6a6','#34352f','#49624d','#d8e2d4'],'anime-titan':['#a94d43','#412c2b','#8e3736','#ff8867']};
   const a=palettes[kind]||['#f1c6a6','#292d3a',c.coat,c.accent],skin=a[0],hair=a[1],cloth=a[2],shine=a[3];
   const titan=kind==='anime-titan';
   let hairPath='<path d="M29 39 L23 22 L36 29 L42 14 L51 27 L66 19 L68 39Z" fill="'+hair+'" stroke="#332b2b" stroke-width="2"/>';
   if(kind==='anime-luffy')hairPath='<path d="M29 39 L22 27 L34 30 L29 18 L43 25 L47 14 L54 25 L66 19 L64 32 L73 29 L66 43Z" fill="'+hair+'" stroke="#30221e" stroke-width="2"/><path d="M24 30 Q47 25 70 32 L69 38 L27 38Z" fill="#c83b37"/>';
-  if(kind==='anime-sanji')hairPath='<path d="M29 39 Q23 20 41 17 Q63 12 69 31 L62 37 L58 25 Q49 35 34 34Z" fill="'+hair+'" stroke="#6e5328" stroke-width="2"/>';
+  if(kind==='anime-zoro')hairPath='<path d="M27 42 L22 21 L37 27 L42 13 L50 27 L65 18 L70 42Z" fill="#5f9850" stroke="#294333" stroke-width="2"/><path d="M29 38 L67 38" stroke="#b7d99a" stroke-width="3"/>';
+  if(kind==='anime-sanji')hairPath='<path d="M29 39 Q23 20 41 17 Q63 12 69 31 L62 37 L58 25 Q49 35 34 34Z" fill="'+hair+'" stroke="#6e5328" stroke-width="2"/><path d="M58 43 Q69 44 62 52" fill="none" stroke="#5a3b29" stroke-width="3"/>';
+  if(kind==='anime-sasuke')hairPath='<path d="M26 42 L23 17 L39 26 L48 10 L55 27 L71 18 L67 43Z" fill="#252a36" stroke="#171e2a" stroke-width="2"/><path d="M29 35 L65 35" stroke="#3b465b" stroke-width="3"/>';
+  if(kind==='anime-levi')hairPath='<path d="M29 39 L27 19 L39 26 L47 15 L54 27 L67 20 L67 40Z" fill="#34352f" stroke="#252a26" stroke-width="2"/><path d="M32 31 L64 31" stroke="#66675e" stroke-width="2"/>';
+  if(kind==='anime-bruce')hairPath='<path d="M30 37 Q28 19 46 18 Q64 17 67 36Z" fill="#252329"/><path d="M31 31 Q47 24 65 31" stroke="#44404a" stroke-width="2" fill="none"/>';
   if(kind==='anime-naruto'||kind==='anime-mech')hairPath='<path d="M28 39 L21 25 L34 29 L34 16 L46 26 L53 14 L58 28 L71 22 L67 39Z" fill="'+(kind==='anime-mech'?'#f6a52f':hair)+'" stroke="#a96a23" stroke-width="2"/>';
   if(kind==='anime-batman')hairPath='<path d="M27 40 L22 12 L39 23 L48 8 L57 23 L74 12 L68 42Z" fill="'+hair+'" stroke="#111827" stroke-width="2"/>';
   const face=titan?'<path d="M30 47 Q24 30 37 23 L59 23 Q75 31 67 48 L61 66 L53 73 L44 72 L35 62Z" fill="'+skin+'" stroke="#351f25" stroke-width="2"/><path d="M31 43 L41 39 L47 45 L40 48Z M52 45 L59 39 L66 43 L59 49Z" fill="#fff1df"/><path d="M39 55 L58 55 L53 61 L43 61Z" fill="#271d25"/>':'<path d="M28 42 Q23 27 35 20 Q48 12 62 21 Q74 28 68 45 L65 59 Q61 71 48 72 Q34 70 30 59Z" fill="'+skin+'" stroke="#6b4b49" stroke-width="1.5"/><path d="M31 43 L42 40 L47 44 L41 47Z M52 44 L59 40 L65 43 L59 47Z" fill="#fff"/><ellipse cx="41" cy="44" rx="3.5" ry="4" fill="'+(kind==='anime-sasuke'?'#6679c6':'#533c31')+'"/><ellipse cx="59" cy="44" rx="3.5" ry="4" fill="#533c31"/><circle cx="42" cy="44" r="1.5"/><circle cx="58" cy="44" r="1.5"/><path d="M44 55 Q49 59 54 55" fill="none" stroke="#9a5553" stroke-width="2"/>';
@@ -49,7 +54,13 @@ function art(kind,stage=0,outfit=0){
   if(kind==='anime-zoro')body+='<path d="M22 79 L70 79" stroke="'+shine+'" stroke-width="4"/><path d="M20 58 L13 49 M74 58 L83 49" stroke="#cfd9e5" stroke-width="4"/>';
   if(kind==='anime-sanji')body+='<path d="M48 68 L42 87 L53 87 L48 68" fill="'+shine+'"/>';
   if(kind==='anime-naruto'||kind==='anime-mech')body+='<path d="M30 75 L66 75 M34 82 L62 82" stroke="'+shine+'" stroke-width="3"/>';
-  if(kind==='anime-batman')body+='<path d="M20 66 L10 84 L21 89 L32 71 M76 66 L86 84 L75 89 L64 71" fill="'+cloth+'"/><path d="M35 72 L61 72" stroke="'+shine+'" stroke-width="3"/>';
+  if(kind==='anime-naruto')body+='<path d="M28 70 L68 70" stroke="#f2c6a2" stroke-width="5"/><path d="M34 75 L62 75" stroke="#f7c948" stroke-width="3"/>';
+  if(kind==='anime-sasuke')body+='<path d="M32 68 L64 68 L61 78 L35 78Z" fill="#202735"/><path d="M48 78 L48 92" stroke="#9aafd9" stroke-width="3"/>';
+  if(kind==='anime-mech')body+='<path d="M27 68 L19 80 L28 88 L35 74 M69 68 L77 80 L68 88 L61 74" fill="#dceeff" stroke="#4edfff" stroke-width="2"/><circle cx="48" cy="78" r="7" fill="#54eaff" stroke="#e8fcff" stroke-width="2"/>';
+  if(kind==='anime-bruce')body+='<path d="M31 70 L22 62 M65 70 L74 62" stroke="#f0c5a3" stroke-width="7" stroke-linecap="round"/><path d="M40 73 L56 73" stroke="#fff1bd" stroke-width="3"/>';
+  if(kind==='anime-batman')body+='<path d="M20 66 L10 84 L21 89 L32 71 M76 66 L86 84 L75 89 L64 71" fill="'+cloth+'"/><path d="M35 72 L61 72" stroke="'+shine+'" stroke-width="3"/><path d="M40 72 L48 79 L56 72 L54 88 L42 88Z" fill="#161c29"/>';
+  if(kind==='anime-levi')body+='<path d="M34 70 L62 70 L58 91 L38 91Z" fill="#d9e0d5"/><path d="M33 70 L24 82 M63 70 L72 82" stroke="#d9e0d5" stroke-width="5"/>';
+  if(kind==='anime-sanji')body+='<path d="M39 69 L48 79 L57 69" fill="none" stroke="#f5f0dc" stroke-width="4"/><path d="M48 79 L48 91" stroke="#f5f0dc" stroke-width="3"/>';
   if(titan)body='<path d="M25 67 L70 67 L81 95 L14 95Z" fill="'+cloth+'" stroke="#3b2426" stroke-width="2"/><path d="M31 70 L42 89 M64 70 L54 89" stroke="'+shine+'" stroke-width="5"/>';
   return '<svg class="creature-anime-art" viewBox="0 0 96 112" role="img" aria-label="'+escapeHtml(c.name)+'" xmlns="http://www.w3.org/2000/svg"><ellipse cx="48" cy="105" rx="29" ry="5" fill="#101b3240"/>'+body+face+hairPath+(kind==='anime-batman'?'<path d="M33 47 L43 47 L40 52 L34 52Z M53 47 L63 47 L62 52 L56 52Z" fill="#111827"/>':'')+'<circle cx="21" cy="58" r="3" fill="'+shine+'"/><circle cx="75" cy="58" r="3" fill="'+shine+'"/></svg>';
  }
