@@ -23,6 +23,45 @@ const notifyIncomingMessage=m=>{if(!m||m.recipient_id!==state.user?.id||m.sender
 const showTab=tab=>{$$('.social-panel').forEach(p=>p.hidden=true);const p=$('#social-'+tab);if(p)p.hidden=false;$$('[data-social-tab]').forEach(b=>b.classList.toggle('primary',b.dataset.socialTab===tab));state.channel=tab;if(tab==='direct')renderFriends();if(tab==='profile')ensureProfile().catch(e=>say(e.message));if(tab==='feed')loadAchievements()};
 const loadAchievements=async()=>{const box=$('#socialAchievementFeed');box.innerHTML='<p class="note">جارٍ تحميل الإنجازات…</p>';try{const {data,error}=await state.client.from('student_achievement_posts').select('*').order('created_at',{ascending:false}).limit(100);if(error)throw error;const profiles=await loadProfiles((data||[]).map(p=>p.user_id));box.innerHTML='';(data||[]).forEach(p=>{const prof=profiles[p.user_id]||{};const card=document.createElement('article');card.className='social-achievement-card';const title=document.createElement('h4');title.textContent='🏆 '+p.title;const desc=document.createElement('p');desc.textContent=p.description||'';const meta=document.createElement('div');meta.className='social-achievement-meta';meta.textContent=(prof.display_name||'طالب')+' · '+fmt(p.created_at);card.append(title,desc,meta);if(p.user_id===state.user.id){const del=document.createElement('button');del.className='btn small';del.textContent='حذف منشوري';del.onclick=async()=>{if(!confirm('حذف هذا الإنجاز؟'))return;const r=await state.client.from('student_achievement_posts').delete().eq('id',p.id);if(r.error)alert(r.error.message);else loadAchievements()};card.append(del)}box.append(card)});if(!data?.length)box.innerHTML='<p class="note">لا توجد إنجازات منشورة. شارك أول إنجاز عندما تكون مستعدًا.</p>'}catch(e){box.innerHTML='<p class="note">تعذر تحميل الإنجازات: '+safe(e.message)+'</p>'}};
 const setup=async()=>{if(state.channelSub&&state.client){try{await state.client.removeChannel(state.channelSub)}catch(_){}}state.channelSub=null;const getClient=window.studentGuideGetSupabaseClient,getUser=window.studentGuideGetUser;state.client=getClient?.();state.user=getUser?.();if(!state.client||!state.user){$$('[data-social-tab]').forEach(b=>b.disabled=true);['socialAddFriend','socialDirectFind','socialDirectForm','socialProfileForm','socialAchievementForm'].forEach(id=>{const e=$('#'+id);if(e)e.querySelectorAll('button,input,textarea,select').forEach(x=>x.disabled=true)});say('سجّل الدخول لاستخدام الأصدقاء والمحادثات.');return}$$('[data-social-tab]').forEach(b=>b.disabled=false);['socialAddFriend','socialDirectFind','socialDirectForm','socialProfileForm','socialAchievementForm'].forEach(id=>{const e=$('#'+id);if(e)e.querySelectorAll('button,input,textarea,select').forEach(x=>x.disabled=false)});$('#socialDirectInput').disabled=!state.targetId;$('#socialDirectForm').querySelector('button').disabled=!state.targetId;await ensureProfile();await renderFriends();if(state.targetId)await loadMessages('direct');if(state.client.channel){state.channelSub=state.client.channel('student-friends-live').on('postgres_changes',{event:'INSERT',schema:'public',table:'student_social_messages'},payload=>{const m=payload.new;if(m.channel==='direct'){if(state.channel==='direct'&&state.targetId&&[m.sender_id,m.recipient_id].includes(state.targetId))loadMessages('direct');notifyIncomingMessage(m)}}).on('postgres_changes',{event:'INSERT',schema:'public',table:'student_achievement_posts'},()=>{if(state.channel==='feed')loadAchievements()}).subscribe()}};
+
+const requestMessageNotificationsSafe=()=>{try{if('Notification'in window&&Notification.permission==='default')Promise.resolve(Notification.requestPermission()).catch(()=>{})}catch(_){}};
+// Capture these controls before any other handler so a failed initializer cannot reload the entire app.
+document.addEventListener('click',event=>{
+ const tab=event.target.closest?.('[data-social-tab]');
+ if(!tab||!$('#view-community'))return;
+ event.preventDefault();event.stopImmediatePropagation();
+ if(tab.dataset.socialTab==='direct')requestMessageNotificationsSafe();
+ showTab(tab.dataset.socialTab);
+},true);
+document.addEventListener('submit',event=>{
+ const form=event.target;
+ if(!form||!['socialAddFriend','socialDirectFind'].includes(form.id))return;
+ event.preventDefault();event.stopImmediatePropagation();
+ (async()=>{
+  try{
+   if(!state.client||!state.user){say('سجّل الدخول أولًا، ثم أعد المحاولة.');return}
+   if(form.id==='socialAddFriend'){await addFriendByUsername($('#socialFriendUsername').value);return}
+   const term=$('#socialTargetId').value.trim();
+   if(!term){say('اكتب اسم المستخدم أو معرّف الحساب.');return}
+   let userId=term;
+   if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(term)){
+    const username=term.replace(/^@/,'').toLowerCase();
+    if(!/^[a-z0-9_]{3,24}$/.test(username)){say('اكتب اسم مستخدم صحيحًا أو UUID كاملًا.');return}
+    const {data,error}=await state.client.from('student_profiles').select('user_id,username').eq('username',username).maybeSingle();
+    if(error)throw error;
+    if(!data){say('لم أجد حسابًا بهذا الاسم.');return}
+    userId=data.user_id;
+   }
+   if(userId===state.user.id){say('هذا حسابك أنت.');return}
+   state.targetId=userId;
+   $('#socialDirectInput').disabled=false;
+   $('#socialDirectForm').querySelector('button').disabled=false;
+   await loadMessages('direct');
+   say('تم فتح المحادثة.');
+  }catch(error){say('تعذّر تنفيذ الطلب: '+(error?.message||'خطأ غير معروف'))}
+ })();
+},true);
+
 document.addEventListener('DOMContentLoaded',()=>{if(!$('#view-community'))return;
 const requestMessageNotifications=()=>{if(!('Notification' in window)||Notification.permission!=='default')return;try{const permission=Notification.requestPermission();if(permission&&typeof permission.catch==='function')permission.catch(()=>{})}catch(_){}};document.querySelectorAll('[data-social-tab]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.socialTab==='direct')requestMessageNotifications();showTab(b.dataset.socialTab)}));
 $('#socialDirectFind').onsubmit=async e=>{e.preventDefault();const id=$('#socialTargetId').value.trim();if(id===state.user?.id){say('هذا معرّف حسابك أنت.');return}state.targetId=id;$('#socialDirectInput').disabled=false;$('#socialDirectForm').querySelector('button').disabled=false;await loadMessages('direct');say('تم فتح المحادثة الخاصة.')};
