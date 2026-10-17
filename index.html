@@ -13,6 +13,11 @@
 </style>
 
 
+<style id="student-guide-theme-palette">
+:root[data-theme="light"]{color-scheme:light;--bg:#eef3ed;--surface:#fff;--surface2:#f4f8f2;--text:#17251b;--muted:#6d7d70;--line:#dce6da;--blue:#2f7c42;--bluebg:#e3f4df;--green:#2f7c42;--greenbg:#e3f4df;--amber:#a36b17;--shadow:0 14px 34px rgba(15,35,19,.09)}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#101812;--surface:#19251d;--surface2:#202f24;--text:#eff7ef;--muted:#a5b7a7;--line:#354a39;--blue:#78d66b;--bluebg:#233f28;--green:#78d66b;--greenbg:#233f28;--amber:#f0c76a;--shadow:0 14px 34px rgba(0,0,0,.22)}
+#themeToggle{white-space:nowrap}
+</style>
 <style>#lectureText{min-height:220px;resize:vertical;line-height:1.9}#lectureOutput .study-point{padding:11px 13px;border:1px solid var(--line);border-radius:11px;margin:8px 0;background:var(--surface2)}#lectureOutput details{padding:12px;border:1px solid var(--line);border-radius:11px;margin:8px 0;background:var(--surface2)}#lectureOutput details summary{cursor:pointer;font-weight:bold}#lectureOutput details p{color:var(--muted);line-height:1.9}@media(max-width:680px){.mobile-nav .nav{max-width:16%;padding:5px 3px;font-size:8px}.mobile-nav .nav .ico{font-size:15px}}</style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="./supabase-config.js"></script>
@@ -110,7 +115,7 @@
   <div class="auth-actions" style="margin-top:10px"><button class="btn small" id="cloudResetBtn" type="button">نسيت كلمة المرور؟</button><button class="btn small" id="cloudLocalBackupBtn" type="button">تنزيل نسخة بيانات هذا المتصفح</button></div><p id="cloudAuthMessage" class="auth-message" role="status" aria-live="polite"></p><p style="font-size:11px">لن يتمكن الطلاب الآخرون من الوصول إلى بياناتك. سجّل الدخول ببريدك الإلكتروني وكلمة المرور فقط؛ اسم المستخدم مطلوب عند إنشاء الحساب لا عند تسجيل الدخول.</p>
 </div><div id="appContent" class="auth-locked">
 <div class="app">
-<header class="topbar"><div class="brand"><img class="brand-mark" src="./student-guide-icon.svg" alt="" aria-hidden="true"><div><h1>دليل الطالب</h1><p>مساحة دراستك الشخصية</p></div></div><div class="top-actions"><span class="chip" id="saveStatus">● بانتظار الاتصال</span><span class="chip" id="cloudUserEmail"></span><button class="btn small" id="cloudSignoutBtn">تسجيل الخروج</button></div></header>
+<header class="topbar"><div class="brand"><img class="brand-mark" src="./student-guide-icon.svg" alt="" aria-hidden="true"><div><h1>دليل الطالب</h1><p>مساحة دراستك الشخصية</p></div></div><div class="top-actions"><button class="btn small soft" id="themeToggle" type="button" aria-label="تبديل الوضع اللوني">☀️ الوضع النهاري</button><span class="chip" id="saveStatus">● بانتظار الاتصال</span><span class="chip" id="cloudUserEmail"></span><button class="btn small" id="cloudSignoutBtn">تسجيل الخروج</button></div></header>
 <div class="shell"><aside class="sidebar"><div class="side-label">مساحة الدراسة</div><button class="nav active" data-view="home"><span class="ico">⌂</span>الرئيسية</button><button class="nav" data-view="planner"><span class="ico">▦</span>التخطيط والمهام</button><button class="nav" data-view="library"><span class="ico">▤</span>مكتبة الملفات</button><button class="nav" data-view="flashcards"><span class="ico">▣</span>بطاقات المراجعة</button><button class="nav" data-view="study"><span class="ico">✎</span>مساعد المحاضرات</button><button class="nav" data-view="insights"><span class="ico">◔</span>التقدم والإعدادات</button><button class="nav" data-view="community"><span class="ico">♧</span>الأصدقاء</button><div class="sidebar-note"><strong>خطوة صغيرة كل يوم</strong><p>الاستمرارية أهم من جلسة مذاكرة طويلة واحدة.</p><button class="btn green small" data-goto="planner">خطط ليومك ←</button></div></aside>
 <main class="main">
 <section class="view active" id="view-home"><div class="welcome"><div><div class="eyebrow">دليل الطالب</div><h2>مساحة دراستك، بترتيب أبسط.</h2><p id="welcomeSub">رتّب أولوياتك وابدأ بأهم مهمة عندك.</p></div><div class="date-pill" id="todayDate">اليوم</div></div>
@@ -235,4 +240,12 @@ window.addEventListener("load",()=>setTimeout(()=>document.getElementById("bxSpl
   </script>
   <script src="./social.js?v=username-chat-1017"></script>
 <script src="./companion.js?v=username-chat-1017"></script>
+<script id="student-guide-theme-controller">
+(function(){
+  const root=document.documentElement,button=document.getElementById("themeToggle");
+  let saved="light";try{saved=localStorage.getItem("student-guide-theme")||"light"}catch(e){}
+  function applyTheme(theme){const next=theme==="dark"?"dark":"light";root.dataset.theme=next;if(button){button.textContent=next==="dark"?"🌙 الوضع الليلي":"☀️ الوضع النهاري";button.setAttribute("aria-pressed",String(next==="dark"));button.title=next==="dark"?"التبديل إلى الوضع النهاري":"التبديل إلى الوضع الليلي"}const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=next==="dark"?"#101812":"#eef3ed";try{localStorage.setItem("student-guide-theme",next)}catch(e){}}
+  applyTheme(saved);button?.addEventListener("click",()=>applyTheme(root.dataset.theme==="dark"?"light":"dark"));
+})();
+</script>
 </body></html>
