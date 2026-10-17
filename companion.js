@@ -35,75 +35,92 @@ function companionName(kind){return data.customName||((COMPANIONS[kind]||COMPANI
 function art(kind,stage=0,outfit=0){
  const c=COMPANIONS[kind]||COMPANIONS.medicine;
  if(String(c.kind).startsWith('anime-')){
-  const k=c.kind, titan=k==='anime-titan', mech=k==='anime-mech';
-  const palettes={
-   'anime-luffy':{skin:'#f5c9a7',hair:'#30241f',cloth:'#c72f38',trim:'#f4c64e',dark:'#74232a'},
-   'anime-zoro':{skin:'#f0c5a5',hair:'#4e8846',cloth:'#356b4a',trim:'#c8d99b',dark:'#203f31'},
-   'anime-sanji':{skin:'#f0c5a3',hair:'#e4c05c',cloth:'#27374b',trim:'#eee5d1',dark:'#172335'},
-   'anime-naruto':{skin:'#f2c5a1',hair:'#f3b12e',cloth:'#e87524',trim:'#f8d34c',dark:'#a9431f'},
-   'anime-sasuke':{skin:'#edc1a0',hair:'#202635',cloth:'#30394d',trim:'#7e9fd7',dark:'#161c2b'},
-   'anime-mech':{skin:'#dbeaf3',hair:'#f4a52b',cloth:'#347ba6',trim:'#58e9ff',dark:'#173c59'},
-   'anime-bruce':{skin:'#e9bd9a',hair:'#252329',cloth:'#d6a32a',trim:'#fff0ae',dark:'#6d4b18'},
-   'anime-batman':{skin:'#e7c3a4',hair:'#1a2030',cloth:'#293142',trim:'#f5d15f',dark:'#101521'},
-   'anime-levi':{skin:'#f0c6a6',hair:'#35352f',cloth:'#4d6650',trim:'#d9e0d5',dark:'#2b3a30'},
-   'anime-titan':{skin:'#ad554b',hair:'#3a2929',cloth:'#813733',trim:'#ff9270',dark:'#3a2528'}
+  const k=c.kind;
+  const P={
+   'anime-luffy':{skin:'#f3c29d',hair:'#29211d',cloth:'#c92f36',trim:'#f4c74c',pants:'#684a35'},
+   'anime-zoro':{skin:'#efc19e',hair:'#4b8c43',cloth:'#39724e',trim:'#d9d7b5',pants:'#263c30'},
+   'anime-sanji':{skin:'#f0c29f',hair:'#e5c153',cloth:'#26364c',trim:'#eee7d8',pants:'#172233'},
+   'anime-naruto':{skin:'#f2c29e',hair:'#f4b52e',cloth:'#e97825',trim:'#aeb9c7',pants:'#38465c'},
+   'anime-sasuke':{skin:'#efc09d',hair:'#202735',cloth:'#343d50',trim:'#9db6e8',pants:'#202737'},
+   'anime-mech':{skin:'#dcebf5',hair:'#f3a72b',cloth:'#317ba6',trim:'#54eaff',pants:'#173c59'},
+   'anime-bruce':{skin:'#e8b994',hair:'#201f24',cloth:'#d8a52b',trim:'#fff0ac',pants:'#27252a'},
+   'anime-batman':{skin:'#e4bd9e',hair:'#171e2a',cloth:'#252e3d',trim:'#f1d15f',pants:'#151b27'},
+   'anime-levi':{skin:'#efc4a4',hair:'#35342f',cloth:'#526a53',trim:'#dce3d6',pants:'#303c32'},
+   'anime-titan':{skin:'#b75b50',hair:'#3a292a',cloth:'#823833',trim:'#ff9474',pants:'#3b2529'}
   };
-  const a=palettes[k]||palettes['anime-luffy'],S=a.skin,H=a.hair,C=a.cloth,T=a.trim,D=a.dark;
-  const hair={
-   'anime-luffy':'<path d="M45 65 L32 42 L47 47 L42 28 L61 42 L70 20 L82 43 L101 27 L103 45 L122 39 L112 66Z" fill="'+H+'" stroke="#211a18" stroke-width="3" stroke-linejoin="round"/><path d="M39 48 Q80 38 119 49 L117 59 L42 59Z" fill="#c72f38" stroke="#76232a" stroke-width="2"/><path d="M47 50 Q80 44 111 50" fill="none" stroke="#f26c60" stroke-width="2"/>',
-   'anime-zoro':'<path d="M43 67 L36 35 L53 44 L57 22 L72 43 L91 25 L98 46 L119 36 L113 68Z" fill="'+H+'" stroke="#294333" stroke-width="3"/><path d="M48 50 L111 50" stroke="#8dbf72" stroke-width="3"/><path d="M46 59 L39 79 M115 59 L121 79" stroke="#4e8846" stroke-width="5"/>',
-   'anime-sanji':'<path d="M42 66 Q35 37 59 27 Q92 14 113 40 L117 60 L103 54 L98 39 Q82 55 49 48Z" fill="'+H+'" stroke="#78602c" stroke-width="3"/><path d="M101 59 Q121 60 110 82 Q106 88 99 82" fill="none" stroke="#b28c35" stroke-width="5"/>',
-   'anime-naruto':'<path d="M42 66 L31 41 L49 48 L46 27 L64 43 L73 19 L85 42 L105 27 L103 48 L123 39 L112 68Z" fill="'+H+'" stroke="#a96a23" stroke-width="3" stroke-linejoin="round"/><path d="M42 48 L112 48 L115 59 L41 59Z" fill="#9da9b7" stroke="#515d70" stroke-width="3"/><path d="M50 51 L105 51" stroke="#e6eaf0" stroke-width="2"/><path d="M44 56 L34 62 M112 56 L123 62" stroke="#596679" stroke-width="3"/>',
-   'anime-sasuke':'<path d="M40 67 L37 35 L53 43 L62 19 L74 42 L96 24 L101 47 L119 37 L111 69Z" fill="'+H+'" stroke="#121824" stroke-width="3"/><path d="M47 47 L108 47" stroke="#46516a" stroke-width="3"/><path d="M51 60 L43 76 M109 60 L118 75" stroke="#202635" stroke-width="5"/>',
-   'anime-mech':'<path d="M38 68 L29 39 L49 47 L46 24 L64 42 L75 17 L87 42 L108 26 L105 48 L124 39 L115 68Z" fill="#f6ae35" stroke="#22506c" stroke-width="3"/><path d="M39 48 L114 48 L116 60 L38 60Z" fill="#8c9aa9" stroke="#254f6a" stroke-width="3"/><path d="M46 53 L107 53" stroke="#5deaff" stroke-width="3"/>',
-   'anime-bruce':'<path d="M44 63 Q39 31 67 27 Q96 24 111 50 L109 65Z" fill="'+H+'" stroke="#17171b" stroke-width="3"/><path d="M48 49 Q77 37 105 49" fill="none" stroke="#4d4a52" stroke-width="3"/>',
-   'anime-batman':'<path d="M39 70 L29 13 L56 34 L76 5 L95 34 L124 13 L114 71 L101 54 L53 54Z" fill="'+H+'" stroke="#101521" stroke-width="4" stroke-linejoin="round"/><path d="M42 58 L112 58" stroke="#515b6d" stroke-width="3"/>',
-   'anime-levi':'<path d="M42 66 L39 35 L54 42 L63 22 L75 42 L94 28 L99 48 L116 40 L110 67Z" fill="'+H+'" stroke="#252923" stroke-width="3"/><path d="M47 48 L107 48" stroke="#686a61" stroke-width="3"/>',
-   'anime-titan':'<path d="M35 69 L23 35 L42 43 L39 15 L59 37 L72 5 L86 36 L108 15 L107 43 L129 30 L116 72 L102 57 L50 57Z" fill="'+H+'" stroke="#2b2021" stroke-width="4"/>'
-  }[k]||'';
-  const face=titan
-   ?'<path d="M43 53 Q80 36 117 53 L112 100 L96 122 L80 132 L64 122 L48 100Z" fill="'+S+'" stroke="#5b292a" stroke-width="3"/><path d="M43 75 L66 68 L77 79 L62 84Z M84 79 L96 68 L117 75 L99 84Z" fill="#fff0d8" stroke="#4a2428" stroke-width="3"/><path d="M45 92 L64 91 L72 100 L80 95 L89 100 L97 91 L115 92 L105 108 L91 115 L80 110 L69 115 L54 108Z" fill="#291e23"/><path d="M51 92 L65 95 M95 95 L109 92" stroke="#ff947a" stroke-width="3"/>'
-   :'<path d="M45 54 Q42 42 57 36 Q80 25 103 36 Q119 43 115 64 L111 91 Q105 111 80 115 Q56 111 49 91Z" fill="'+S+'" stroke="#865c51" stroke-width="2.5"/><path d="M47 69 Q60 61 75 69 L70 77 L50 77Z" fill="#fffdf5"/><path d="M85 69 Q100 61 114 69 L111 77 L90 77Z" fill="#fffdf5"/><ellipse cx="62" cy="71" rx="5.5" ry="8" fill="'+(k==='anime-sasuke'?'#6b83d7':k==='anime-mech'?'#51eaff':'#49352d')+'"/><ellipse cx="99" cy="71" rx="5.5" ry="8" fill="'+(k==='anime-sasuke'?'#6b83d7':k==='anime-mech'?'#51eaff':'#49352d')+'"/><ellipse cx="63" cy="72" rx="2" ry="4" fill="#171923"/><ellipse cx="100" cy="72" rx="2" ry="4" fill="#171923"/><path d="M47 65 L73 62 M88 62 L113 65" stroke="'+H+'" stroke-width="4" stroke-linecap="round"/><path d="M79 77 L75 88 L82 90" fill="none" stroke="#bc8270" stroke-width="2"/>';
-  const mouth=(data.mood==='sad'||data.mood==='tired')?'<path d="M70 101 Q80 92 90 101" fill="none" stroke="#713f3a" stroke-width="3" stroke-linecap="round"/>':(data.mood==='angry')?'<path d="M69 101 L91 101" stroke="#713f3a" stroke-width="3" stroke-linecap="round"/>':(data.mood==='surprised')?'<ellipse cx="80" cy="101" rx="5" ry="7" fill="#713f3a"/>':'<path d="M68 98 Q80 109 92 98" fill="none" stroke="#713f3a" stroke-width="3" stroke-linecap="round"/>';
-  let body='<path d="M48 117 Q80 107 112 117 L127 162 L112 173 L48 173 L33 162Z" fill="'+C+'" stroke="'+D+'" stroke-width="3"/><path d="M54 119 L80 143 L106 119" fill="none" stroke="'+T+'" stroke-width="5"/><path d="M69 142 L91 142 L88 171 L72 171Z" fill="'+D+'" opacity=".65"/><path d="M45 128 L27 149 L34 158 L53 142 M115 128 L133 149 L126 158 L107 142" fill="'+C+'" stroke="'+D+'" stroke-width="3"/><path d="M61 173 L59 185 L76 185 L80 173 L84 185 L101 185 L99 173" fill="#252b39" stroke="'+D+'" stroke-width="3"/>';
-  if(k==='anime-luffy')body='<path d="M48 117 Q80 108 112 117 L126 161 L112 173 L48 173 L34 161Z" fill="#d2343b" stroke="#78232b" stroke-width="3"/><path d="M51 119 Q80 151 109 119" fill="none" stroke="#f6c64e" stroke-width="5"/><path d="M58 133 L102 133" stroke="#f5c64e" stroke-width="3"/><path d="M44 127 L26 148 L35 158 L53 143 M116 127 L134 148 L125 158 L107 143" fill="#f1c4a2" stroke="#8b4f3b" stroke-width="3"/><path d="M59 173 L57 185 L76 185 L80 173 L84 185 L103 185 L100 173" fill="#5c4a37" stroke="#30241f" stroke-width="3"/>';
-  if(k==='anime-zoro')body='<path d="M48 117 L112 117 L127 164 L112 174 L48 174 L33 164Z" fill="#386e4a" stroke="#203e30" stroke-width="3"/><path d="M53 121 L107 121 L99 139 L61 139Z" fill="#d9d8b0"/><path d="M62 141 L98 141 L94 173 L66 173Z" fill="#203e30"/><path d="M45 127 L23 147 L33 158 L55 141 M115 127 L137 147 L127 158 L105 141" fill="#386e4a" stroke="#203e30" stroke-width="3"/><path d="M57 173 L56 185 L76 185 L80 173 L84 185 L104 185 L101 173" fill="#d9d8b0"/><path d="M28 147 L20 139 M131 147 L139 139" stroke="#d9d8b0" stroke-width="4"/>';
-  if(k==='anime-sanji')body='<path d="M48 117 L112 117 L127 164 L112 174 L48 174 L33 164Z" fill="#27374b" stroke="#172335" stroke-width="3"/><path d="M55 120 L80 145 L105 120" fill="#eee5d1" stroke="#b8b9b6" stroke-width="2"/><path d="M75 145 L85 145 L91 172 L69 172Z" fill="#eee5d1"/><path d="M45 127 L25 147 L34 157 L54 141 M115 127 L135 147 L126 157 L106 141" fill="#27374b" stroke="#172335" stroke-width="3"/><path d="M57 173 L56 185 L76 185 L80 173 L84 185 L104 185 L101 173" fill="#202b3c"/>';
-  if(k==='anime-naruto')body='<path d="M48 117 L112 117 L127 164 L112 174 L48 174 L33 164Z" fill="#e87524" stroke="#a9431f" stroke-width="3"/><path d="M50 121 L110 121 L102 139 L58 139Z" fill="#f3b12e"/><path d="M63 140 L97 140 L93 173 L67 173Z" fill="#e9edf2"/><path d="M45 127 L25 147 L34 158 L54 141 M115 127 L135 147 L126 158 L106 141" fill="#e87524" stroke="#a9431f" stroke-width="3"/><path d="M57 173 L56 185 L76 185 L80 173 L84 185 L104 185 L101 173" fill="#39465b"/>';
-  if(k==='anime-sasuke')body='<path d="M48 117 L112 117 L127 164 L112 174 L48 174 L33 164Z" fill="#30394d" stroke="#161c2b" stroke-width="3"/><path d="M51 120 L109 120 L98 141 L62 141Z" fill="#c8d5e7"/><path d="M63 142 L97 142 L93 173 L67 173Z" fill="#202635"/><path d="M45 127 L25 147 L34 158 L54 141 M115 127 L135 147 L126 158 L106 141" fill="#30394d" stroke="#161c2b" stroke-width="3"/><path d="M57 173 L56 185 L76 185 L80 173 L84 185 L104 185 L101 173" fill="#222838"/><path d="M96 131 L117 153" stroke="#7e9fd7" stroke-width="3"/>';
-  if(mech)body='<path d="M48 117 L112 117 L127 164 L112 174 L48 174 L33 164Z" fill="#347ba6" stroke="#173c59" stroke-width="4"/><path d="M53 122 L107 122 L100 143 L60 143Z" fill="#eaf7ff" stroke="#58e9ff" stroke-width="3"/><circle cx="80" cy="150" r="10" fill="#58e9ff" stroke="#eafcff" stroke-width="3"/><path d="M45 127 L24 147 L33 158 L54 141 M115 127 L136 147 L127 158 L106 141" fill="#dbeaf3" stroke="#347ba6" stroke-width="4"/><path d="M57 173 L56 185 L76 185 L80 173 L84 185 L104 185 L101 173" fill="#173c59"/>';
-  if(k==='anime-bruce')body='<path d="M48 117 L112 117 L127 164 L112 174 L48 174 L33 164Z" fill="#d6a32a" stroke="#6d4b18" stroke-width="3"/><path d="M50 121 L110 121 L100 138 L60 138Z" fill="#fff0ae"/><path d="M62 140 L98 140 L93 173 L67 173Z" fill="#d6a32a"/><path d="M45 127 L25 147 L34 158 L54 141 M115 127 L135 147 L126 158 L106 141" fill="#e9bd9a" stroke="#6d4b18" stroke-width="3"/><path d="M57 173 L56 185 L76 185 L80 173 L84 185 L104 185 L101 173" fill="#24232a"/>';
-  if(k==='anime-batman')body='<path d="M48 117 L112 117 L127 164 L112 174 L48 174 L33 164Z" fill="#293142" stroke="#101521" stroke-width="4"/><path d="M51 120 L109 120 L101 142 L59 142Z" fill="#4b5568" stroke="#111722" stroke-width="2"/><path d="M57 123 L80 139 L103 123 L96 147 L64 147Z" fill="#202938" stroke="#68758a" stroke-width="1.5"/><path d="M63 126 L80 136 L97 126 L91 142 L69 142Z" fill="#151d29"/><path d="M56 148 L73 151 L70 168 L56 166Z M104 148 L87 151 L90 168 L104 166Z" fill="#343e50" stroke="#141b28" stroke-width="2"/><path d="M75 150 L85 150 L88 173 L72 173Z" fill="#151c29" stroke="#69768a" stroke-width="1.5"/><path d="M45 127 L25 147 L34 158 L54 141 M115 127 L135 147 L126 158 L106 141" fill="#293142" stroke="#101521" stroke-width="3"/><path d="M29 145 L37 151 L33 158 L25 152Z M131 145 L123 151 L127 158 L135 152Z" fill="#586478"/><path d="M57 173 L56 185 L76 185 L80 173 L84 185 L104 185 L101 173" fill="#101521"/><path d="M54 169 L76 169 L76 176 L54 176Z M84 169 L106 169 L106 176 L84 176Z" fill="#4b5568" stroke="#151b27" stroke-width="1.5"/>';
-  if(k==='anime-levi')body='<path d="M48 117 L112 117 L127 164 L112 174 L48 174 L33 164Z" fill="#4d6650" stroke="#2b3a30" stroke-width="3"/><path d="M51 120 L109 120 L99 141 L61 141Z" fill="#d9e0d5"/><path d="M62 142 L98 142 L94 173 L66 173Z" fill="#d9e0d5"/><path d="M45 127 L25 147 L34 158 L54 141 M115 127 L135 147 L126 158 L106 141" fill="#4d6650" stroke="#2b3a30" stroke-width="3"/><path d="M57 173 L56 185 L76 185 L80 173 L84 185 L104 185 L101 173" fill="#303d32"/><path d="M62 145 L54 164 M98 145 L106 164" stroke="#a7b8a7" stroke-width="3"/>';
-  if(titan)body='<path d="M42 117 L118 117 L139 165 L119 178 L41 178 L21 165Z" fill="#813733" stroke="#3a2528" stroke-width="4"/><path d="M48 122 L112 122 L103 146 L57 146Z" fill="#ff9270"/><path d="M61 147 L99 147 L94 178 L66 178Z" fill="#3a2528"/><path d="M41 126 L15 150 L27 164 L54 143 M119 126 L145 150 L133 164 L106 143" fill="#ad554b" stroke="#3a2528" stroke-width="4"/><path d="M54 177 L51 188 L76 188 L80 177 L84 188 L109 188 L106 177" fill="#3a2528"/>';
-  let gear='';
-  if(k==='anime-zoro')gear='<path d="M48 115 Q80 123 112 115 L110 130 Q80 140 50 130Z" fill="#c8d99b" stroke="#203f31" stroke-width="2"/><path d="M62 124 L98 124" stroke="#203f31" stroke-width="3"/><path d="M30 139 L17 116 M130 139 L143 116" stroke="#dfe7ee" stroke-width="4" stroke-linecap="round"/><path d="M14 113 L20 104 L25 115Z M140 113 L146 104 L151 115Z" fill="#dfe7ee"/>';
-  if(k==='anime-batman')gear='<path d="M43 116 Q80 132 117 116 L112 139 L80 153 L48 139Z" fill="#171e2b" stroke="#101521" stroke-width="3"/><path d="M70 132 L80 138 L90 132 L88 147 L72 147Z" fill="#f5d15f" stroke="#fff0a3" stroke-width="1.5"/><path d="M50 117 L42 101 M110 117 L118 101" stroke="#293142" stroke-width="4"/><path d="M47 138 L113 138 L109 149 L51 149Z" fill="#d4b65f" stroke="#161c28" stroke-width="3"/><path d="M55 140 L64 140 L63 147 L54 147Z M70 140 L78 140 L78 147 L69 147Z M84 140 L92 140 L92 147 L83 147Z M98 140 L106 140 L105 147 L97 147Z" fill="#f4d77c" stroke="#715d31" stroke-width="1.2"/><path d="M51 149 L45 158 L51 164 L57 153 M109 149 L115 158 L109 164 L103 153" fill="#222a39" stroke="#111722" stroke-width="2"/>';
-  if(k==='anime-mech')gear='<path d="M38 64 L25 56 L31 46 L45 52 M122 64 L135 56 L129 46 L115 52" fill="#347ba6" stroke="#58e9ff" stroke-width="3"/><circle cx="80" cy="78" r="27" fill="none" stroke="#58e9ff" stroke-width="2" stroke-dasharray="4 4"/>';
-  const details='<g class="anime-ink" stroke-linecap="round" stroke-linejoin="round">'+
-   '<path d="M47 82 Q51 91 59 94 M113 82 Q109 91 101 94" fill="none" stroke="#b87968" stroke-width="1.5" opacity=".8"/>'+
-   '<path d="M49 70 Q57 63 70 69 M90 69 Q103 63 111 70" fill="none" stroke="'+H+'" stroke-width="2.2"/>'+
-   '<path d="M54 70 Q61 66 68 70 M93 70 Q100 66 107 70" fill="none" stroke="#fff" stroke-width="1.2" opacity=".9"/>'+
-   '<circle cx="64" cy="69" r="1.8" fill="#fff" stroke="none"/><circle cx="101" cy="69" r="1.8" fill="#fff" stroke="none"/>'+
-   '<path d="M79 79 Q76 86 80 88" fill="none" stroke="#a76f61" stroke-width="1.6"/>'+
-   '<path d="M73 91 Q80 94 87 91" fill="none" stroke="#f8d7c7" stroke-width="1.4" opacity=".9"/>'+
-   '<path d="M68 99 Q80 104 92 99" fill="none" stroke="#f4b9a6" stroke-width="1.4" opacity=".8"/>'+
-   '<path d="M49 61 Q51 48 61 43 M55 55 Q65 47 70 45 M88 44 Q99 47 107 55 M95 42 Q105 47 111 59" fill="none" stroke="#ffffff" stroke-width="1.4" opacity=".28"/>'+
-   '<path d="M54 122 Q62 132 68 135 M106 122 Q98 132 92 135 M64 151 L70 164 M96 151 L90 164" fill="none" stroke="'+T+'" stroke-width="2" opacity=".8"/>'+
-   '<path d="M40 151 Q43 157 47 159 M120 151 Q117 157 113 159" fill="none" stroke="#ffffff" stroke-width="1.5" opacity=".35"/>'+
-   (k==='anime-luffy'?'<path d="M46 59 Q80 54 114 59 M49 94 L55 96 M105 96 L111 94" fill="none" stroke="#e9b28e" stroke-width="1.5"/><path d="M69 98 Q80 105 91 98" fill="none" stroke="#7e2c2c" stroke-width="3"/><path d="M54 129 Q80 155 106 129" fill="none" stroke="#ff8d80" stroke-width="2"/>':
-   k==='anime-zoro'?'<path d="M46 68 L70 72 M90 72 L114 68" fill="none" stroke="#244631" stroke-width="3"/><path d="M50 78 Q62 82 72 78 M88 78 Q98 82 110 78" fill="none" stroke="#c4e0ad" stroke-width="1.5"/><path d="M56 119 Q80 126 104 119 M59 126 L101 126" fill="none" stroke="#eff2d2" stroke-width="2"/>':
-   k==='anime-sanji'?'<path d="M89 61 Q105 58 108 72 Q108 83 99 86" fill="none" stroke="#c49d43" stroke-width="2.4"/><path d="M93 71 Q101 67 106 72" fill="none" stroke="#161f2d" stroke-width="2"/><path d="M54 124 Q80 145 106 124" fill="none" stroke="#aeb9c9" stroke-width="1.6"/><path d="M56 133 L68 145 M104 133 L92 145" fill="none" stroke="#f8f3e8" stroke-width="2"/>':
-   k==='anime-naruto'?'<path d="M49 61 L111 61 M55 57 L62 57 M98 57 L105 57" fill="none" stroke="#fff0b0" stroke-width="1.6"/><path d="M48 80 Q55 83 61 80 M99 80 Q105 83 112 80" fill="none" stroke="#d28b22" stroke-width="2"/><path d="M49 84 L60 82 M49 90 L60 88 M100 82 L111 84 M100 88 L111 90" fill="none" stroke="#bd825e" stroke-width="2"/>':
-   k==='anime-sasuke'?'<path d="M47 67 L72 72 M88 72 L113 67" fill="none" stroke="#171d2a" stroke-width="4"/><path d="M53 78 L69 78 M91 78 L107 78" fill="none" stroke="#8ea9f1" stroke-width="1.5"/><path d="M60 124 L73 139 M100 124 L87 139" fill="none" stroke="#a8c4f0" stroke-width="2"/>':
-   k==='anime-mech'?'<path d="M39 51 L115 51 M44 57 L53 57 M107 57 L116 57" fill="none" stroke="#e5ffff" stroke-width="2"/><path d="M53 123 L67 138 M107 123 L93 138" fill="none" stroke="#58e9ff" stroke-width="2.5"/><path d="M58 153 L69 153 M91 153 L102 153" fill="none" stroke="#d8ffff" stroke-width="2"/>':
-   k==='anime-bruce'?'<path d="M48 67 Q60 75 72 69 M88 69 Q101 75 112 67" fill="none" stroke="#28242b" stroke-width="3"/><path d="M55 79 Q62 84 70 79 M90 79 Q98 84 105 79" fill="none" stroke="#fff0ae" stroke-width="1.4"/><path d="M50 124 Q80 150 110 124" fill="none" stroke="#fff0ae" stroke-width="2"/>':
-   k==='anime-batman'?'<path d="M45 60 L55 54 L70 59 M90 59 L105 54 L115 60" fill="none" stroke="#7f8ca1" stroke-width="2"/><path d="M51 74 L66 76 M94 76 L109 74" fill="none" stroke="#111722" stroke-width="2"/><path d="M47 119 Q80 133 113 119 M51 125 L63 131 M109 125 L97 131" fill="none" stroke="#77849a" stroke-width="2"/><path d="M35 153 L44 158 M125 153 L116 158" fill="none" stroke="#8995a8" stroke-width="1.6"/>':
-   k==='anime-levi'?'<path d="M46 66 L72 70 M88 70 L114 66" fill="none" stroke="#262a27" stroke-width="3"/><path d="M51 78 Q62 81 71 78 M89 78 Q99 81 109 78" fill="none" stroke="#fff" stroke-width="1.2"/><path d="M53 122 L67 139 M107 122 L93 139 M63 145 L54 164 M97 145 L106 164" fill="none" stroke="#9aaa99" stroke-width="2"/>':
-   '<path d="M42 64 Q56 56 72 65 M88 65 Q104 56 118 64" fill="none" stroke="#2b2021" stroke-width="4"/><path d="M47 85 L63 81 M97 81 L113 85" fill="none" stroke="#ffb19a" stroke-width="2"/><path d="M47 123 L63 143 M113 123 L97 143" fill="none" stroke="#ffb49b" stroke-width="3"/>')+
-   '</g>';
-  const brows=(k==='anime-sasuke'||k==='anime-titan')?'<path d="M47 62 L72 68 M88 68 L113 62" stroke="#302326" stroke-width="5" stroke-linecap="round"/>':'';
-  return '<svg class="creature-anime-art anime-'+k.replace('anime-','')+'" viewBox="0 0 160 194" role="img" aria-label="'+escapeHtml(c.name)+'" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="skin-'+k+'" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0dc" stop-opacity=".6"/><stop offset="1" stop-color="'+S+'"/></linearGradient><linearGradient id="cloth-'+k+'" x1="0" y1="0" x2="0.9" y2="1"><stop stop-color="'+T+'"/><stop offset=".45" stop-color="'+C+'"/><stop offset="1" stop-color="'+D+'"/></linearGradient><filter id="shadow-'+k+'" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#121a2d" flood-opacity=".24"/></filter></defs><ellipse cx="80" cy="188" rx="43" ry="5" fill="#101b3230"/><g filter="url(#shadow-'+k+')">'+body+'<path d="M47 124 L37 151 L47 157 L61 133 M113 124 L123 151 L113 157 L99 133" fill="url(#cloth-'+k+')" stroke="'+D+'" stroke-width="3"/>'+gear+'<path d="M44 55 Q40 32 58 23 Q80 10 102 23 Q120 32 116 55 L112 94 Q105 116 80 120 Q55 116 48 94Z" fill="url(#skin-'+k+')" stroke="'+D+'" stroke-width="2.5"/>'+face+brows+hair[k]+details+'<path d="M48 85 Q55 82 62 85 M98 85 Q105 82 112 85" stroke="#c88776" stroke-width="2" fill="none" opacity=".7"/>'+mouth+(k==='anime-luffy'?'<path d="M47 94 Q80 103 113 94" fill="none" stroke="#a45d50" stroke-width="2"/>':'')+(k==='anime-naruto'?'<path d="M49 82 L57 80 M49 89 L57 87 M103 80 L111 82 M103 87 L111 89" stroke="#b47a61" stroke-width="2.5"/>':'')+(k==='anime-batman'?'<path d="M43 55 L53 31 L68 43 L80 22 L92 43 L107 31 L117 55 L111 75 L103 66 L92 71 L88 77 L72 77 L68 71 L57 66 L49 75Z" fill="#202735" stroke="#101521" stroke-width="3" stroke-linejoin="round"/><path d="M49 65 L72 65 L67 71 L51 72Z M88 65 L111 65 L109 72 L93 71Z" fill="#f0f5ff" stroke="#aab9cd" stroke-width="1.5"/><path d="M72 76 L80 81 L88 76" fill="none" stroke="#0e1420" stroke-width="3"/><path d="M56 87 L72 91 M88 91 L104 87" stroke="#8e9aab" stroke-width="2" opacity=".8"/>':'')+(k==='anime-titan'?'<path d="M49 102 L63 115 M111 102 L97 115" stroke="#ff9270" stroke-width="4"/>':'')+'</g></svg>';
+  const a=P[k]||P['anime-luffy'],S=a.skin,H=a.hair,C=a.cloth,T=a.trim,B=a.pants;
+  const R=(x,y,w,h,f,extra='')=>'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="'+f+'" '+extra+'/>';
+  let p='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 200" width="160" height="200" shape-rendering="crispEdges" role="img" aria-label="'+c.name+' pixel anime companion"><rect width="160" height="200" fill="none"/>';
+  // Pixel body first so the head remains the focal point.
+  p+=R(42,111,76,61,C,'stroke="'+B+'" stroke-width="4"')+R(48,119,64,26,T)+R(54,142,52,27,B);
+  p+=R(49,169,25,17,B)+R(88,169,25,17,B)+R(44,183,32,8,'#181d29')+R(84,183,34,8,'#181d29');
+  p+=R(31,119,18,39,C,'stroke="'+B+'" stroke-width="4"')+R(111,119,18,39,C,'stroke="'+B+'" stroke-width="4"')+R(29,151,18,11,S)+R(112,151,18,11,S);
+  if(k==='anime-luffy')p+=R(44,112,72,42,'#c92f36')+R(49,115,62,5,'#f4c74c')+R(75,118,10,36,'#f4c74c')+R(53,146,54,7,'#f4c74c')+R(49,153,62,17,'#684a35');
+  if(k==='anime-zoro')p+=R(45,111,70,43,'#39724e')+R(51,116,58,13,'#d9d7b5')+R(56,130,48,6,'#263c30')+R(51,143,58,6,'#263c30')+R(46,151,68,9,'#d9d7b5')+R(23,100,5,49,'#bfc9d3')+R(18,97,6,9,'#dce5ed')+R(132,99,5,49,'#bfc9d3')+R(136,96,6,9,'#dce5ed');
+  if(k==='anime-sanji')p+=R(45,111,70,57,'#26364c')+R(65,113,30,29,'#eee7d8')+R(76,132,8,35,'#eee7d8')+R(73,121,14,8,'#a43e3e')+R(77,129,6,8,'#a43e3e')+R(49,149,62,5,'#141f30');
+  if(k==='anime-naruto')p+=R(44,111,72,45,'#e97825')+R(49,116,62,9,'#f4b52e')+R(52,132,56,8,'#f0e9d9')+R(49,148,62,8,'#f4b52e')+R(44,157,72,11,'#38465c');
+  if(k==='anime-sasuke')p+=R(44,111,72,48,'#343d50')+R(49,116,62,9,'#d8dfeb')+R(65,125,30,27,'#202737')+R(48,151,64,6,'#9db6e8')+R(92,120,21,28,'#343d50');
+  if(k==='anime-mech')p+=R(43,109,74,58,'#317ba6','stroke="#173c59" stroke-width="5"')+R(51,117,58,20,'#e7f7ff')+R(69,139,22,22,'#54eaff')+R(75,145,10,10,'#f5ffff')+R(49,160,62,7,'#54eaff')+R(27,117,15,25,'#dcebf5')+R(118,117,15,25,'#dcebf5');
+  if(k==='anime-bruce')p+=R(44,111,72,56,'#d8a52b')+R(49,118,62,7,'#fff0ac')+R(52,137,56,6,'#fff0ac')+R(48,152,64,7,'#27252a');
+  if(k==='anime-batman')p+=R(42,109,76,61,'#252e3d','stroke="#111722" stroke-width="5"')+R(49,117,62,22,'#3e495c')+R(61,121,38,26,'#1b2330')+R(71,132,18,20,'#f1d15f')+R(49,150,62,8,'#151b27')+R(47,155,66,7,'#d7bd69');
+  if(k==='anime-levi')p+=R(44,111,72,56,'#526a53')+R(49,116,62,11,'#dce3d6')+R(61,127,38,25,'#dce3d6')+R(49,151,62,7,'#303c32')+R(34,126,15,25,'#aebfae')+R(111,126,15,25,'#aebfae');
+  if(k==='anime-titan')p+=R(37,107,86,67,'#823833','stroke="#3b2529" stroke-width="5"')+R(45,115,70,12,'#ff9474')+R(52,131,56,17,'#3b2529')+R(47,153,66,9,'#b75b50')+R(27,117,17,32,'#b75b50')+R(116,117,17,32,'#b75b50');
+  // Large, pixel-stepped face and neck.
+  p+=R(67,91,26,22,S)+R(54,38,52,57,S)+R(47,49,7,25,S)+R(106,49,7,25,S)+R(54,38,52,6,'#fff0dc','opacity=".24"')+R(54,85,52,8,'#9a6657','opacity=".16"');
+  if(k==='anime-luffy'){
+   p+=R(45,34,70,12,H)+R(49,25,62,12,H)+R(57,18,46,10,H)+R(48,39,10,14,H)+R(102,38,10,14,H);
+   p+=R(37,20,86,8,'#d8ad55')+R(43,12,74,9,'#f2d47d')+R(52,5,56,8,'#f2d47d')+R(37,21,86,4,'#bd3338')+R(48,13,62,3,'#d7ad55');
+  }else if(k==='anime-zoro'){
+   p+=R(49,31,62,12,H)+R(52,23,13,12,H)+R(67,17,12,16,H)+R(81,21,12,12,H)+R(96,26,15,11,H)+R(46,40,12,11,H)+R(103,39,11,12,H)+R(51,36,58,5,'#c9d8a1')+R(55,39,50,4,'#203d2c');
+  }else if(k==='anime-sanji'){
+   p+=R(48,31,64,11,H)+R(52,23,54,10,H)+R(60,17,40,9,H)+R(48,36,12,12,H)+R(100,36,12,12,H)+R(51,31,18,9,H)+R(62,38,17,10,H)+R(75,45,17,8,H)+R(86,50,15,8,H)+R(94,56,9,8,H);
+  }else if(k==='anime-naruto'){
+   p+=R(49,31,62,11,H)+R(45,23,13,14,H)+R(54,14,12,17,H)+R(66,8,10,19,H)+R(77,15,12,14,H)+R(89,10,11,18,H)+R(101,21,13,14,H)+R(105,32,10,12,H)+R(47,38,66,7,'#aeb9c7')+R(52,39,56,4,'#596577')+R(73,39,14,4,'#dbe4ef');
+  }else if(k==='anime-sasuke'){
+   p+=R(49,31,62,11,H)+R(43,24,14,16,H)+R(55,16,13,18,H)+R(68,10,12,20,H)+R(80,19,12,13,H)+R(93,14,13,17,H)+R(104,25,12,13,H)+R(48,38,12,13,H)+R(101,39,12,12,H);
+  }else if(k==='anime-mech'){
+   p+=R(48,31,64,13,'#e7f7ff','stroke="#173c59" stroke-width="4"')+R(54,20,52,12,'#dcebf5','stroke="#173c59" stroke-width="4"')+R(64,13,32,8,'#f3a72b')+R(39,41,10,17,'#317ba6')+R(111,41,10,17,'#317ba6')+R(54,48,52,10,'#317ba6')+R(59,51,13,5,'#54eaff')+R(88,51,13,5,'#54eaff')+R(70,63,20,5,'#173c59');
+  }else if(k==='anime-bruce'){
+   p+=R(49,30,62,12,H)+R(53,22,54,11,H)+R(61,17,38,7,H)+R(47,36,12,10,H)+R(101,36,12,10,H)+R(52,39,56,5,'#17171b');
+  }else if(k==='anime-batman'){
+   p+=R(49,39,62,45,'#252e3d','stroke="#101521" stroke-width="4"')+R(43,39,13,20,'#252e3d')+R(48,27,16,18,'#252e3d')+R(57,15,15,23,'#252e3d')+R(88,15,15,23,'#252e3d')+R(98,27,16,18,'#252e3d')+R(105,39,13,20,'#252e3d')+R(56,59,18,6,'#f2f5fb')+R(87,59,18,6,'#f2f5fb')+R(75,67,10,9,'#151b27')+R(69,78,22,5,'#151b27');
+  }else if(k==='anime-levi'){
+   p+=R(49,30,62,12,H)+R(54,23,52,9,H)+R(64,18,34,7,H)+R(47,37,11,9,H)+R(102,37,11,9,H)+R(49,30,62,5,'#55544d')+R(52,35,15,7,H)+R(95,35,14,7,H);
+  }else if(k==='anime-titan'){
+   p+=R(44,35,72,14,H,'stroke="#3b2529" stroke-width="4"')+R(48,23,15,16,H)+R(64,13,12,20,H)+R(78,7,12,23,H)+R(92,16,12,17,H)+R(104,26,13,14,H)+R(41,42,11,14,H)+R(109,42,11,14,H)+R(45,53,9,28,'#b75b50')+R(106,53,9,28,'#b75b50');
+  }
+  p+=R(48,55,6,12,S)+R(106,55,6,12,S);
+  const eye=k==='anime-batman'?'#f4f7ff':k==='anime-mech'?'#54eaff':k==='anime-sasuke'?'#8da9ef':k==='anime-titan'?'#fff0d9':'#29232a';
+  const eyeY=(data.mood==='tired'||data.mood==='sad')?61:57;
+  if(k!=='anime-batman'&&k!=='anime-mech'&&k!=='anime-titan'){
+   p+=R(58,eyeY,15,5,H)+R(87,eyeY,15,5,H)+R(60,eyeY+4,10,7,eye)+R(89,eyeY+4,10,7,eye)+R(63,eyeY+5,4,5,'#171821')+R(92,eyeY+5,4,5,'#171821');
+   if(data.mood==='angry')p+=R(56,eyeY-3,19,4,H)+R(86,eyeY-3,19,4,H);
+   if(k==='anime-sanji')p+=R(78,47,26,25,H)+R(82,54,20,13,H);
+  }else if(k==='anime-batman')p+=R(56,60,20,5,'#f4f7ff')+R(85,60,20,5,'#f4f7ff');
+  else if(k==='anime-mech')p+=R(57,54,18,7,'#54eaff')+R(86,54,18,7,'#54eaff')+R(60,56,12,3,'#ffffff')+R(89,56,12,3,'#ffffff');
+  else p+=R(56,57,20,6,'#302126')+R(84,57,20,6,'#302126')+R(58,59,16,5,'#fff0d9')+R(86,59,16,5,'#fff0d9');
+  if(k==='anime-luffy')p+=R(59,73,10,3,'#9b5148')+R(59,76,3,4,'#9b5148');
+  if(k==='anime-naruto')p+=R(49,70,8,2,'#b87960')+R(48,75,9,2,'#b87960')+R(103,70,8,2,'#b87960')+R(103,75,9,2,'#b87960');
+  if(k==='anime-zoro')p+=R(87,73,18,3,'#8d5c4d')+R(90,77,13,3,'#8d5c4d');
+  if(k==='anime-sanji')p+=R(87,73,15,3,'#b77b66')+R(96,76,8,4,'#b77b66');
+  if(k==='anime-levi')p+=R(51,45,12,5,'#35342f')+R(99,45,12,5,'#35342f');
+  if(k==='anime-titan')p+=R(52,77,56,8,'#2a2023')+R(57,77,8,5,'#fff0d9')+R(69,77,8,5,'#fff0d9')+R(81,77,8,5,'#fff0d9')+R(93,77,8,5,'#fff0d9');
+  if(k!=='anime-batman'&&k!=='anime-mech'&&k!=='anime-titan'){
+   if(data.mood==='surprised')p+=R(76,78,9,9,'#5f302e')+R(79,79,3,3,'#f8d2bd');
+   else if(data.mood==='sad'||data.mood==='tired')p+=R(72,83,18,3,'#713f3a')+R(76,80,10,3,S);
+   else if(data.mood==='angry')p+=R(72,83,18,3,'#713f3a');
+   else p+=R(71,81,20,4,'#6e342e')+R(75,81,12,2,'#fff0df');
+  }
+  if(k==='anime-batman')p+=R(73,78,14,6,'#151b27');
+  if(k==='anime-mech')p+=R(70,68,20,5,'#173c59')+R(74,69,12,2,'#54eaff');
+  if(k==='anime-titan')p+=R(53,83,54,8,'#251d22')+R(57,83,7,4,'#fff0d9')+R(69,83,7,4,'#fff0d9')+R(81,83,7,4,'#fff0d9')+R(93,83,7,4,'#fff0d9');
+  if(k==='anime-luffy')p+=R(37,4,86,4,'#f2d47d')+R(43,8,74,3,'#d8ad55')+R(72,95,16,5,'#c92f36');
+  if(k==='anime-zoro')p+=R(24,98,4,46,'#c7d1dc')+R(20,95,6,8,'#e8edf2')+R(132,98,4,46,'#c7d1dc')+R(136,95,6,8,'#e8edf2');
+  if(k==='anime-bruce')p+=R(31,122,8,28,'#d8a52b')+R(121,122,8,28,'#d8a52b');
+  if(k==='anime-batman')p+=R(44,108,72,7,'#171e2a')+R(69,111,22,16,'#f1d15f')+R(75,115,10,8,'#252e3d');
+  if(k==='anime-titan')p+=R(38,93,14,10,'#b75b50')+R(108,93,14,10,'#b75b50')+R(45,101,70,7,'#823833');
+  p+='</svg>';
+  return p;
  }
  const coat=['#dcecff','#4b77ca','#f0f4ff','#263d71'][outfit%4]||c.coat;
  const tier=Math.min(7,1+Math.floor(Math.max(0,Number(data.xp)||0)/100));
