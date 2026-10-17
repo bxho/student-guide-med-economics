@@ -329,3 +329,20 @@
 /* GitHub: scale down newly added anime companions without shrinking legacy companions. */
 #companionBuddy:has(.creature-anime-art){width:clamp(76px,9vw,104px);height:clamp(90px,10vw,116px)}
 @media(max-width:600px){#companionBuddy:has(.creature-anime-art){width:68px;height:80px}}
+
+
+/* Interaction safety: visual layers must never intercept the study app while closed. */
+#companionOverlay[hidden],
+#companionHabitat[hidden],
+#companionPanel[hidden],
+#companionDock[hidden],
+#habitatSubpage[hidden] { display: none !important; }
+#companionOverlay[hidden],
+#companionHabitat[hidden] { visibility: hidden !important; pointer-events: none !important; }
+#companionDock { pointer-events: none; }
+#companionDock > #companionLaunch,
+#companionDock > #companionBuddy { pointer-events: auto; }
+#companionBuddy, #companionBubble { user-select: none; -webkit-user-select: none; }
+#companionOverlay:not([hidden]), #companionHabitat:not([hidden]) { pointer-events: auto; }
+#companionOverlay:not([hidden]) { z-index: 1200; }
+#companionHabitat:not([hidden]) { z-index: 1300; }
