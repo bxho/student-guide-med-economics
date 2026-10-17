@@ -19,7 +19,17 @@ const COMPANIONS={
  adam:{name:'آدم',coat:'#344da8',fur:'#c28b69',accent:'#9eb6ff',kind:'dark',emoji:'★'},
  eren:{name:'إيرين ييغر',coat:'#5b493c',fur:'#4b392f',accent:'#b9d4ad',kind:'eren',emoji:'⚔️'},
  armin:{name:'أرمين أرليرت',coat:'#c4a36c',fur:'#e6c9a0',accent:'#e8d8a8',kind:'armin',emoji:'🪽'},
- mikasa:{name:'ميكاسا أكرمان',coat:'#6f2e38',fur:'#222733',accent:'#a93d4a',kind:'mikasa',emoji:'🧣'}
+ mikasa:{name:'ميكاسا أكرمان',coat:'#6f2e38',fur:'#222733',accent:'#a93d4a',kind:'mikasa',emoji:'🧣'},
+ luffy:{name:'لوفي',coat:'#b92d32',fur:'#57362a',accent:'#f6c85f',kind:'anime-luffy',emoji:'🍖'},
+ zoro:{name:'زورو',coat:'#32694a',fur:'#4e8a53',accent:'#b8d58a',kind:'anime-zoro',emoji:'⚔️'},
+ sanji:{name:'سانجي',coat:'#26364b',fur:'#e5c36d',accent:'#f0d18a',kind:'anime-sanji',emoji:'🍳'},
+ naruto:{name:'ناروتو',coat:'#e87824',fur:'#f2b747',accent:'#e7a62e',kind:'anime-naruto',emoji:'🍥'},
+ sasuke:{name:'ساسكي',coat:'#30384e',fur:'#202c45',accent:'#8da7d7',kind:'anime-sasuke',emoji:'⚡'},
+ narutoMech:{name:'ناروتو الآلي',coat:'#3979a7',fur:'#dcecff',accent:'#56e3ff',kind:'anime-mech',emoji:'🤖'},
+ bruceLee:{name:'بروس لي',coat:'#d9a82e',fur:'#242329',accent:'#f6d66c',kind:'anime-bruce',emoji:'🥋'},
+ batman:{name:'باتمان',coat:'#252b3b',fur:'#1a2030',accent:'#f6d66c',kind:'anime-batman',emoji:'🦇'},
+ levi:{name:'ليڤاي أكرمان',coat:'#344c3e',fur:'#28312c',accent:'#d2dfd1',kind:'anime-levi',emoji:'🗡️'},
+ erenTitan:{name:'إيرين العملاق',coat:'#923e3a',fur:'#7e292a',accent:'#ff8d63',kind:'anime-titan',emoji:'🔥'}
 };
 function companionName(kind){return data.customName||((COMPANIONS[kind]||COMPANIONS.medicine).name)}
 function art(kind,stage=0,outfit=0){
