@@ -19,11 +19,40 @@ const COMPANIONS={
  adam:{name:'آدم',coat:'#344da8',fur:'#c28b69',accent:'#9eb6ff',kind:'dark',emoji:'★'},
  eren:{name:'إيرين ييغر',coat:'#5b493c',fur:'#4b392f',accent:'#b9d4ad',kind:'eren',emoji:'⚔️'},
  armin:{name:'أرمين أرليرت',coat:'#c4a36c',fur:'#e6c9a0',accent:'#e8d8a8',kind:'armin',emoji:'🪽'},
- mikasa:{name:'ميكاسا أكرمان',coat:'#6f2e38',fur:'#222733',accent:'#a93d4a',kind:'mikasa',emoji:'🧣'}
+ mikasa:{name:'ميكاسا أكرمان',coat:'#6f2e38',fur:'#222733',accent:'#a93d4a',kind:'mikasa',emoji:'🧣'},
+ luffy:{name:'لوفي',coat:'#b92d32',fur:'#57362a',accent:'#f6c85f',kind:'anime-luffy',emoji:'🍖'},
+ zoro:{name:'زورو',coat:'#32694a',fur:'#4e8a53',accent:'#b8d58a',kind:'anime-zoro',emoji:'⚔️'},
+ sanji:{name:'سانجي',coat:'#26364b',fur:'#e5c36d',accent:'#f0d18a',kind:'anime-sanji',emoji:'🍳'},
+ naruto:{name:'ناروتو',coat:'#e87824',fur:'#f2b747',accent:'#e7a62e',kind:'anime-naruto',emoji:'🍥'},
+ sasuke:{name:'ساسكي',coat:'#30384e',fur:'#202c45',accent:'#8da7d7',kind:'anime-sasuke',emoji:'⚡'},
+ narutoMech:{name:'ناروتو الآلي',coat:'#3979a7',fur:'#dcecff',accent:'#56e3ff',kind:'anime-mech',emoji:'🤖'},
+ bruceLee:{name:'بروس لي',coat:'#d9a82e',fur:'#242329',accent:'#f6d66c',kind:'anime-bruce',emoji:'🥋'},
+ batman:{name:'باتمان',coat:'#252b3b',fur:'#1a2030',accent:'#f6d66c',kind:'anime-batman',emoji:'🦇'},
+ levi:{name:'ليڤاي أكرمان',coat:'#344c3e',fur:'#28312c',accent:'#d2dfd1',kind:'anime-levi',emoji:'🗡️'},
+ erenTitan:{name:'إيرين العملاق',coat:'#923e3a',fur:'#7e292a',accent:'#ff8d63',kind:'anime-titan',emoji:'🔥'}
 };
 function companionName(kind){return data.customName||((COMPANIONS[kind]||COMPANIONS.medicine).name)}
 function art(kind,stage=0,outfit=0){
  const c=COMPANIONS[kind]||COMPANIONS.medicine;
+ if(String(kind).startsWith('anime-')){
+  const palettes={'anime-luffy':['#f2c6a4','#30231e','#c93336','#f6d15c'],'anime-zoro':['#f0c6a4','#659b5a','#356c4b','#d6e5a0'],'anime-sanji':['#f0c5a3','#e8c65d','#28364b','#f4dfad'],'anime-naruto':['#f2c6a2','#f0b32e','#e87924','#f4d65d'],'anime-sasuke':['#f0c3a1','#222938','#343e58','#94a9dd'],'anime-mech':['#e0edf5','#f1f8ff','#347ba6','#58e9ff'],'anime-bruce':['#e9c09d','#252329','#d7a52b','#f8d75c'],'anime-batman':['#e7c4a3','#1c2230','#343b4c','#f5d15f'],'anime-levi':['#f0c6a6','#34352f','#49624d','#d8e2d4'],'anime-titan':['#a94d43','#412c2b','#8e3736','#ff8867']};
+  const a=palettes[kind]||['#f1c6a6','#292d3a',c.coat,c.accent],skin=a[0],hair=a[1],cloth=a[2],shine=a[3];
+  const titan=kind==='anime-titan';
+  let hairPath='<path d="M29 39 L23 22 L36 29 L42 14 L51 27 L66 19 L68 39Z" fill="'+hair+'" stroke="#332b2b" stroke-width="2"/>';
+  if(kind==='anime-luffy')hairPath='<path d="M29 39 L22 27 L34 30 L29 18 L43 25 L47 14 L54 25 L66 19 L64 32 L73 29 L66 43Z" fill="'+hair+'" stroke="#30221e" stroke-width="2"/><path d="M24 30 Q47 25 70 32 L69 38 L27 38Z" fill="#c83b37"/>';
+  if(kind==='anime-sanji')hairPath='<path d="M29 39 Q23 20 41 17 Q63 12 69 31 L62 37 L58 25 Q49 35 34 34Z" fill="'+hair+'" stroke="#6e5328" stroke-width="2"/>';
+  if(kind==='anime-naruto'||kind==='anime-mech')hairPath='<path d="M28 39 L21 25 L34 29 L34 16 L46 26 L53 14 L58 28 L71 22 L67 39Z" fill="'+(kind==='anime-mech'?'#f6a52f':hair)+'" stroke="#a96a23" stroke-width="2"/>';
+  if(kind==='anime-batman')hairPath='<path d="M27 40 L22 12 L39 23 L48 8 L57 23 L74 12 L68 42Z" fill="'+hair+'" stroke="#111827" stroke-width="2"/>';
+  const face=titan?'<path d="M30 47 Q24 30 37 23 L59 23 Q75 31 67 48 L61 66 L53 73 L44 72 L35 62Z" fill="'+skin+'" stroke="#351f25" stroke-width="2"/><path d="M31 43 L41 39 L47 45 L40 48Z M52 45 L59 39 L66 43 L59 49Z" fill="#fff1df"/><path d="M39 55 L58 55 L53 61 L43 61Z" fill="#271d25"/>':'<path d="M28 42 Q23 27 35 20 Q48 12 62 21 Q74 28 68 45 L65 59 Q61 71 48 72 Q34 70 30 59Z" fill="'+skin+'" stroke="#6b4b49" stroke-width="1.5"/><path d="M31 43 L42 40 L47 44 L41 47Z M52 44 L59 40 L65 43 L59 47Z" fill="#fff"/><ellipse cx="41" cy="44" rx="3.5" ry="4" fill="'+(kind==='anime-sasuke'?'#6679c6':'#533c31')+'"/><ellipse cx="59" cy="44" rx="3.5" ry="4" fill="#533c31"/><circle cx="42" cy="44" r="1.5"/><circle cx="58" cy="44" r="1.5"/><path d="M44 55 Q49 59 54 55" fill="none" stroke="#9a5553" stroke-width="2"/>';
+  let body='<path d="M31 65 Q48 59 65 65 L72 94 L24 94Z" fill="'+cloth+'"/>';
+  if(kind==='anime-luffy')body+='<path d="M35 66 L48 78 L61 66" fill="none" stroke="'+shine+'" stroke-width="4"/>';
+  if(kind==='anime-zoro')body+='<path d="M22 79 L70 79" stroke="'+shine+'" stroke-width="4"/><path d="M20 58 L13 49 M74 58 L83 49" stroke="#cfd9e5" stroke-width="4"/>';
+  if(kind==='anime-sanji')body+='<path d="M48 68 L42 87 L53 87 L48 68" fill="'+shine+'"/>';
+  if(kind==='anime-naruto'||kind==='anime-mech')body+='<path d="M30 75 L66 75 M34 82 L62 82" stroke="'+shine+'" stroke-width="3"/>';
+  if(kind==='anime-batman')body+='<path d="M20 66 L10 84 L21 89 L32 71 M76 66 L86 84 L75 89 L64 71" fill="'+cloth+'"/><path d="M35 72 L61 72" stroke="'+shine+'" stroke-width="3"/>';
+  if(titan)body='<path d="M25 67 L70 67 L81 95 L14 95Z" fill="'+cloth+'" stroke="#3b2426" stroke-width="2"/><path d="M31 70 L42 89 M64 70 L54 89" stroke="'+shine+'" stroke-width="5"/>';
+  return '<svg class="creature-anime-art" viewBox="0 0 96 112" role="img" aria-label="'+escapeHtml(c.name)+'" xmlns="http://www.w3.org/2000/svg"><ellipse cx="48" cy="105" rx="29" ry="5" fill="#101b3240"/>'+body+face+hairPath+(kind==='anime-batman'?'<path d="M33 47 L43 47 L40 52 L34 52Z M53 47 L63 47 L62 52 L56 52Z" fill="#111827"/>':'')+'<circle cx="21" cy="58" r="3" fill="'+shine+'"/><circle cx="75" cy="58" r="3" fill="'+shine+'"/></svg>';
+ }
  const coat=['#dcecff','#4b77ca','#f0f4ff','#263d71'][outfit%4]||c.coat;
  const tier=Math.min(7,1+Math.floor(Math.max(0,Number(data.xp)||0)/100));
  const mood=data.mood||'happy';
@@ -295,9 +324,10 @@ function bind(){
  document.addEventListener('pointermove',e=>{if(!holdStart)return;if(Math.abs(e.clientX-holdStart.x)>12||Math.abs(e.clientY-holdStart.y)>12)cancelHold()},{passive:true});
  document.addEventListener('pointerup',cancelHold,{passive:true});document.addEventListener('pointercancel',cancelHold,{passive:true});document.addEventListener('contextmenu',e=>{if(!e.target.closest('input,textarea,[contenteditable="true"]')){e.preventDefault();openPanel();bubble('قائمة الرفيق جاهزة لك!')}});
 
- buddy.addEventListener('pointerdown',e=>{if(e.button!==0&&e.pointerType==='mouse')return;const r=buddy.getBoundingClientRect();drag={x:e.clientX-r.left,y:e.clientY-r.top};clearTimeout(wanderTimer);buddy.setPointerCapture(e.pointerId)});
- buddy.addEventListener('pointermove',e=>{if(!drag)return;const x=Math.max(0,Math.min(innerWidth-buddy.offsetWidth,e.clientX-drag.x));const y=Math.max(60,Math.min(innerHeight-buddy.offsetHeight,e.clientY-drag.y));buddy.style.position='fixed';buddy.style.bottom='auto';buddy.style.left=x+'px';buddy.style.top=y+'px';buddy.style.zIndex='801'});
- const end=()=>{drag=null;scheduleWander(2800)};buddy.addEventListener('pointerup',end);buddy.addEventListener('pointercancel',end);
+ buddy.style.touchAction='none';
+ buddy.addEventListener('pointerdown',e=>{if(e.button!==0&&e.pointerType==='mouse')return;const r=buddy.getBoundingClientRect();drag={x:e.clientX-r.left,y:e.clientY-r.top,pointerId:e.pointerId};clearTimeout(wanderTimer);buddy.classList.add('being-held');buddy.style.transition='none';buddy.setPointerCapture(e.pointerId);e.preventDefault()});
+ buddy.addEventListener('pointermove',e=>{if(!drag||drag.pointerId!==e.pointerId)return;const x=Math.max(0,Math.min(innerWidth-buddy.offsetWidth,e.clientX-drag.x));const y=Math.max(60,Math.min(innerHeight-buddy.offsetHeight,e.clientY-drag.y));buddy.style.position='fixed';buddy.style.bottom='auto';buddy.style.left=x+'px';buddy.style.top=y+'px';buddy.style.zIndex='801'});
+ const end=e=>{if(!drag||e&&drag.pointerId!==e.pointerId)return;drag=null;buddy.classList.remove('being-held');buddy.style.transition='';scheduleWander(2800)};buddy.addEventListener('pointerup',end);buddy.addEventListener('pointercancel',end);
  document.addEventListener('click',e=>{if(e.target.closest('#appContent button, #appContent form'))syncLater()});
  document.addEventListener('submit',e=>{if(e.target.closest('#appContent'))syncLater()});
  const app=$('#appContent');
