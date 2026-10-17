@@ -315,3 +315,78 @@
 #companionPanel .companion-panel-head{position:sticky;top:-9px;z-index:3;background:#fff;padding:4px 0 8px}
 #companionPanel button.companion-x{display:inline-flex!important;align-items:center;justify-content:center;flex:0 0 38px;width:38px;min-width:38px;height:38px;padding:0!important;border:2px solid #4775bf!important;border-radius:10px;background:#dbeafe!important;color:#12336b!important;font-size:21px;font-weight:900;line-height:1;opacity:1;visibility:visible;position:relative;z-index:5;box-shadow:0 2px 8px #17203325}
 #companionPanel button.companion-x:focus-visible{outline:3px solid #17866c;outline-offset:2px}
+
+
+/* Companion world redesign: layered, game-inspired illustrated landscape. */
+#companionHabitat{background:#101a2c}
+#companionHabitat .habitat-top{background:linear-gradient(100deg,#111b31f5,#24385af5);border-bottom-color:#d6e7ff24}
+#companionHabitat .habitat-title strong{font-size:clamp(16px,2vw,21px);letter-spacing:.2px}
+#companionHabitat .habitat-wallet{border-color:#f6d78a55;background:#302c43;color:#ffe8a2}
+#companionHabitat .habitat-scene.companion-world{isolation:isolate;background:#9bb8d4;transition:background .6s}
+#companionHabitat .habitat-sky{inset:0;overflow:hidden;color:white}
+#companionHabitat .world-sky-gradient{position:absolute;inset:0 0 22%;background:linear-gradient(180deg,#253d70 0%,#7199bf 53%,#e6c8b0 100%);transition:background .6s}
+#companionHabitat .world-sun-moon{position:absolute;z-index:0;top:10%;right:15%;width:clamp(42px,6vw,72px);aspect-ratio:1;border-radius:50%;background:#ffe9ac;box-shadow:0 0 25px #ffe4a277,0 0 85px #ffe4a244;animation:world-lunar-glow 5s ease-in-out infinite}
+#companionHabitat .world-stars{position:absolute;inset:0 0 30%;pointer-events:none}
+#companionHabitat .world-stars i{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff8d8;box-shadow:0 0 9px #fff6cf;animation:world-twinkle 2.8s ease-in-out infinite alternate}
+#companionHabitat .world-stars i:nth-child(1){top:12%;left:13%}#companionHabitat .world-stars i:nth-child(2){top:22%;left:29%}#companionHabitat .world-stars i:nth-child(3){top:9%;left:43%}#companionHabitat .world-stars i:nth-child(4){top:31%;left:55%}#companionHabitat .world-stars i:nth-child(5){top:16%;left:72%}#companionHabitat .world-stars i:nth-child(6){top:35%;left:86%}#companionHabitat .world-stars i:nth-child(7){top:43%;left:19%}#companionHabitat .world-stars i:nth-child(8){top:7%;left:62%}#companionHabitat .world-stars i:nth-child(9){top:29%;left:39%}#companionHabitat .world-stars i:nth-child(10){top:19%;left:93%}#companionHabitat .world-stars i:nth-child(11){top:39%;left:67%}#companionHabitat .world-stars i:nth-child(12){top:5%;left:25%}
+#companionHabitat .world-cloud{position:absolute;z-index:1;top:29%;width:110px;height:24px;border-radius:40px;background:#ffffff58;filter:blur(.3px);animation:world-cloud-drift 28s linear infinite}
+#companionHabitat .world-cloud:before,#companionHabitat .world-cloud:after{content:"";position:absolute;bottom:5px;border-radius:50%;background:inherit}
+#companionHabitat .world-cloud:before{left:18px;width:42px;height:42px}#companionHabitat .world-cloud:after{left:49px;width:31px;height:31px}
+#companionHabitat .world-cloud-a{left:10%;transform:scale(.8)}#companionHabitat .world-cloud-b{top:42%;right:8%;transform:scale(.55);animation-delay:-13s}
+#companionHabitat .world-mountain{position:absolute;z-index:1;left:-10%;width:120%;height:45%;bottom:18%;clip-path:polygon(0 88%,12% 58%,21% 70%,37% 15%,49% 67%,63% 28%,76% 72%,88% 42%,100% 81%,100% 100%,0 100%)}
+#companionHabitat .world-mountain-back{background:linear-gradient(155deg,#7f9bb9,#526f92);opacity:.78;transform:translateY(-14%) scale(1.08)}
+#companionHabitat .world-mountain-front{background:linear-gradient(155deg,#5d8790,#345c66);bottom:13%;transform:translateY(12%) scale(1.1)}
+#companionHabitat .world-tree{position:absolute;z-index:2;bottom:15%;width:clamp(45px,8vw,95px);height:clamp(110px,24vh,220px)}
+#companionHabitat .world-tree i{position:absolute;bottom:0;left:43%;width:18%;height:46%;background:linear-gradient(90deg,#553e45,#9a6c57);border-radius:5px}
+#companionHabitat .world-tree b{position:absolute;left:0;top:0;width:100%;height:72%;background:linear-gradient(135deg,#477e78,#24534f);clip-path:polygon(50% 0,75% 28%,66% 28%,94% 60%,75% 60%,100% 88%,0 88%,25% 60%,6% 60%,34% 28%,25% 28%);filter:drop-shadow(4px 8px 0 #172d3d33)}
+#companionHabitat .world-tree-a{left:3%;transform:scale(.85);transform-origin:bottom}#companionHabitat .world-tree-b{right:3%;transform:scale(1.06);transform-origin:bottom}
+#companionHabitat .world-fireflies{position:absolute;z-index:3;inset:20% 0 20%;pointer-events:none}
+#companionHabitat .world-fireflies i{position:absolute;width:5px;height:5px;border-radius:50%;background:#fff0a0;box-shadow:0 0 13px 4px #fff0a066;animation:world-firefly 4s ease-in-out infinite}
+#companionHabitat .world-fireflies i:nth-child(1){left:18%;top:48%}#companionHabitat .world-fireflies i:nth-child(2){left:30%;top:68%;animation-delay:-1s}#companionHabitat .world-fireflies i:nth-child(3){right:22%;top:53%;animation-delay:-2.4s}#companionHabitat .world-fireflies i:nth-child(4){right:34%;top:35%;animation-delay:-.6s}#companionHabitat .world-fireflies i:nth-child(5){left:48%;top:72%;animation-delay:-3s}
+#companionHabitat .world-title-card{position:absolute;z-index:2;top:8%;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;max-width:80%;padding:10px 22px;border:1px solid #ffffff4d;border-radius:16px;background:#17274772;backdrop-filter:blur(8px);box-shadow:0 10px 28px #17213c1f}
+#companionHabitat .world-title-card span{font-size:8px;letter-spacing:2px;color:#ffe9b5;font-weight:900}
+#companionHabitat .world-title-card strong{font-size:clamp(17px,3vw,27px);color:#fff8e9;text-shadow:0 3px 14px #17213c66}
+#companionHabitat .world-title-card small{font-size:11px;color:#edf3ff}
+#companionHabitat .habitat-ground{z-index:0;left:-8%;width:116%;height:28%;border-radius:48% 48% 0 0;background:linear-gradient(180deg,#6da17e,#3d765e 50%,#2b554c);box-shadow:inset 0 10px 0 #b5d4a333}
+#companionHabitat .habitat-home{z-index:3;bottom:19%;width:min(42vw,300px);height:clamp(170px,32vh,285px);filter:drop-shadow(0 22px 18px #14243d77)}
+#companionHabitat .habitat-home .world-home-glow{position:absolute;inset:8% 0 0;border-radius:50%;background:radial-gradient(ellipse,#ffe8ac38,transparent 70%);filter:blur(12px)}
+#companionHabitat .world-home-roof{position:absolute;z-index:2;top:0;left:4%;width:92%;height:43%;background:linear-gradient(135deg,#e5b77f,#b76c6a 58%,#735276);clip-path:polygon(50% 0,100% 100%,0 100%);filter:drop-shadow(0 8px 0 #352d4d)}
+#companionHabitat .world-home-body{position:absolute;bottom:0;left:12%;width:76%;height:67%;border:4px solid #f4d7a5;background:linear-gradient(90deg,#b8c6dc,#fff0d0 53%,#d8a9a1);box-shadow:inset 0 0 0 4px #fff8df,inset -15px 0 #6f557533,0 11px 0 #3b3452;display:flex;align-items:center;justify-content:center}
+#companionHabitat .world-home-emblem{position:absolute;top:7%;font-size:clamp(28px,5vw,49px);filter:drop-shadow(0 4px 5px #4c3b55aa)}
+#companionHabitat .world-home-door{position:absolute;bottom:0;left:calc(50% - 20px);width:40px;height:58%;border:4px solid #f3d5a0;border-bottom:0;border-radius:15px 15px 0 0;background:linear-gradient(90deg,#4c3853,#9b626b)}
+#companionHabitat .world-home-window{position:absolute;top:28%;width:22%;height:29%;border:4px solid #fff0c9;background:linear-gradient(135deg,#8cdbf0,#f7edc8 62%,#ffd98d);box-shadow:0 0 20px #ffe8a455,inset 0 0 0 3px #ffffff8c}
+#companionHabitat .world-window-a{left:7%}#companionHabitat .world-window-b{right:7%}
+#companionHabitat .world-home-trim{position:absolute;left:0;right:0;bottom:0;height:6px;background:#f1d8a6}
+#companionHabitat .habitat-pet{z-index:4;left:calc(50% - 49px);bottom:7%;width:98px;height:115px;filter:drop-shadow(0 12px 7px #15243f66);cursor:pointer;transition:filter .2s}
+#companionHabitat .habitat-pet:hover{filter:drop-shadow(0 0 14px #ffe8a4aa)}
+#companionHabitat .habitat-pet.world-pet-react{animation:world-pet-hop .55s cubic-bezier(.2,.8,.3,1)}
+#companionHabitat .habitat-bottom{background:linear-gradient(100deg,#10182beF,#24385af5);border-top-color:#d6e7ff24;gap:10px}
+#companionHabitat .habitat-bottom button{border-radius:14px;border-color:#a9c8f544;background:linear-gradient(145deg,#2e4970,#1c2e4d);box-shadow:0 5px 0 #0a1427;color:#f8f6ef;transition:transform .15s,filter .15s}
+#companionHabitat .habitat-bottom button:hover{transform:translateY(-2px);filter:brightness(1.16)}
+#companionHabitat .world-forest .world-sky-gradient{background:linear-gradient(180deg,#172f51,#477d91 60%,#d1c9a6)}
+#companionHabitat .world-forest .world-mountain-back{background:linear-gradient(155deg,#739e91,#416c69)}
+#companionHabitat .world-forest .world-mountain-front{background:linear-gradient(155deg,#3e7a68,#244e4b)}
+#companionHabitat .world-forest .world-tree b{background:linear-gradient(135deg,#74a87b,#22554a)}
+#companionHabitat .world-forest .world-home-roof{background:linear-gradient(135deg,#c88d5e,#754c48)}
+#companionHabitat .world-valley .world-sky-gradient{background:linear-gradient(180deg,#213d75,#8bb9d1 57%,#f5d5a5)}
+#companionHabitat .world-valley .world-mountain-back{background:linear-gradient(155deg,#9fb9d8,#697eaa)}
+#companionHabitat .world-valley .world-mountain-front{background:linear-gradient(155deg,#709e9c,#426e6d)}
+#companionHabitat .world-valley .world-home-roof{background:linear-gradient(135deg,#8b9bd2,#4c5a9a)}
+#companionHabitat .world-starlight .world-sky-gradient{background:linear-gradient(180deg,#090f31,#2b387a 60%,#916db3)}
+#companionHabitat .world-starlight .world-stars i{width:4px;height:4px}
+#companionHabitat .world-starlight .world-sun-moon{background:#e6ddff;box-shadow:0 0 28px #bdb1ff99,0 0 95px #a78bfa66}
+#companionHabitat .world-starlight .world-mountain-back{background:linear-gradient(155deg,#7975ba,#41487f)}
+#companionHabitat .world-starlight .world-mountain-front{background:linear-gradient(155deg,#5e65a1,#282e61)}
+#companionHabitat .world-starlight .world-tree b{background:linear-gradient(135deg,#7777b8,#36376e)}
+#companionHabitat .world-starlight .world-home-roof{background:linear-gradient(135deg,#ffe5a3,#d28be7 48%,#5f5dc0)}
+#companionHabitat .world-starlight .world-home-body{background:linear-gradient(90deg,#8ca5e8,#fff0f7 48%,#b4caff);box-shadow:inset 0 0 0 4px #fff5ff,0 11px 0 #433775,0 0 30px #d4c5ff55}
+#companionHabitat .world-meadow .world-sky-gradient{background:linear-gradient(180deg,#36527b,#8ab5ca 60%,#f0d5b1)}
+#companionHabitat .world-meadow .world-mountain-back{background:linear-gradient(155deg,#a6b9c3,#718fa0)}
+#companionHabitat .world-meadow .world-mountain-front{background:linear-gradient(155deg,#7aa18c,#48715f)}
+@keyframes world-twinkle{from{opacity:.35;transform:scale(.7)}to{opacity:1;transform:scale(1.25)}}
+@keyframes world-cloud-drift{from{margin-left:-3vw}to{margin-left:7vw}}
+@keyframes world-firefly{0%,100%{transform:translateY(0);opacity:.25}50%{transform:translateY(-14px);opacity:1}}
+@keyframes world-lunar-glow{0%,100%{transform:scale(1);opacity:.88}50%{transform:scale(1.06);opacity:1}}
+@keyframes world-pet-hop{0%{transform:translateY(0) scale(1)}35%{transform:translateY(-20px) scale(1.05)}70%{transform:translateY(0) scale(.98)}100%{transform:translateY(0) scale(1)}}
+@media(max-width:600px){#companionHabitat .world-title-card{top:5%;padding:8px 12px}#companionHabitat .world-title-card small{font-size:9px}#companionHabitat .habitat-home{width:min(60vw,260px);height:clamp(160px,27vh,225px);bottom:20%}#companionHabitat .habitat-pet{width:78px;height:92px;left:calc(50% - 39px);bottom:7%}#companionHabitat .world-tree{height:clamp(105px,21vh,160px)}#companionHabitat .world-mountain{height:37%;bottom:19%}#companionHabitat .habitat-bottom{gap:5px;padding-left:8px;padding-right:8px}#companionHabitat .habitat-bottom button{font-size:11px;padding:8px 4px}}
+@media(prefers-reduced-motion:reduce){#companionHabitat .world-stars i,#companionHabitat .world-cloud,#companionHabitat .world-fireflies i,#companionHabitat .world-sun-moon,#companionHabitat .habitat-pet.world-pet-react{animation:none!important}}
