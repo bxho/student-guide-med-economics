@@ -16,7 +16,10 @@ const COMPANIONS={
  mimi:{name:'ميمي',coat:'#d88722',fur:'#eaa04c',accent:'#ffe4a4',kind:'cat',emoji:'🐾'},
  zayd:{name:'زيد',coat:'#26724e',fur:'#b98057',accent:'#a9e6bf',kind:'glasses',emoji:'🧠'},
  sara:{name:'سارة',coat:'#bd466d',fur:'#c98a62',accent:'#ffb0c8',kind:'cap',emoji:'♥'},
- adam:{name:'آدم',coat:'#344da8',fur:'#c28b69',accent:'#9eb6ff',kind:'dark',emoji:'★'}
+ adam:{name:'آدم',coat:'#344da8',fur:'#c28b69',accent:'#9eb6ff',kind:'dark',emoji:'★'},
+ eren:{name:'إيرين ييغر',coat:'#5b493c',fur:'#4b392f',accent:'#b9d4ad',kind:'eren',emoji:'⚔️'},
+ armin:{name:'أرمين أرليرت',coat:'#c4a36c',fur:'#e6c9a0',accent:'#e8d8a8',kind:'armin',emoji:'🪽'},
+ mikasa:{name:'ميكاسا أكرمان',coat:'#6f2e38',fur:'#222733',accent:'#a93d4a',kind:'mikasa',emoji:'🧣'}
 };
 function companionName(kind){return data.customName||((COMPANIONS[kind]||COMPANIONS.medicine).name)}
 function art(kind,stage=0,outfit=0){
@@ -28,7 +31,14 @@ function art(kind,stage=0,outfit=0){
  let p='';
  // Shadow and pixel feet/body: deliberate square silhouettes, no smooth gradients.
  // Distinct pixel silhouettes: Riko is a tall mech; others have role-specific builds.
- if(kind==='hijab'){
+ if(kind==='eren'||kind==='armin'||kind==='mikasa'){
+   p+=R(28,101,40,6,'#101b32','opacity=".3"');
+   p+=R(29,82,14,17,'#4a3329')+R(53,82,14,17,'#4a3329')+R(25,94,20,7,'#26312f')+R(51,94,20,7,'#26312f');
+   p+=R(25,71,46,22,'#4d554b')+R(21,76,54,13,'#5d6656')+R(31,71,34,7,'#d5d0b6');
+   p+=R(26,78,8,16,'#68715f')+R(62,78,8,16,'#68715f')+R(35,77,7,15,'#e0d8c0')+R(54,77,7,15,'#e0d8c0');
+   p+=R(43,75,10,14,'#c8d0c2')+R(38,87,20,4,'#3e4d43');
+   if(kind==='mikasa')p+=R(25,70,46,9,'#7c303a')+R(31,72,34,7,'#a53d49')+R(42,78,12,12,'#8e303d');
+ } else if(kind==='hijab'){
    p+=R(25,101,46,6,'#101b32','opacity=".25"');
    p+=R(30,80,17,22,'#263b65')+R(51,80,17,22,'#263b65')+R(25,96,25,7,'#172640')+R(49,96,25,7,'#172640');
    p+=R(23,69,52,30,coat)+R(28,73,42,24,coat)+R(33,70,32,6,c.accent);
@@ -70,7 +80,16 @@ function art(kind,stage=0,outfit=0){
    }
  }
  // Ears and silhouette vary by creature type.
- if(c.kind==='animal'||c.kind==='cat'){
+ if(kind==='eren'){
+   p+=R(24,22,48,11,'#3a302b')+R(28,16,40,10,'#4b392f')+R(23,29,10,15,'#4b392f')+R(30,24,12,8,'#4b392f')+R(50,23,12,9,'#4b392f')+R(62,29,10,13,'#4b392f');
+   p+=R(30,22,8,7,'#5c493e')+R(54,21,8,7,'#5c493e');
+ } else if(kind==='armin'){
+   p+=R(24,22,48,11,'#e3c98f')+R(28,16,40,10,'#e8d4a5')+R(23,29,10,14,'#d6bd82')+R(30,24,12,8,'#f0dcae')+R(50,23,12,9,'#e5cf99')+R(62,29,10,13,'#d7bf87');
+   p+=R(31,21,9,6,'#f5e7c3')+R(55,22,7,6,'#f5e7c3');
+ } else if(kind==='mikasa'){
+   p+=R(24,22,48,11,'#1e2028')+R(28,16,40,10,'#262832')+R(23,29,10,14,'#20222b')+R(30,24,12,8,'#292b35')+R(50,23,12,9,'#252731')+R(62,29,10,13,'#20222b');
+   p+=R(29,21,10,6,'#3b3d47')+R(54,22,8,6,'#393b45');
+ } else if(c.kind==='animal'||c.kind==='cat'){
    p+=R(24,25,8,20,c.fur)+R(28,17,8,13,c.fur)+R(32,25,8,8,c.fur);
    p+=R(64,25,8,20,c.fur)+R(60,17,8,13,c.fur)+R(56,25,8,8,c.fur);
    p+=R(29,24,4,8,'#f6c0b1')+R(63,24,4,8,'#f6c0b1');
@@ -128,6 +147,9 @@ function art(kind,stage=0,outfit=0){
  }
  // Neckwear and unique role badges.
  p+=R(42,68,12,6,c.accent)+R(45,73,6,6,'#fff0a6');
+ if(kind==='eren')p+=R(34,78,6,14,'#34453e')+R(56,78,6,14,'#34453e')+R(41,80,14,5,'#d6d8c5');
+ if(kind==='armin')p+=R(34,78,6,14,'#e9e0c7')+R(56,78,6,14,'#e9e0c7')+R(41,80,14,5,'#d7c48c');
+ if(kind==='mikasa')p+=R(32,69,32,6,'#9d3945')+R(39,74,18,8,'#b94b55')+R(43,77,10,10,'#8e303d');
  if(c.kind==='medicine') p+=R(45,77,6,10,'#fff')+R(42,80,12,4,'#e84b60');
  if(c.kind==='economics') p+=R(43,78,4,8,'#fff0a6')+R(47,75,4,11,'#fff0a6')+R(51,72,4,14,'#fff0a6');
  if(c.kind==='robot') p+=R(36,78,24,5,'#102c50')+R(42,79,12,3,c.accent);
@@ -218,7 +240,7 @@ function inject(){
  const overlay=document.createElement('div');overlay.id='companionOverlay';overlay.hidden=true;overlay.innerHTML='<section class="companion-card" dir="rtl"><button class="companion-skip" id="companionSkip" type="button">تخطي المشهد</button><p class="companion-kicker">دليل الطالب · رحلتك الدراسية</p><h2 id="companionIntroTitle">اختر رفيق رحلتك</h2><p id="companionIntroCopy">رحلتك الدراسية تبدأ الآن.</p><div class="companion-heroes companion-heroes-all" id="companionChoose"></div><div id="companionWelcome" hidden><div style="width:140px;height:150px;margin:0 auto" id="companionWelcomeArt"></div></div><button class="companion-primary" id="companionBegin" type="button">ابدأ الرحلة ←</button><button class="companion-secondary" id="companionReturn" type="button" hidden>متابعة الدراسة</button><div class="companion-stage">الرفيق يتطور مع إنجازاتك · حفظ محلي في هذه النسخة</div></section>';
  document.body.append(dock,panel,overlay);
  const habitat=document.createElement('section');habitat.id='companionHabitat';habitat.hidden=true;habitat.dir='rtl';habitat.innerHTML='<header class="habitat-top"><button type="button" id="habitatBack">← رجوع</button><div class="habitat-title"><strong id="habitatTitle">بيت الرفيق</strong><small id="habitatLevel"></small></div><div class="habitat-wallet">🪙 <span id="habitatCoins">0</span></div></header><div id="habitatScene" class="habitat-scene"><div id="habitatSky" class="habitat-sky"></div><div id="habitatHome" class="habitat-home"></div><div id="habitatPet" class="habitat-pet"></div><div class="habitat-ground"></div></div><div class="habitat-bottom"><button type="button" id="habitatInterior">🛋️ داخل البيت</button><button type="button" id="habitatShop">🛍️ المتجر</button><button type="button" id="habitatCompanionMenu">🐾 قائمة الرفيق</button></div><div id="habitatSubpage" class="habitat-subpage" hidden></div>';document.body.append(habitat);
- $('#companionChoose').innerHTML=Object.keys(COMPANIONS).map(key=>'<button class="companion-hero '+(key===chosen()?'selected':'')+'" type="button" data-companion-choice="'+key+'" aria-pressed="'+(key===chosen())+'"><span>'+art(key,0,0)+'</span><strong>'+COMPANIONS[key].name+'</strong><small>'+({medicine:'المثابرة والدقة',economics:'الذكاء والتخطيط',robot:'رفيق تقني',lina:'رفيقة المذاكرة',kai:'طاقة وموسيقى',mimi:'لطافة ومرح',zayd:'تفكير وتركيز',sara:'تشجيع وود',adam:'شجاعة وثبات'}[key]||'رفيق الدراسة')+'</small></button>').join('');
+ $('#companionChoose').innerHTML=Object.keys(COMPANIONS).map(key=>'<button class="companion-hero '+(key===chosen()?'selected':'')+'" type="button" data-companion-choice="'+key+'" aria-pressed="'+(key===chosen())+'"><span>'+art(key,0,0)+'</span><strong>'+COMPANIONS[key].name+'</strong><small>'+({medicine:'المثابرة والدقة',economics:'الذكاء والتخطيط',robot:'رفيق تقني',lina:'رفيقة المذاكرة',kai:'طاقة وموسيقى',mimi:'لطافة ومرح',zayd:'تفكير وتركيز',sara:'تشجيع وود',adam:'شجاعة وثبات',eren:'إرادة لا تستسلم',armin:'ذكاء وشجاعة',mikasa:'قوة ووفاء'}[key]||'رفيق الدراسة')+'</small></button>').join('');
 }
 function showExtra(html){$('#companionExtra').innerHTML=html}
 function todayKey(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
