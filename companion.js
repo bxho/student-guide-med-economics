@@ -15,22 +15,10 @@ const COMPANIONS={
  kai:{name:'كاي',coat:'#0f8b83',fur:'#c9a17f',accent:'#59e0c4',kind:'headphones',emoji:'🎵'},
  mimi:{name:'ميمي',coat:'#d88722',fur:'#eaa04c',accent:'#ffe4a4',kind:'cat',emoji:'🐾'},
  zayd:{name:'زيد',coat:'#26724e',fur:'#b98057',accent:'#a9e6bf',kind:'glasses',emoji:'🧠'},
- sara:{name:'سارة',coat:'#bd466d',fur:'#c98a62',accent:'#ffb0c8',kind:'cap',emoji:'♥'},
- adam:{name:'آدم',coat:'#344da8',fur:'#c28b69',accent:'#9eb6ff',kind:'dark',emoji:'★'},
- eren:{name:'إيرين ييغر',coat:'#5b493c',fur:'#4b392f',accent:'#b9d4ad',kind:'eren',emoji:'⚔️'},
- armin:{name:'أرمين أرليرت',coat:'#c4a36c',fur:'#e6c9a0',accent:'#e8d8a8',kind:'armin',emoji:'🪽'},
- mikasa:{name:'ميكاسا أكرمان',coat:'#6f2e38',fur:'#222733',accent:'#a93d4a',kind:'mikasa',emoji:'🧣'},
- luffy:{name:'لوفي',coat:'#b92d32',fur:'#57362a',accent:'#f6c85f',kind:'anime-luffy',emoji:'🍖'},
- zoro:{name:'زورو',coat:'#32694a',fur:'#4e8a53',accent:'#b8d58a',kind:'anime-zoro',emoji:'⚔️'},
- sanji:{name:'سانجي',coat:'#26364b',fur:'#e5c36d',accent:'#f0d18a',kind:'anime-sanji',emoji:'🍳'},
- naruto:{name:'ناروتو',coat:'#e87824',fur:'#f2b747',accent:'#e7a62e',kind:'anime-naruto',emoji:'🍥'},
- sasuke:{name:'ساسكي',coat:'#30384e',fur:'#202c45',accent:'#8da7d7',kind:'anime-sasuke',emoji:'⚡'},
- narutoMech:{name:'ناروتو الآلي',coat:'#3979a7',fur:'#dcecff',accent:'#56e3ff',kind:'anime-mech',emoji:'🤖'},
- bruceLee:{name:'بروس لي',coat:'#d9a82e',fur:'#242329',accent:'#f6d66c',kind:'anime-bruce',emoji:'🥋'},
- batman:{name:'باتمان',coat:'#252b3b',fur:'#1a2030',accent:'#f6d66c',kind:'anime-batman',emoji:'🦇'},
- levi:{name:'ليڤاي أكرمان',coat:'#344c3e',fur:'#28312c',accent:'#d2dfd1',kind:'anime-levi',emoji:'🗡️'},
- erenTitan:{name:'إيرين العملاق',coat:'#923e3a',fur:'#7e292a',accent:'#ff8d63',kind:'anime-titan',emoji:'🔥'}
+
 };
+// Remove previously selected characters that are no longer part of the original companion roster.
+if(data.chosen&&!COMPANIONS[data.chosen]){data.chosen='medicine';save()}
 function companionName(kind){return data.customName||((COMPANIONS[kind]||COMPANIONS.medicine).name)}
 function art(kind,stage=0,outfit=0){
  const c=COMPANIONS[kind]||COMPANIONS.medicine;
@@ -122,7 +110,7 @@ function art(kind,stage=0,outfit=0){
   p+='</svg>';
   return p;
  }
- const coat=['#dcecff','#4b77ca','#f0f4ff','#263d71'][outfit%4]||c.coat;
+ const coat=['#dcecff','#4b77ca','#f0f4ff','#263d71','#d95f59','#4eaf8b','#d4a54a','#8e67bc'][((Number(outfit)||0)%8+8)%8]||c.coat;
  const tier=Math.min(7,1+Math.floor(Math.max(0,Number(data.xp)||0)/100));
  const mood=data.mood||'happy';
  const R=(x,y,w,h,fill,extra='')=>'<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="'+fill+'" '+extra+'/>';
@@ -223,13 +211,15 @@ function art(kind,stage=0,outfit=0){
    p+=R(38,52,20,3,'#ffffff')+R(42,56,12,3,c.accent);
  } else {
    // Eyes and eyebrows, pixelated expressions.
-   if(mood==='sleepy'){
+   if(mood==='sleepy'||mood==='sad'){
      p+=R(34,42,10,3,'#49362f')+R(52,42,10,3,'#49362f');
    } else {
      p+=R(34,39,10,12,'#fff')+R(52,39,10,12,'#fff');
      p+=R(37,42,5,8,'#27354d')+R(55,42,5,8,'#27354d');
      p+=R(38,42,2,3,'#fff')+R(56,42,2,3,'#fff');
      p+=R(32,35,13,3,'#51372f')+R(51,35,13,3,'#51372f');
+     if(mood==='angry')p+=R(32,33,14,4,'#49362f')+R(50,33,14,4,'#49362f');
+     if(mood==='surprised')p+=R(36,39,7,13,'#27354d')+R(54,39,7,13,'#27354d');
    }
    if(c.kind==='glasses'){
      p+=R(30,38,17,3,'#182a37')+R(30,38,3,12,'#182a37')+R(44,38,3,12,'#182a37')+R(32,47,13,3,'#182a37');
@@ -239,6 +229,9 @@ function art(kind,stage=0,outfit=0){
      p+=R(34,54,8,4,'#fff0dc')+R(54,54,8,4,'#fff0dc');
    }
    if(mood==='sleepy') p+=R(42,57,12,3,'#754d42');
+   else if(mood==='sad') p+=R(41,60,6,3,'#754d42')+R(47,57,6,3,'#754d42')+R(45,51,4,5,'#73c8f5');
+   else if(mood==='angry') p+=R(41,57,12,4,'#754d42')+R(42,57,10,2,'#e8b1a3');
+   else if(mood==='surprised') p+=R(43,55,10,9,'#754d42')+R(46,56,4,4,'#fff0dc');
    else if(mood==='curious') p+=R(45,56,6,7,'#754d42');
    else if(mood==='excited') p+=R(40,56,16,7,'#a83d58')+R(43,56,10,3,'#fff');
    else p+=R(41,57,5,3,'#754d42')+R(46,60,5,3,'#754d42')+R(51,57,5,3,'#754d42');
@@ -300,7 +293,7 @@ function wander(){
 function renderHabitat(){const i=stage(),home=$('#habitatHome'),scene=$('#habitatScene');if(!home||!scene)return;const houses=[{name:'مأوى صغير',desc:'بداية الرحلة',emoji:'📦',className:'home-poor'},{name:'كوخ بسيط',desc:'مكان دافئ للراحة',emoji:'🛖',className:'home-cabin'},{name:'بيت مريح',desc:'أثاث ونوافذ مضيئة',emoji:'🏡',className:'home-comfort'},{name:'قصر الرفيق',desc:'بيت أسطوري وسط النجوم',emoji:'🏰',className:'home-royal'}];const h=houses[i];$('#habitatTitle').textContent=h.name;$('#habitatLevel').textContent='المستوى '+(i+1)+' · '+rank();$('#habitatCoins').textContent=data.coins;home.className='habitat-home '+h.className;home.innerHTML='<div class="habitat-house-roof"></div><div class="habitat-house-body"><span class="habitat-house-icon">'+h.emoji+'</span><span class="habitat-house-door"></span><span class="habitat-house-window window-one"></span><span class="habitat-house-window window-two"></span></div><div class="habitat-house-caption">'+h.desc+'</div>';$('#habitatPet').innerHTML=art(chosen(),stage(),data.outfit);scene.className='habitat-scene scene-level-'+i;$('#habitatSky').innerHTML='<div class="pixel-skyline" aria-hidden="true"><i class="pixel-cloud cloud-a"></i><i class="pixel-cloud cloud-b"></i><i class="pixel-sun"></i><i class="pixel-star star-a"></i><i class="pixel-star star-b"></i><i class="pixel-star star-c"></i></div>';$('#habitatSubpage').hidden=true;$('#habitatSubpage').innerHTML='';}
 function openHabitat(){const view=$('#companionHabitat');if(!view)return;clearTimeout(wanderTimer);closePanel();view.hidden=false;renderHabitat();}
 function closeHabitat(){const view=$('#companionHabitat');if(view)view.hidden=true;scheduleWander(3000);}
-function showHabitatSubpage(type){const sub=$('#habitatSubpage');sub.hidden=false;if(type==='interior'){sub.innerHTML='<div class="anime-room-heading"><span class="anime-room-kicker">COMPANION HOME · 3D ROOM</span><h3>🏠 غرفة '+escapeHtml(companionName(chosen()))+'</h3><p>عالم أنمي دافئ بعمق ثلاثي الأبعاد يتطور مع مستواك.</p></div><div class="habitat-interior anime-3d-room level-interior-'+stage()+'"><div class="room-back-wall"><div class="room-window-3d"><span class="window-sky"><i class="pixel-star"></i><i class="pixel-cloud-mini"></i><i class="pixel-star"></i></span><span class="window-horizon"></span><span class="window-hills"></span></div><div class="room-wall-poster"><span class="pixel-emblem">✦</span><small>LEVEL<br>UP!</small></div><div class="room-shelf-3d"><i class="pixel-book book-a"></i><i class="pixel-book book-b"></i><i class="pixel-plant"></i><i class="pixel-trophy"></i></div><div class="room-wall-light"></div></div><div class="room-side-wall"></div><div class="room-floor-3d"><div class="room-floor-grid"></div><div class="room-rug-3d"></div><div class="room-bed-3d"><div class="bed-headboard"></div><div class="bed-pillow"></div><div class="bed-blanket"></div><div class="bed-foot"></div></div><div class="room-nightstand"><span class="pixel-book book-night"></span><i></i></div><div class="room-lamp-3d"><i></i><b></b><span></span></div><div class="room-plant-3d"><i class="pixel-plant"></i><b></b></div><div class="room-pet-3d">'+art(chosen(),stage(),data.outfit)+'</div><div class="room-decor-3d">'+(data.roomItems?Array(Math.min(8,data.roomItems)).fill('<span class="pixel-plant"></span>').join(''):'')+'</div></div><div class="room-level-plaque">✦ '+['بداية بسيطة','كوخ دافئ','جناح أنيق','جناح أسطوري'][stage()]+' ✦</div></div><p class="room-status">🪴 قطع الديكور: '+data.roomItems+' <span>🪙 رصيدك: '+data.coins+'</span></p><button type="button" id="habitatDecorBuy">🪴 أضف ديكور (3 عملات)</button><button type="button" id="habitatCityBack">العودة إلى البيت</button>';sub.querySelector('#habitatDecorBuy').addEventListener('click',()=>{if(data.coins<3){bubble('تحتاج 3 عملات لشراء الديكور.');return}data.coins-=3;data.roomItems++;save();renderHabitat();refreshPanel();showHabitatSubpage('interior')});sub.querySelector('#habitatCityBack').addEventListener('click',()=>sub.hidden=true);return;}else{sub.innerHTML='<h3>🛍️ متجر الرفيق</h3><p>رصيدك: 🪙 '+data.coins+' عملة</p><div class="habitat-shop-grid"><button type="button" data-buy="decor"><span class="pixel-plant"></span> ديكور البيت <strong>3 عملات</strong></button><button type="button" data-buy="outfit"><span class="pixel-shirt"></span> زي جديد <strong>3 عملات</strong></button></div><p class="habitat-shop-note">البيت يتحسن مع مستوياتك؛ يمكنك شراء اللمسات الإضافية من هنا.</p><button type="button" id="habitatShopBack">العودة إلى البيت</button>';}sub.querySelectorAll('#habitatCityBack,#habitatShopBack').forEach(b=>b.addEventListener('click',()=>{sub.hidden=true}));sub.querySelectorAll('[data-buy]').forEach(b=>b.addEventListener('click',()=>{const item=b.dataset.buy,cost=3;if(data.coins<cost){bubble('تحتاج '+cost+' عملات لإتمام الشراء.');return}data.coins-=cost;if(item==='decor')data.roomItems++;if(item==='outfit')data.outfit=(data.outfit+1)%4;save();renderHabitat();refreshPanel();showHabitatSubpage(type);bubble('تم الشراء! شكراً لك.');}));}
+function showHabitatSubpage(type){const sub=$('#habitatSubpage');sub.hidden=false;if(type==='interior'){sub.innerHTML='<div class="anime-room-heading"><span class="anime-room-kicker">COMPANION HOME · 3D ROOM</span><h3>🏠 غرفة '+escapeHtml(companionName(chosen()))+'</h3><p>عالم أنمي دافئ بعمق ثلاثي الأبعاد يتطور مع مستواك.</p></div><div class="habitat-interior anime-3d-room level-interior-'+stage()+'"><div class="room-back-wall"><div class="room-window-3d"><span class="window-sky"><i class="pixel-star"></i><i class="pixel-cloud-mini"></i><i class="pixel-star"></i></span><span class="window-horizon"></span><span class="window-hills"></span></div><div class="room-wall-poster"><span class="pixel-emblem">✦</span><small>LEVEL<br>UP!</small></div><div class="room-shelf-3d"><i class="pixel-book book-a"></i><i class="pixel-book book-b"></i><i class="pixel-plant"></i><i class="pixel-trophy"></i></div><div class="room-wall-light"></div></div><div class="room-side-wall"></div><div class="room-floor-3d"><div class="room-floor-grid"></div><div class="room-rug-3d"></div><div class="room-bed-3d"><div class="bed-headboard"></div><div class="bed-pillow"></div><div class="bed-blanket"></div><div class="bed-foot"></div></div><div class="room-nightstand"><span class="pixel-book book-night"></span><i></i></div><div class="room-lamp-3d"><i></i><b></b><span></span></div><div class="room-plant-3d"><i class="pixel-plant"></i><b></b></div><div class="room-pet-3d">'+art(chosen(),stage(),data.outfit)+'</div><div class="room-decor-3d">'+(data.roomItems?Array(Math.min(8,data.roomItems)).fill('<span class="pixel-plant"></span>').join(''):'')+'</div></div><div class="room-level-plaque">✦ '+['بداية بسيطة','كوخ دافئ','جناح أنيق','جناح أسطوري'][stage()]+' ✦</div></div><p class="room-status">🪴 قطع الديكور: '+data.roomItems+' <span>🪙 رصيدك: '+data.coins+'</span></p><button type="button" id="habitatDecorBuy">🪴 أضف ديكور (3 عملات)</button><button type="button" id="habitatCityBack">العودة إلى البيت</button>';sub.querySelector('#habitatDecorBuy').addEventListener('click',()=>{if(data.coins<3){bubble('تحتاج 3 عملات لشراء الديكور.');return}data.coins-=3;data.roomItems++;save();renderHabitat();refreshPanel();showHabitatSubpage('interior')});sub.querySelector('#habitatCityBack').addEventListener('click',()=>sub.hidden=true);return;}else{sub.innerHTML='<h3>🛍️ متجر الرفيق</h3><p>رصيدك: 🪙 '+data.coins+' عملة</p><div class="habitat-shop-grid"><button type="button" data-buy="decor"><span class="pixel-plant"></span> ديكور البيت <strong>3 عملات</strong></button><button type="button" data-buy="outfit"><span class="pixel-shirt"></span> زي جديد <strong>3 عملات</strong></button></div><p class="habitat-shop-note">البيت يتحسن مع مستوياتك؛ يمكنك شراء اللمسات الإضافية من هنا.</p><button type="button" id="habitatShopBack">العودة إلى البيت</button>';}sub.querySelectorAll('#habitatCityBack,#habitatShopBack').forEach(b=>b.addEventListener('click',()=>{sub.hidden=true}));sub.querySelectorAll('[data-buy]').forEach(b=>b.addEventListener('click',()=>{const item=b.dataset.buy,cost=3;if(data.coins<cost){bubble('تحتاج '+cost+' عملات لإتمام الشراء.');return}data.coins-=cost;if(item==='decor')data.roomItems++;if(item==='outfit')data.outfit=(data.outfit+1)%8;save();renderHabitat();refreshPanel();showHabitatSubpage(type);bubble('تم الشراء! شكراً لك.');}));}
 function scheduleWander(ms){clearTimeout(wanderTimer);wanderTimer=setTimeout(wander,ms)}
 function startAutonomy(){
  scheduleWander(2200);
@@ -413,7 +406,7 @@ function init(){
  syncDockVisibility();
  if(app){new MutationObserver(syncDockVisibility).observe(app,{attributes:true,attributeFilter:['class']});}
  bind();renderBuddy();startAutonomy();
- const moods=['happy','curious','excited'];let moodIndex=0;setInterval(()=>{if(document.hidden)return;moodIndex=(moodIndex+1)%moods.length;data.mood=moods[moodIndex];renderBuddy();if(!$('#companionHabitat')?.hidden)$('#habitatPet').innerHTML=art(chosen(),stage(),data.outfit);if(!$('#companionOverlay')?.hidden)$('#companionChoose').querySelectorAll('[data-companion-choice]').forEach(b=>{const k=b.dataset.companionChoice;b.querySelector('span').innerHTML=art(k,0,0)});},3200);
+ const moods=['happy','curious','excited','sleepy','surprised','angry','sad'];let moodIndex=0;setInterval(()=>{if(document.hidden)return;moodIndex=(moodIndex+1)%moods.length;data.mood=moods[moodIndex];renderBuddy();if(!$('#companionHabitat')?.hidden)$('#habitatPet').innerHTML=art(chosen(),stage(),data.outfit);if(!$('#companionOverlay')?.hidden)$('#companionChoose').querySelectorAll('[data-companion-choice]').forEach(b=>{const k=b.dataset.companionChoice;b.querySelector('span').innerHTML=art(k,0,0)});},3200);
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
