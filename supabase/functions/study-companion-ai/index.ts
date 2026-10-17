@@ -77,7 +77,7 @@ Deno.serve(async (req: Request) => {
       { role: "system", content: systemPrompt },
       ...messages,
     ].map((m) => (m.role === "assistant" ? "المساعد: " : "المستخدم: ") + m.content).join("\n\n");
-    const aiRes = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent", {
+    const aiRes = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent", {
       method: "POST",
       headers: { "x-goog-api-key": geminiKey, "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -88,7 +88,8 @@ Deno.serve(async (req: Request) => {
     const result = await aiRes.json().catch(() => ({}));
     if (!aiRes.ok) {
       console.error("Gemini provider error", aiRes.status, result?.error?.status || "provider_error");
-      if (aiRes.status === 400 || aiRes.status === 403) return json({ error: "تعذر استخدام Gemini. تحقق من صلاحية المفتاح وإتاحة النموذج في Google AI Studio." }, 502);
+      if (aiRes.status === 400 || aiRes.status === 403) return json({ error: "تعذر استخدام Gemini. تحقق من صلاحية المفتاح وإعدادات Google AI Studio." }, 502);
+      if (aiRes.status === 404) return json({ error: "النموذج غير متاح لهذا المشروع. تحقق من نماذج Gemini المتاحة لمفتاحك." }, 502);
       if (aiRes.status === 429) return json({ error: "وصل استخدام Gemini إلى الحد المؤقت المجاني؛ انتظر قليلًا ثم حاول." }, 503);
       return json({ error: "تعذر إكمال الرد الآن. حاول مرة أخرى بعد قليل." }, 502);
     }
