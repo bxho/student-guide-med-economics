@@ -1,4 +1,4 @@
-// Authenticated study companion AI proxy. Keep OPENAI_API_KEY in Supabase Edge Function secrets only.
+// Authenticated study companion AI proxy. Keep GEMINI_API_KEY in Supabase Edge Function secrets only.
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, apikey, content-type, x-client-info",
@@ -21,9 +21,9 @@ Deno.serve(async (req: Request) => {
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY");
-  const openAiKey = Deno.env.get("OPENAI_API_KEY");
+  const geminiKey = Deno.env.get("GEMINI_API_KEY");
   if (!supabaseUrl || !anonKey) return json({ error: "إعداد التحقق من الحساب غير مكتمل." }, 503);
-  if (!openAiKey) return json({ error: "لم يُضف مسؤول المشروع سر OPENAI_API_KEY في إعدادات Edge Functions بعد." }, 503);
+  if (!geminiKey) return json({ error: "لم يُضف سر GEMINI_API_KEY في إعدادات Supabase Edge Functions." }, 503);
 
   let userId: string;
   try {
@@ -49,7 +49,7 @@ Deno.serve(async (req: Request) => {
   let body: { messages?: unknown };
   try {
     const raw = await req.text();
-    if (raw.length > 40_000) return json({ error: "المحاضرة طويلة جدًا لطلب واحد؛ قسّمها إلى أجزاء أصغر." }, 413);
+    if (raw.length > 45_000) return json({ error: "الطلب طويل جدًا؛ قسّم المحاضرة إلى أجزاء أصغر." }, 413);
     body = JSON.parse(raw);
   } catch {
     return json({ error: "صيغة الطلب غير صحيحة." }, 400);
@@ -58,7 +58,7 @@ Deno.serve(async (req: Request) => {
 
   const messages = body.messages.slice(-8).flatMap((m: any) => {
     if (!m || !["user", "assistant"].includes(m.role) || typeof m.content !== "string") return [];
-    const content = m.content.trim().slice(0, 32_000);
+    const content = m.content.trim().slice(0, 40_000);
     return content ? [{ role: m.role, content }] : [];
   });
   if (!messages.length || messages[messages.length - 1].role !== "user") {
@@ -70,28 +70,30 @@ Deno.serve(async (req: Request) => {
 ساعد في شرح المفاهيم، بناء خطط المذاكرة، الأسئلة التدريبية، التذكر النشط، وتنظيم الوقت.
 كن دقيقًا؛ إذا لم تكن متأكدًا فصرّح بذلك ولا تختلق مراجع أو حقائق. في موضوعات الطب، قدّم شرحًا تعليميًا عامًا لا تشخيصًا أو وصفة علاجية شخصية، ووجّه الحالات الطارئة إلى الرعاية الطبية العاجلة.
 لا تدّع أنك قرأت ملفات الطالب أو بياناته؛ لا تصلك إلا رسائل المحادثة المرسلة هنا.
-اجعل الرد مفيدًا ومباشرًا ومنظمًا. إذا طلب المستخدم JSON فأخرج JSON صالحًا فقط دون Markdown. عند تحليل محاضرة، استخدم النص المرسل وحده ولا تختلق معلومات؛ أنشئ نقاطًا وأسئلة استرجاع نشط مفيدة بدل نسخ الجمل حرفيًا.`;
+اجعل الرد مفيدًا ومباشرًا ومنظمًا، وبحد أقصى نحو 500 كلمة.`;
 
   try {
-    const aiRes = await fetch("https://api.openai.com/v1/chat/completions", {
+    const prompt = [
+      { role: "system", content: systemPrompt },
+      ...messages,
+    ].map((m) => (m.role === "assistant" ? "المساعد: " : "المستخدم: ") + m.content).join("\n\n");
+    const aiRes = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent", {
       method: "POST",
-      headers: { Authorization: "Bearer " + openAiKey, "Content-Type": "application/json" },
+      headers: { "x-goog-api-key": geminiKey, "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "gpt-4.1-mini",
-        messages: [{ role: "system", content: systemPrompt }, ...messages],
-        temperature: 0.25,
-        max_tokens: 3000,
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.2, maxOutputTokens: 6000 },
       }),
     });
     const result = await aiRes.json().catch(() => ({}));
     if (!aiRes.ok) {
-      console.error("OpenAI provider error", aiRes.status, result?.error?.code || "provider_error");
-      if (aiRes.status === 401) return json({ error: "مفتاح مزود الذكاء الاصطناعي غير صالح؛ راجع السر في Supabase." }, 502);
-      if (aiRes.status === 429) return json({ error: "وصل حساب النموذج إلى حد الاستخدام أو الرصيد. تحقق من إعدادات المزود." }, 503);
+      console.error("Gemini provider error", aiRes.status, result?.error?.status || "provider_error");
+      if (aiRes.status === 400 || aiRes.status === 403) return json({ error: "تعذر استخدام Gemini. تحقق من صلاحية المفتاح وإتاحة النموذج في Google AI Studio." }, 502);
+      if (aiRes.status === 429) return json({ error: "وصل استخدام Gemini إلى الحد المؤقت المجاني؛ انتظر قليلًا ثم حاول." }, 503);
       return json({ error: "تعذر إكمال الرد الآن. حاول مرة أخرى بعد قليل." }, 502);
     }
-    const reply = result?.choices?.[0]?.message?.content;
-    if (typeof reply !== "string" || !reply.trim()) return json({ error: "لم يصل رد صالح من النموذج." }, 502);
+    const reply = result?.candidates?.[0]?.content?.parts?.map((p: any) => typeof p.text === "string" ? p.text : "").join("");
+    if (typeof reply !== "string" || !reply.trim()) return json({ error: "لم يصل رد صالح من Gemini." }, 502);
     return json({ reply: reply.trim() });
   } catch {
     return json({ error: "تعذر الاتصال بخدمة الذكاء الاصطناعي." }, 502);
