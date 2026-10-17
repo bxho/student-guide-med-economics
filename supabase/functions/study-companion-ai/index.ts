@@ -49,7 +49,7 @@ Deno.serve(async (req: Request) => {
   let body: { messages?: unknown };
   try {
     const raw = await req.text();
-    if (raw.length > 14_000) return json({ error: "المحادثة طويلة جدًا؛ اختصر الرسالة وحاول مجددًا." }, 413);
+    if (raw.length > 40_000) return json({ error: "المحاضرة طويلة جدًا لطلب واحد؛ قسّمها إلى أجزاء أصغر." }, 413);
     body = JSON.parse(raw);
   } catch {
     return json({ error: "صيغة الطلب غير صحيحة." }, 400);
@@ -58,7 +58,7 @@ Deno.serve(async (req: Request) => {
 
   const messages = body.messages.slice(-8).flatMap((m: any) => {
     if (!m || !["user", "assistant"].includes(m.role) || typeof m.content !== "string") return [];
-    const content = m.content.trim().slice(0, 1200);
+    const content = m.content.trim().slice(0, 32_000);
     return content ? [{ role: m.role, content }] : [];
   });
   if (!messages.length || messages[messages.length - 1].role !== "user") {
@@ -70,7 +70,7 @@ Deno.serve(async (req: Request) => {
 ساعد في شرح المفاهيم، بناء خطط المذاكرة، الأسئلة التدريبية، التذكر النشط، وتنظيم الوقت.
 كن دقيقًا؛ إذا لم تكن متأكدًا فصرّح بذلك ولا تختلق مراجع أو حقائق. في موضوعات الطب، قدّم شرحًا تعليميًا عامًا لا تشخيصًا أو وصفة علاجية شخصية، ووجّه الحالات الطارئة إلى الرعاية الطبية العاجلة.
 لا تدّع أنك قرأت ملفات الطالب أو بياناته؛ لا تصلك إلا رسائل المحادثة المرسلة هنا.
-اجعل الرد مفيدًا ومباشرًا ومنظمًا، وبحد أقصى نحو 500 كلمة.`;
+اجعل الرد مفيدًا ومباشرًا ومنظمًا. إذا طلب المستخدم JSON فأخرج JSON صالحًا فقط دون Markdown. عند تحليل محاضرة، استخدم النص المرسل وحده ولا تختلق معلومات؛ أنشئ نقاطًا وأسئلة استرجاع نشط مفيدة بدل نسخ الجمل حرفيًا.`;
 
   try {
     const aiRes = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -79,8 +79,8 @@ Deno.serve(async (req: Request) => {
       body: JSON.stringify({
         model: "gpt-4.1-mini",
         messages: [{ role: "system", content: systemPrompt }, ...messages],
-        temperature: 0.4,
-        max_tokens: 700,
+        temperature: 0.25,
+        max_tokens: 3000,
       }),
     });
     const result = await aiRes.json().catch(() => ({}));
