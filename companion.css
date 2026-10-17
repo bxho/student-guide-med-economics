@@ -324,3 +324,8 @@
 #companionBuddy:has(.creature-anime-art) .creature-anime-art{pointer-events:none}
 @keyframes anime-companion-float{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-4px) rotate(1deg)}}
 @media(prefers-reduced-motion:reduce){.creature-anime-art{animation:none}}
+
+
+/* GitHub: scale down newly added anime companions without shrinking legacy companions. */
+#companionBuddy:has(.creature-anime-art){width:clamp(76px,9vw,104px);height:clamp(90px,10vw,116px)}
+@media(max-width:600px){#companionBuddy:has(.creature-anime-art){width:68px;height:80px}}
