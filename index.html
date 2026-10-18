@@ -240,7 +240,26 @@ applyMajor();selectTimer('focus',25);
 const $=s=>document.querySelector(s), authBox=$('#studentCloudAuth'), appContent=$('#appContent'), msg=$('#cloudAuthMessage');
 const cfg=window.STUDENT_GUIDE_SUPABASE||{};
 let client=null, user=null, saveTimer=null, loadingCloud=false, demoMode=false, signupMode=false;
-window.studentGuideGetAccessToken=async function(){if(demoMode||!client||!user)return null;try{const {data,error}=await client.auth.getSession();if(error||!data.session||data.session.user.id!==user.id)return null;return data.session.access_token||null}catch(_){return null}};
+window.studentGuideGetAccessToken=async function(){
+ if(demoMode||!client||!user)return null;
+ try{
+  let {data,error}=await client.auth.getSession();
+  if(error)throw error;
+  let session=data?.session;
+  if(!session||session.user.id!==user.id)return null;
+  // Refresh a little before expiry so Edge Functions never receive an almost-expired JWT.
+  if(!session.expires_at||session.expires_at<=Math.floor(Date.now()/1000)+90){
+   const refreshed=await client.auth.refreshSession();
+   if(refreshed.error)throw refreshed.error;
+   session=refreshed.data?.session;
+  }
+  if(!session||session.user.id!==user.id)return null;
+  return session.access_token||null;
+ }catch(e){
+  console.warn('Could not refresh student session:',e?.message||e);
+  return null;
+ }
+};
 function say(s){msg.textContent=s}
 function configured(){return typeof cfg.url==='string'&&cfg.url.startsWith('https://')&&typeof cfg.anonKey==='string'&&cfg.anonKey.length>20&&!cfg.url.includes('YOUR_PROJECT')&&!cfg.anonKey.includes('YOUR_SUPABASE')}
 function lock(){authBox.classList.remove('auth-hidden');appContent.classList.add('auth-locked')}
@@ -265,7 +284,7 @@ window.addEventListener("load",()=>{setTimeout(()=>document.getElementById("bxSp
   }
   </script>
   <script src="./social.js?v=username-chat-1017"></script>
-<script src="./companion.js?v=streak-fire-1019"></script>
+<script src="./companion.js?v=streak-fire-jwt-1019"></script>
 <script id="student-guide-theme-controller">
 (function(){
   const root=document.documentElement,button=document.getElementById("themeToggle");
