@@ -164,9 +164,10 @@ function updateStreakUI(){
  const today=streakDateKey(0),yesterday=streakDateKey(-1),todayMinutes=Number(state.focusByDay?.[today]||0);
  let anchor=streakQualified(today)?0:(streakQualified(yesterday)?-1:null),count=0;
  if(anchor!==null){for(let offset=anchor;offset>=-370;offset--){if(!streakQualified(streakDateKey(offset)))break;count++}}
- let best=Number(state.bestStudyStreak||0);
- if(count>best){best=count;state.bestStudyStreak=best}
- if(best>=30&&!state.fireCompanionUnlocked){state.fireCompanionUnlocked=true;toast('🔥 مبروك! فتحت رفيق النار بعد 30 يوم ستريك!')}
+ let best=Number(state.bestStudyStreak||0),streakChanged=false;
+ if(count>best){best=count;state.bestStudyStreak=best;streakChanged=true}
+ if(best>=30&&!state.fireCompanionUnlocked){state.fireCompanionUnlocked=true;streakChanged=true;toast('🔥 مبروك! فتحت رفيق النار بعد 30 يوم ستريك!')}
+ if(streakChanged)save()
  const tier=count>=30?3:count>=20?2:count>=10?1:0;
  flame.style.filter=['drop-shadow(0 0 5px #ffb13b)','drop-shadow(0 0 9px #ff7b22)','drop-shadow(0 0 13px #f04424)','drop-shadow(0 0 17px #b82cff)'][tier];
  flame.style.transform='scale('+(1+tier*.06)+')';
