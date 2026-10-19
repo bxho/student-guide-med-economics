@@ -182,3 +182,14 @@
 #socialStatus{font-size:12px;line-height:1.7;color:#174a91;overflow-wrap:anywhere}
 .social-hint{font-size:11px;line-height:1.8;color:#6d7d95}
 @media(max-width:600px){#companionDock{left:8px;bottom:10px;gap:3px}.companion-stage-platform{transform:scale(.82);transform-origin:bottom left;margin-right:-19px}#companionBuddy{left:10px;bottom:25px;width:76px;height:78px}#companionDock #companionLaunch{font-size:10px;padding:6px 8px}.social-head{padding:10px;gap:8px}.social-head span{display:none}.social-body{padding:10px}.social-tabs{gap:5px;padding:8px}.social-tabs button{padding:8px;font-size:12px}.social-log{max-height:calc(100dvh - 300px)}.social-friend-open{display:none}}
+
+/* Secret 3D companion and code panel */
+.companion-secret-code{display:grid;gap:7px;margin:12px 0;padding:11px;border:1px dashed #93a8c7;border-radius:12px;background:rgba(110,140,180,.07)}
+.companion-secret-code label{font-size:12px;font-weight:700}
+.companion-secret-code>div{display:flex;gap:7px}
+.companion-secret-code input{min-width:0;width:100%;max-width:150px;border:1px solid #aebbd0;border-radius:9px;padding:8px 10px;background:var(--surface,#fff);color:var(--text,#172033)}
+.companion-secret-code button{border:1px solid #8297b7;border-radius:9px;padding:7px 13px;background:#e8effb;color:#19345b;font-weight:700}
+.companion-secret-code small{font-size:10px;color:var(--muted,#718096)}
+.companion-3d-art{position:relative;display:block;width:100%;height:100%;min-height:78px;overflow:hidden;isolation:isolate}
+#companionArt.companion-3d-art{min-height:100px}
+#companionPanelArt.companion-3d-art{min-height:66px}
