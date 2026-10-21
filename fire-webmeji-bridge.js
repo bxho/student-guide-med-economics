@@ -19,7 +19,7 @@
     if (container.dataset.studentGuideBound === '1') return;
     container.dataset.studentGuideBound = '1';
     container.setAttribute('role', 'button');
-    container.setAttribute('aria-label', 'افتح قائمة رفيق النار');
+    container.setAttribute('aria-label', 'افتح قائمة Shimeji');
     container.title = 'اضغط لفتح قائمة الرفيق';
     container.addEventListener('click', function () {
       const existingBuddy = document.getElementById('companionBuddy');
@@ -30,7 +30,11 @@
   function sync(kind) {
     const selected = kind || storedKind();
     lastKind = selected;
-    document.body.classList.toggle('student-guide-fire-active', selected === 'flame');
+    let customImage = false;
+    try { customImage = !!localStorage.getItem('studentGuideShimejiImageData'); } catch (_) {}
+    document.body.classList.toggle('student-guide-fire-active', selected === 'flame' || customImage);
+    document.body.classList.toggle('student-guide-custom-shimeji-active', customImage);
+
     attachClick();
   }
 
