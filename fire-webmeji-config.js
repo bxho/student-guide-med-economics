@@ -5,7 +5,9 @@
  */
 (function () {
   'use strict';
-  const FIRE = "https://opengameart.org/sites/default/files/1535543564422Instagram_last.png";
+  const DEFAULT_FIRE = "https://opengameart.org/sites/default/files/1535543564422Instagram_last.png";
+  let FIRE = DEFAULT_FIRE;
+  try { FIRE = localStorage.getItem('studentGuideShimejiImageData') || DEFAULT_FIRE; } catch (_) {}
   const repeat = (count) => Array.from({ length: count }, () => FIRE);
   window.SPAWNING = [{ id: 'student-guide-fire-webmeji', config: 'STUDENT_GUIDE_FIRE_CONFIG' }];
   window.STUDENT_GUIDE_FIRE_CONFIG = {
