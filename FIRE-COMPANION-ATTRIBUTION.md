@@ -2,7 +2,7 @@
 
 - **Pixel-art sprite:** “FireCreature” by **BlackSwordo**.
 - **Original asset page:** https://opengameart.org/content/firecreature
-- **Direct image currently referenced by the companion:** https://opengameart.org/sites/default/files/1535543564422Instagram_last_0.png
+- **Direct image currently referenced by the companion:** https://opengameart.org/sites/default/files/1535543564422Instagram_last.png
 - **Asset license:** Creative Commons Attribution 4.0 International (CC BY 4.0): https://creativecommons.org/licenses/by/4.0/
 - **Attribution:** FireCreature by BlackSwordo, used under CC BY 4.0. The asset page requests credit to the author.
 - **Movement engine:** Webmeji by Lars de Rooij, https://github.com/lars-rooij/webmeji
