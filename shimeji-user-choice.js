@@ -25,8 +25,8 @@
     const choose = document.createElement('button');
     choose.id = 'studentGuideShimejiChoose';
     choose.type = 'button';
-    choose.textContent = '🖼️ اختيار Shimeji من جهازي';
-    choose.title = 'اختر صورة أو GIF محفوظًا على جهازك';
+    choose.textContent = '🖼️ اختيار Shimeji للتطبيق';
+    choose.title = 'اختر مظهر Shimeji الذي سيظهر داخل دليل الطالب';
     const reset = document.createElement('button');
     reset.id = 'studentGuideShimejiReset';
     reset.type = 'button';
@@ -42,7 +42,7 @@
       const file = input.files && input.files[0];
       if (!file) return;
       if (!['image/png','image/jpeg','image/webp','image/gif'].includes(file.type)) {
-        alert('اختر صورة PNG أو JPG أو WebP أو GIF.');
+        alert('اختر ملف صورة PNG أو JPG أو WebP أو GIF لاستخدامه كرفيق داخل دليل الطالب.');
         input.value = '';
         return;
       }
@@ -74,7 +74,7 @@
       try { localStorage.removeItem(STORE); } catch (_) {}
       setFrames(DEFAULT_FIRE);
       document.body.classList.remove('student-guide-custom-shimeji-active');
-      choose.textContent = '🖼️ اختيار Shimeji من جهازي';
+      choose.textContent = '🖼️ اختيار Shimeji للتطبيق';
       const status = document.getElementById('companionBubble');
       if (status) status.textContent = 'عاد الرفيق إلى الاختيار المعتاد.';
     });
