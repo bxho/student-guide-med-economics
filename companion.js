@@ -3,7 +3,7 @@
 'use strict';
 const STORE='studentGuideCompanion_v2';
 const $=(s,root=document)=>root.querySelector(s);
-const load=()=>{try{const prev=JSON.parse(localStorage.getItem('studentGuideCompanion_v1')||'{}'),now=JSON.parse(localStorage.getItem(STORE)||'{}');const merged={...{chosen:null,introSeen:false,xp:0,coins:0,outfit:0,mood:'happy',roomItems:0,secret:false,missionDay:'',missionDone:false,badges:[],streak:0,lastCheckin:''},...prev,...now};delete merged.hunger;delete merged.cleanliness;delete merged.happiness;delete merged.energy;delete merged.careDay;delete merged.careActions;delete merged.lastCareAt;delete merged.car;return merged}catch(_){return {chosen:null,introSeen:false,xp:0,coins:0,outfit:0,mood:'happy',roomItems:0,secret:false,missionDay:'',missionDone:false,badges:[],streak:0,lastCheckin:''}}};
+const load=()=>{try{const prev=JSON.parse(localStorage.getItem('studentGuideCompanion_v1')||'{}'),now=JSON.parse(localStorage.getItem(STORE)||'{}');const merged={...{chosen:null,introSeen:false,xp:0,coins:0,outfit:0,mood:'happy',roomItems:0,secret:false,missionDay:'',missionDone:false,badges:[],streak:0,lastCheckin:'',companionHidden:false},...prev,...now};delete merged.hunger;delete merged.cleanliness;delete merged.happiness;delete merged.energy;delete merged.careDay;delete merged.careActions;delete merged.lastCareAt;delete merged.car;return merged}catch(_){return {chosen:null,introSeen:false,xp:0,coins:0,outfit:0,mood:'happy',roomItems:0,secret:false,missionDay:'',missionDone:false,badges:[],streak:0,lastCheckin:''}}};
 let data=load(), panelOpen=false, selected='medicine';
 const save=()=>{try{localStorage.setItem(STORE,JSON.stringify(data))}catch(_){bubble('مساحة الحفظ المحلي ممتلئة؛ صدّر بيانات دليل الطالب كنسخة احتياطية.')}};
 const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -276,6 +276,9 @@ function bubble(msg){const b=$('#companionBubble');if(!b)return;b.textContent=ms
 function greeting(){const s=getStudy(),done=s?(s.tasks||[]).filter(t=>t.done).length:0;return ['جاهز ننجز خطوة صغيرة اليوم؟','أنا فخور باستمرارك. كل مراجعة تقرّبك من هدفك!','خلينا نراجع مهمة واحدة، وبعدها نأخذ استراحة.'][Math.floor(Date.now()/86400000)%3]+' '+(done?'أنجزت '+done+' مهمة؛ واصل!':'ابدأ بمهمة صغيرة اليوم.')}
 function renderBuddy(){
  const dock=$('#companionDock');if(!dock)return;
+ const app=document.querySelector('#appContent');
+ dock.hidden=!!data.companionHidden||!!(app&&app.classList.contains('auth-locked'));
+ document.body.classList.toggle('student-guide-companion-hidden',!!data.companionHidden);
  if(window.StudentGuideFireWebmejiSync)window.StudentGuideFireWebmejiSync(chosen());
  renderCompanionArt($('#companionArt'),chosen());
  $('#companionLabel').textContent=companionName(chosen());
@@ -357,7 +360,7 @@ function dailyMission(){
 function studyStreakStats(byDay={}){return window.studentGuideStudyStreakStats?window.studentGuideStudyStreakStats(byDay):{current:0,best:0}}function showStudyAchievements(){const s=getStudy()||{},st=studyStreakStats(s.focusByDay||{}),badges=Array.isArray(data.badges)?data.badges.length:0;showExtra('<strong>إنجازات المذاكرة</strong><span>📘 '+((s.tasks||[]).filter(t=>t.done).length)+' مهمة دراسية مكتملة</span><span>🌟 '+data.xp+' XP</span><span>🔥 سلسلة المذاكرة الحالية: '+st.current+' يوم</span><span>🏅 شارة 10 أيام: '+(st.best>=10?'مفتوحة 🔥':'مقفلة 🔒')+'</span><span>💎 شارة 100 يوم: '+(st.best>=100?'مفتوحة':'مقفلة 🔒')+'</span><span>✨ '+badges+' شارات رفيق إضافية</span>')}
 function bind(){
  $('#companionLaunch').addEventListener('click',()=>{openPanel();bubble('أنا هنا! '+greeting())});
- $('#settingsChooseCompanion')?.addEventListener('click',()=>{
+ const openCompanionChooser=()=>{
    selected=chosen();
    const overlay=$('#companionOverlay'),choose=$('#companionChoose');
    if(!overlay||!choose){bubble('تعذر فتح قائمة اختيار الرفيق.');return}
@@ -374,7 +377,29 @@ function bind(){
      btn.classList.toggle('selected',on);
      btn.setAttribute('aria-pressed',String(on));
    });
+ };
+ $('#companionSwitch').textContent='🐾 اختيار الرفيق';
+ $('#companionSwitch').addEventListener('click',openCompanionChooser);
+ const visibilityButton=$('#toggleCompanionVisibility');
+ const syncCompanionVisibility=()=>{
+   const app=document.querySelector('#appContent');
+   const authLocked=!!(app&&app.classList.contains('auth-locked'));
+   const hidden=!!data.companionHidden;
+   document.body.classList.toggle('student-guide-companion-hidden',hidden);
+   const dock=$('#companionDock');
+   if(dock)dock.hidden=authLocked||hidden;
+   if(visibilityButton){
+     visibilityButton.textContent=hidden?'👁️ عرض الرفيق':'🙈 عدم عرض الرفيق';
+     visibilityButton.setAttribute('aria-pressed',String(!hidden));
+     visibilityButton.setAttribute('aria-label',hidden?'عرض الرفيق على الشاشة':'إخفاء الرفيق من الشاشة');
+   }
+ };
+ visibilityButton?.addEventListener('click',()=>{
+   data.companionHidden=!data.companionHidden;
+   save();syncCompanionVisibility();
+   bubble(data.companionHidden?'تم إخفاء الرفيق. يمكنك إظهاره مجددًا من الإعدادات.':'تم إظهار الرفيق.');
  });
+ syncCompanionVisibility();
  $('#companionBuddy').addEventListener('click',()=>{if(!panelOpen){bubble(greeting());openPanel()}else bubble('اضغط على أزرار الرفيق لتجربة حركة مختلفة.')});
  $('#companionBuddy').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openPanel();bubble(greeting())}});
  $('#companionClose').addEventListener('click',closePanel);
@@ -393,8 +418,7 @@ function bind(){
  $('#habitatCompanionMenu').addEventListener('click',()=>openPanel());
  $('#companionOutfit').addEventListener('click',()=>{if(!data.allModesUnlocked&&data.coins<3){bubble('تحتاج 3 عملات لتغيير الزي. أكمل مهمة دراسية أولًا.');return}if(!data.allModesUnlocked)data.coins-=3;data.outfit=(data.outfit+1)%4;save();renderBuddy();refreshPanel();bubble(data.allModesUnlocked?'تم تغيير الزي؛ جميع الأطوار مفتوحة!':'زي جديد! أنفقت 3 عملات من رصيدك.')});
  $('#companionSecretCodeForm').addEventListener('submit',e=>{e.preventDefault();const input=$('#companionSecretCodeInput'),status=$('#companionSecretCodeStatus'),code=input.value.trim();input.value='';if(code==='121'){data.batmanUnlocked=true;data.chosen='batman';selected='batman';save();renderBuddy();refreshPanel();status.textContent='تم فتح باتمان، الرفيق السري! 🦇';bubble('تم فتح باتمان، الرفيق السري!');return}if(code==='12'){data.robotUnlocked=true;data.chosen='wildRobot';selected='wildRobot';save();renderBuddy();refreshPanel();status.textContent='تم فتح روز، الرفيق الروبوتي السري! 🤖';bubble('تم فتح روز، الرفيق الروبوتي السري!');return}if(code==='13'){data.allModesUnlocked=false;data.xp=1000;data.secret=true;save();renderBuddy();refreshPanel();status.textContent='تم رفع مستوى الرفيق إلى الحد الأقصى فقط! ⭐';bubble('وصلت إلى أعلى مستوى؛ فتح جميع الأطوار غير مشمول بهذا الكود.');return}if(code==='14'){data.allModesUnlocked=false;data.xp=0;data.secret=false;save();renderBuddy();refreshPanel();status.textContent='تمت إعادة الأطوار والمستوى إلى البداية. 🔄';bubble('تمت إعادة مستوى الأطوار إلى البداية؛ الرفقاء السريون المفتوحون ما زالوا محفوظين.');return}status.textContent='الكود غير صحيح؛ حاول مرة أخرى.';bubble('الكود غير صحيح.');});
- $('#companionSwitch').textContent='✨ رفيق مختلف';
- $('#companionSwitch').addEventListener('click',()=>{const studyForUnlock=getStudy();const keys=Object.keys(COMPANIONS).filter(key=>(key!=='flame'||!!studyForUnlock?.fireCompanionUnlocked)&&(key!=='wildRobot'||data.robotUnlocked)&&(key!=='batman'||data.batmanUnlocked)),i=keys.indexOf(chosen());data.chosen=keys[(i+1)%keys.length];selected=data.chosen;save();renderBuddy();refreshPanel();$('#companionSwitch').textContent='✨ التالي: '+companionName(keys[(keys.indexOf(data.chosen)+1)%keys.length]);bubble('تم اختيار '+companionName(data.chosen)+'! لكل رفيق شكل ولون وشخصية مختلفة.')});
+
  $('#companionRoom').addEventListener('click',()=>{if(data.coins<3){bubble('تحتاج 3 عملات لإضافة ديكور. أكمل مهمة اليوم أولًا.');return}data.coins-=3;data.roomItems++;save();refreshPanel();$('#companionRoomNote').textContent='غرفتك فيها الآن '+data.roomItems+' قطع ديكور.';showExtra('<strong>🏠 غرفتك تتطور</strong><span>🪴 🛋️ 🖼️ ✨</span><span>أضفت قطعة ديكور رقم '+data.roomItems+'. رصيدك '+data.coins+' عملة.</span>')});
  $('#companionAchievements').addEventListener('click',showStudyAchievements);
  $('#companionDailyMission').addEventListener('click',dailyMission);
@@ -427,7 +451,7 @@ window.addEventListener('student-guide-companion-customized',()=>{try{Object.ass
 function init(){
  inject();
  const app=document.querySelector('#appContent');
- const syncDockVisibility=()=>{const dock=$('#companionDock');if(!dock)return;dock.hidden=app?app.classList.contains('auth-locked'):false;};
+ const syncDockVisibility=()=>{const dock=$('#companionDock');if(!dock)return;dock.hidden=!!data.companionHidden||(app?app.classList.contains('auth-locked'):false);document.body.classList.toggle('student-guide-companion-hidden',!!data.companionHidden);};
  syncDockVisibility();
  if(app){new MutationObserver(syncDockVisibility).observe(app,{attributes:true,attributeFilter:['class']});}
  bind();renderBuddy();startAutonomy();
