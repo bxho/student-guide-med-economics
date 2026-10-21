@@ -276,6 +276,7 @@ function bubble(msg){const b=$('#companionBubble');if(!b)return;b.textContent=ms
 function greeting(){const s=getStudy(),done=s?(s.tasks||[]).filter(t=>t.done).length:0;return ['جاهز ننجز خطوة صغيرة اليوم؟','أنا فخور باستمرارك. كل مراجعة تقرّبك من هدفك!','خلينا نراجع مهمة واحدة، وبعدها نأخذ استراحة.'][Math.floor(Date.now()/86400000)%3]+' '+(done?'أنجزت '+done+' مهمة؛ واصل!':'ابدأ بمهمة صغيرة اليوم.')}
 function renderBuddy(){
  const dock=$('#companionDock');if(!dock)return;
+ if(window.StudentGuideFireWebmejiSync)window.StudentGuideFireWebmejiSync(chosen());
  renderCompanionArt($('#companionArt'),chosen());
  $('#companionLabel').textContent=companionName(chosen());
  $('#companionLevel').textContent='طور '+Math.min(7,1+Math.floor(Math.max(0,Number(data.xp)||0)/100))+' من 7 · '+data.xp+' XP';
