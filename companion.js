@@ -326,9 +326,9 @@ function overlay(first){
  $('#companionSkip').hidden=!first;
 }
 function finishIntro(){
- if(!data.chosen)data.chosen=selected;
+ data.chosen=selected;
  // Companion choice is cosmetic and must not overwrite the student's academic major.
- data.introSeen=true;save();$('#companionOverlay').hidden=true;renderBuddy();bubble(greeting());syncLater();
+ data.introSeen=true;save();$('#companionOverlay').hidden=true;$('#companionSkip').textContent='تخطي المشهد';renderBuddy();refreshPanel();bubble('تم اختيار '+companionName(chosen())+'.');syncLater();
 }
 function inject(){
  if($('#companionDock'))return;
@@ -357,6 +357,24 @@ function dailyMission(){
 function studyStreakStats(byDay={}){return window.studentGuideStudyStreakStats?window.studentGuideStudyStreakStats(byDay):{current:0,best:0}}function showStudyAchievements(){const s=getStudy()||{},st=studyStreakStats(s.focusByDay||{}),badges=Array.isArray(data.badges)?data.badges.length:0;showExtra('<strong>إنجازات المذاكرة</strong><span>📘 '+((s.tasks||[]).filter(t=>t.done).length)+' مهمة دراسية مكتملة</span><span>🌟 '+data.xp+' XP</span><span>🔥 سلسلة المذاكرة الحالية: '+st.current+' يوم</span><span>🏅 شارة 10 أيام: '+(st.best>=10?'مفتوحة 🔥':'مقفلة 🔒')+'</span><span>💎 شارة 100 يوم: '+(st.best>=100?'مفتوحة':'مقفلة 🔒')+'</span><span>✨ '+badges+' شارات رفيق إضافية</span>')}
 function bind(){
  $('#companionLaunch').addEventListener('click',()=>{openPanel();bubble('أنا هنا! '+greeting())});
+ $('#settingsChooseCompanion')?.addEventListener('click',()=>{
+   selected=chosen();
+   const overlay=$('#companionOverlay'),choose=$('#companionChoose');
+   if(!overlay||!choose){bubble('تعذر فتح قائمة اختيار الرفيق.');return}
+   overlay.hidden=false;
+   $('#companionIntroTitle').textContent='اختر رفيقك';
+   $('#companionIntroCopy').textContent='اختر الشخصية التي تريدها رفيقًا نشطًا على الشاشة.';
+   choose.hidden=false;
+   $('#companionWelcome').hidden=true;
+   $('#companionSkip').hidden=false;
+   $('#companionSkip').textContent='إلغاء';
+   $('#companionBegin').textContent='اختيار '+companionName(selected)+' ←';
+   choose.querySelectorAll('[data-companion-choice]').forEach(btn=>{
+     const on=btn.dataset.companionChoice===selected;
+     btn.classList.toggle('selected',on);
+     btn.setAttribute('aria-pressed',String(on));
+   });
+ });
  $('#companionBuddy').addEventListener('click',()=>{if(!panelOpen){bubble(greeting());openPanel()}else bubble('اضغط على أزرار الرفيق لتجربة حركة مختلفة.')});
  $('#companionBuddy').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openPanel();bubble(greeting())}});
  $('#companionClose').addEventListener('click',closePanel);
