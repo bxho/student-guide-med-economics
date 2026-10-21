@@ -1,0 +1,37 @@
+/* webmeji */
+.webmeji-container {
+  position: fixed;
+  bottom: 0;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.webmeji-container img {
+  width: 100%;
+  height: auto;
+  user-select: none;
+  pointer-events: none;
+  display: block;
+  transform-origin: center;
+}
+
+@media (max-width: 768px) {
+  .webmeji-container {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+
+/* Student Guide integration: keep Webmeji behind the existing companion panel and app overlays. */
+.webmeji-container { z-index: 805 !important; width: 88px; height: 88px; overflow: visible; }
+.webmeji-container img { image-rendering: pixelated; object-fit: contain; }
+.webmeji-container.student-guide-fire-webmeji-hidden { visibility: hidden !important; pointer-events: none !important; }
+body:not(.student-guide-fire-active) .webmeji-container { visibility: hidden !important; pointer-events: none !important; }
+body.student-guide-fire-active #companionBuddy { display: none !important; }
+body.student-guide-fire-active .webmeji-container { visibility: visible !important; pointer-events: auto !important; }
+@media (max-width: 768px) {
+  .webmeji-container { width: 56px; height: 56px; }
+}
