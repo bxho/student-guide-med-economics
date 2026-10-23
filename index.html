@@ -129,6 +129,9 @@ body.student-guide-companion-hidden .webmeji-container{visibility:hidden!importa
 @media(max-width:680px){.topbar{gap:8px}.top-clock{min-width:88px;padding:7px 9px;margin-inline-end:0}.top-clock-time{font-size:15px}.top-clock-date{font-size:9px}.brand p{display:none}.top-actions{gap:6px}}
 @media(max-width:390px){.top-clock{min-width:76px;padding:6px 7px}.top-clock-time{font-size:13px}.top-clock-date{font-size:8px}.brand h1{font-size:12px}}
 </style>
+<style id="western-digits-ui">
+html,body,input,textarea,select,button,.timer,.clock,.stat-value,.number,.count,.top-clock-time,.top-clock-date{font-variant-numeric:lining-nums tabular-nums}
+</style>
 </head>
 <body>
 <div id="bxSplash" aria-label="دليل الطالب"><div class="bx-logo"><span>b</span><span>x</span></div><div class="bx-splash-title">دليل الطالب</div><div class="bx-splash-line"></div></div>
@@ -420,4 +423,36 @@ byId("studioClose").addEventListener("click",closeStudio);studio.addEventListene
 const clock=byId("clock"),topClock=byId("liveClockFace");if(clock){clock.title="انقر مرتين لفتح مركز الوقت";clock.addEventListener("dblclick",openStudio);const hint=document.createElement("small");hint.className="timer-expand-hint";hint.textContent="انقر مرتين لعرض الساعة الكبيرة والمنبّه";clock.insertAdjacentElement("afterend",hint)}if(topClock){topClock.parentElement.addEventListener("dblclick",openStudio);topClock.parentElement.title="Double-click to open the timer and alarm center"}
 setInterval(liveClock,1000);liveClock();setInterval(()=>{if(studio.classList.contains("open"))drawStudio()},250)
 })();</script>
+<script id="western-digit-normalizer">
+(function(){
+  const digitMap={"٠":"0","١":"1","٢":"2","٣":"3","٤":"4","٥":"5","٦":"6","٧":"7","٨":"8","٩":"9","۰":"0","۱":"1","۲":"2","۳":"3","۴":"4","۵":"5","۶":"6","۷":"7","۸":"8","۹":"9"};
+  const digits=/[٠-٩۰-۹]/g;
+  function normalizeTextNode(node){
+    if(!node||node.nodeType!==Node.TEXT_NODE||!node.parentElement)return;
+    const parent=node.parentElement;
+    if(parent.closest("script,style,textarea,pre,code,[contenteditable=true]"))return;
+    if(digits.test(node.nodeValue)){digits.lastIndex=0;node.nodeValue=node.nodeValue.replace(digits,ch=>digitMap[ch]||ch)}
+    else digits.lastIndex=0;
+  }
+  function normalizeInput(el){
+    if(!el||!(/^(INPUT|TEXTAREA)$/.test(el.tagName))||el.type==="password"||el.type==="email")return;
+    if(typeof el.value==="string"&&digits.test(el.value)){digits.lastIndex=0;const start=el.selectionStart,end=el.selectionEnd;el.value=el.value.replace(digits,ch=>digitMap[ch]||ch);try{if(start!==null&&end!==null)el.setSelectionRange(start,end)}catch(e){}}
+    else digits.lastIndex=0;
+    if(typeof el.placeholder==="string"&&digits.test(el.placeholder)){digits.lastIndex=0;el.placeholder=el.placeholder.replace(digits,ch=>digitMap[ch]||ch)}
+    else digits.lastIndex=0;
+  }
+  function scan(root){
+    if(!root)return;
+    if(root.nodeType===Node.TEXT_NODE){normalizeTextNode(root);return}
+    if(root.nodeType===Node.ELEMENT_NODE){if(root.matches("input,textarea"))normalizeInput(root);if(root.matches("script,style,pre,code,[contenteditable=true]"))return}
+    const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+    let node;while((node=walker.nextNode()))normalizeTextNode(node);
+    if(root.querySelectorAll)root.querySelectorAll("input,textarea").forEach(normalizeInput);
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",()=>scan(document.body),{once:true});else scan(document.body);
+  document.addEventListener("input",e=>normalizeInput(e.target),true);
+  const observer=new MutationObserver(records=>records.forEach(record=>{if(record.type==="characterData")normalizeTextNode(record.target);else record.addedNodes.forEach(node=>scan(node))}));
+  observer.observe(document.documentElement,{subtree:true,childList:true,characterData:true});
+})();
+</script>
 </body></html>
