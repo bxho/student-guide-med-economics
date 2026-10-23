@@ -18,10 +18,27 @@ const renderFriends=async()=>{
  const ids=[...new Set((rows||[]).map(r=>r.user_id===state.user.id?r.friend_id:r.user_id).filter(id=>id!==state.user.id))];box.innerHTML='';
  if(!ids.length){box.innerHTML='<p class="note">لا توجد صداقات مقبولة بعد. ابحث عن اسم مستخدم وأرسل طلب صداقة.</p>';return}
  const {data:profiles,error:pe}=await state.client.from('student_profiles').select('user_id,username,display_name,avatar_url').in('user_id',ids);if(pe)throw pe;
- (profiles||[]).forEach(p=>{const btn=document.createElement('button');btn.type='button';btn.className='social-friend-card';const img=p.avatar_url?document.createElement('img'):document.createElement('span');if(p.avatar_url){img.src=p.avatar_url;img.alt=p.display_name||p.username;img.loading='lazy'}else{img.className='avatar-placeholder';img.textContent='👤'}
- const text=document.createElement('span'),name=document.createElement('strong'),username=document.createElement('small');name.textContent=p.display_name||'طالب';username.textContent='@'+(p.username||'');text.append(name,username);const open=document.createElement('span');open.textContent='مراسلة ←';btn.append(img,text,open);
- btn.addEventListener('click',()=>openFriendProfile(p.user_id));box.append(btn)})}
+ (profiles||[]).forEach(p=>{
+  const btn=document.createElement('div');btn.className='social-friend-card';btn.tabIndex=0;btn.setAttribute('role','group');btn.setAttribute('aria-label','الصديق '+(p.display_name||p.username||''));
+  const avatarLink=document.createElement('button');avatarLink.type='button';avatarLink.className='social-friend-avatar-button';avatarLink.title='عرض الملف الشخصي';avatarLink.setAttribute('aria-label','فتح الملف الشخصي لـ '+(p.display_name||p.username||'الصديق'));
+  const img=p.avatar_url?document.createElement('img'):document.createElement('span');if(p.avatar_url){img.src=p.avatar_url;img.alt='';img.loading='lazy'}else{img.className='avatar-placeholder';img.textContent='👤'}avatarLink.append(img);avatarLink.addEventListener('click',event=>{event.stopPropagation();openFriendProfile(p.user_id)});
+  const text=document.createElement('button');text.type='button';text.className='social-friend-main';text.setAttribute('aria-label','فتح محادثة '+(p.display_name||p.username||'الصديق'));
+  const name=document.createElement('strong'),username=document.createElement('small');name.textContent=p.display_name||'طالب';username.textContent='@'+(p.username||'');text.append(name,username);text.addEventListener('click',()=>openFriendChat(p));
+  const open=document.createElement('span');open.className='social-friend-action-label';open.textContent='مراسلة ←';btn.append(avatarLink,text,open);
+  box.append(btn)
+ })}
  catch(e){box.innerHTML='<p class="note">تعذر تحميل قائمة الأصدقاء: '+safe(e.message)+'</p>'}
+};
+const openFriendChat=async p=>{
+ if(!p?.user_id||!state.client||!state.user)return;
+ try{
+  const {data:links,error}=await state.client.from('student_friends').select('status').eq('status','accepted').or('and(user_id.eq.'+state.user.id+',friend_id.eq.'+p.user_id+'),and(user_id.eq.'+p.user_id+',friend_id.eq.'+state.user.id+')');
+  if(error)throw error;if(!links?.length){say('المراسلة متاحة للأصدقاء المقبولين فقط.');return}
+  state.targetId=p.user_id;const target=$('#socialTargetId');if(target)target.value=p.username||'';
+  showTab('direct');const profile=$('#socialFriendProfile');if(profile)profile.hidden=true;
+  await updateChatHeader();await loadMessages('direct');
+  const input=$('#socialDirectInput');if(input)input.focus();
+ }catch(e){say('تعذر فتح المحادثة: '+safe(e.message))}
 };
 const openFriendProfile=async userId=>{
  const panel=$('#socialFriendProfile');if(!panel||!state.client||!state.user)return;
