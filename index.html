@@ -479,7 +479,6 @@ setInterval(liveClock,1000);liveClock();setInterval(()=>{if(studio.classList.con
       button.textContent=(labels[form.id]||["＋ إنشاء","− إخفاء النموذج"])[opening?1:0];
       if(opening){const first=form.querySelector("input:not([type=file]),textarea,select");first?.focus();form.scrollIntoView({behavior:"smooth",block:"nearest"})}
     });
-    form.addEventListener("submit",()=>{form.hidden=true;button.setAttribute("aria-expanded","false");const labels={"taskForm":"＋ إنشاء مهمة","fileForm":"＋ إضافة ملف","cardForm":"＋ إنشاء بطاقة","lectureForm":"＋ إنشاء محاضرة"};button.textContent=labels[form.id]||"＋ إنشاء"});
   });
 })();
 </script>
