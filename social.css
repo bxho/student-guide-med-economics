@@ -147,3 +147,11 @@
 .profile-save-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:15px;border-top:1px solid var(--line)}.profile-save-row p{margin:0;color:var(--muted);font-size:11px}.profile-save-btn{min-width:180px}
 @media(max-width:760px){.profile-hub-hero{grid-template-columns:auto minmax(0,1fr);gap:14px;padding:16px}.profile-hub-avatar-wrap{width:76px;height:76px;font-size:30px}.profile-hub-id{grid-column:1/-1}.profile-companion-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:480px){.profile-hub{padding:12px;gap:17px}.profile-hub-hero{padding:12px}.profile-hub-avatar-wrap{width:64px;height:64px;font-size:26px}.profile-hub-intro h2{font-size:19px}.profile-form-grid{grid-template-columns:minmax(0,1fr);gap:12px}.profile-bio-field{grid-row:auto}.profile-save-row{align-items:stretch;flex-direction:column}.profile-save-btn{width:100%;min-width:0}.profile-private-pill{font-size:9px;padding:6px}}
+
+/* Stabilize friend list: prevent vertical jitter while live data refreshes */
+.social-friends-list{align-content:start;align-items:stretch;overflow-y:auto;overscroll-behavior:contain;scroll-behavior:auto;min-height:0}
+.social-friend-card{position:relative;box-sizing:border-box;flex-shrink:0;animation:none!important;transform:none!important;transition:none!important;will-change:auto;contain:layout style}
+.social-friend-card:hover{transform:none!important}
+.social-friend-avatar-button,.social-friend-main{animation:none!important;transform:none!important;transition:none!important}
+.social-friend-avatar-button img{display:block}
+@media(max-width:850px){.social-friends-list{align-items:stretch;overflow-y:hidden;scroll-snap-type:x proximity}.social-friend-card{scroll-snap-align:start}}
