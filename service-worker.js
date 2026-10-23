@@ -1,4 +1,4 @@
-const CACHE_NAME = 'student-guide-shell-v22-shimeji';
+const CACHE_NAME = 'student-guide-shell-v23-create-sound-fix';
 const APP_SHELL = ['./', './index.html', './manifest.webmanifest', './student-guide-icon.svg', './social.js', './companion.css', './companion.js', './webmeji.js', './webmeji.css', './fire-webmeji-config.js', './fire-webmeji-bridge.js', './shimeji-user-choice.js'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()));
