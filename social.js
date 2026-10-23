@@ -80,7 +80,27 @@ const addFriendByUsername=async username=>{
  catch(e){say('تعذّر إرسال طلب الصداقة: '+(e.message||'خطأ غير معروف'))}
 };
 
-const drawMessages=async(container,rows)=>{if(!container)return;container.innerHTML='';if(!rows?.length){container.innerHTML='<p class="note">لا توجد رسائل هنا بعد. ابدأ المحادثة!</p>';return}const profiles=await loadProfiles(rows.flatMap(m=>[m.sender_id,m.recipient_id]));const seen=[...new Set(rows.flatMap(m=>[m.sender_id,...(m.channel==='direct'?[m.recipient_id]:[])]).filter(Boolean))].slice(0,6);if(seen.length){const stage=document.createElement('div');stage.className='social-companion-bench';stage.setAttribute('aria-label','الرفقاء جالسون بالقرب من بعضهم');seen.forEach(id=>{const p=profiles[id]||{},seat=document.createElement('div');seat.className='social-seated-buddy';seat.style.setProperty('--pet-color',p.companion_style?.color||'#2fbd9a');const pet=document.createElement('div');pet.className='social-seated-pet';pet.textContent=p.companion_style?.accessory==='crown'?'👑':p.companion_style?.accessory==='glasses'?'🕶️':p.companion_style?.accessory==='star'?'⭐':'🐾';const chair=document.createElement('div');chair.className='social-mini-chair';const label=document.createElement('span');label.textContent=p.companion_name||'رفيق';seat.append(pet,chair,label);stage.append(seat)});container.append(stage)}rows.forEach(m=>{const p=profiles[m.sender_id]||{},name=p.display_name||'طالب',comp=p.companion_name||m.companion_name||'رفيق',color=p.companion_style?.color||'#2fbd9a';const el=document.createElement('article');el.className='social-message'+(m.sender_id===state.user.id?' mine':'');const av=document.createElement(p.avatar_url?'img':'div');av.className='social-pet-avatar'+(p.avatar_url?' social-user-photo':'');if(p.avatar_url){av.src=p.avatar_url;av.alt=name;av.loading='lazy'}else{av.style.setProperty('--pet-color',color);av.textContent=(p.companion_style?.accessory==='crown'?'👑':p.companion_style?.accessory==='glasses'?'🕶️':p.companion_style?.accessory==='star'?'⭐':'🐾')}const body=document.createElement('div');body.className='social-msg-content';const meta=document.createElement('div');meta.className='social-msg-meta';const cname=document.createElement('span');cname.className='social-msg-name';cname.textContent=comp+' قال';const owner=document.createElement('span');owner.textContent='بواسطة '+name+' · '+fmt(m.created_at);meta.append(cname,owner);const text=document.createElement('div');text.className='social-msg-body';text.textContent=m.body;body.append(meta,text);el.append(av,body);container.append(el)});container.scrollTop=container.scrollHeight};
+const drawMessages=async(container,rows)=>{
+ if(!container)return;
+ container.innerHTML='';
+ if(!rows?.length){container.innerHTML='<div class="social-chat-empty"><div>✉</div><strong>لا توجد رسائل بعد</strong><p>ابدأ المحادثة برسالة بسيطة.</p></div>';return}
+ const profiles=await loadProfiles(rows.flatMap(m=>[m.sender_id,m.recipient_id]));
+ rows.forEach(m=>{
+  const p=profiles[m.sender_id]||{},name=p.display_name||'طالب',color=p.companion_style?.color||'#2fbd9a';
+  const el=document.createElement('article');el.className='social-message'+(m.sender_id===state.user.id?' mine':'');
+  const av=document.createElement(p.avatar_url?'img':'div');av.className='social-pet-avatar'+(p.avatar_url?' social-user-photo':'');
+  if(p.avatar_url){av.src=p.avatar_url;av.alt=name;av.loading='lazy'}else{av.style.setProperty('--pet-color',color);av.textContent=(name.trim().slice(0,1)||'👤')}
+  const body=document.createElement('div');body.className='social-msg-content';
+  const meta=document.createElement('div');meta.className='social-msg-meta';
+  const cname=document.createElement('span');cname.className='social-msg-name';cname.textContent=name;
+  const time=document.createElement('time');time.dateTime=m.created_at;time.textContent=fmt(m.created_at);
+  meta.append(cname,time);
+  const text=document.createElement('div');text.className='social-msg-body';text.textContent=m.body;
+  body.append(meta,text);el.append(av,body);container.append(el);
+ });
+ container.scrollTop=container.scrollHeight;
+};
+
 const updateChatHeader=async()=>{
  const avatar=$('#socialChatAvatar'),name=$('#socialChatName'),handle=$('#socialChatHandle'),input=$('#socialDirectInput'),send=$('#socialDirectForm button');
  if(!state.targetId||!state.client){if(avatar)avatar.textContent='✉';if(name)name.textContent='اختر صديقًا للمحادثة';if(handle)handle.textContent='رسائلك الخاصة تظهر هنا';if(input)input.disabled=true;if(send)send.disabled=true;return}
