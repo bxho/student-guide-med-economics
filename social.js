@@ -32,6 +32,7 @@ let friendsRenderVersion=0;
 const renderFriends=async()=>{
  const box=$('#socialFriendsList');if(!box||!state.client||!state.user)return;
  const renderVersion=++friendsRenderVersion;
+ box.innerHTML='<p class="note">جارٍ تحميل الأصدقاء…</p>';
  try{
   const {data:rows,error}=await state.client.from('student_friends').select('user_id,friend_id,status').eq('status','accepted').or('user_id.eq.'+state.user.id+',friend_id.eq.'+state.user.id);
   if(error)throw error;if(renderVersion!==friendsRenderVersion)return;
@@ -52,16 +53,22 @@ const renderFriends=async()=>{
   });
  }catch(e){if(renderVersion===friendsRenderVersion)box.innerHTML='<p class="note">تعذر تحميل قائمة الأصدقاء: '+safe(e.message)+'</p>'}
 };
+let chatSwitchVersion=0;
+let messageLoadVersion=0;
 const openFriendChat=async p=>{
  if(!p?.user_id||!state.client||!state.user)return;
+ const switchVersion=++chatSwitchVersion;
+ const requestedId=p.user_id;
  try{
-  const {data:links,error}=await state.client.from('student_friends').select('status').eq('status','accepted').or('and(user_id.eq.'+state.user.id+',friend_id.eq.'+p.user_id+'),and(user_id.eq.'+p.user_id+',friend_id.eq.'+state.user.id+')');
-  if(error)throw error;if(!links?.length){say('المراسلة متاحة للأصدقاء المقبولين فقط.');return}
-  state.targetId=p.user_id;const target=$('#socialTargetId');if(target)target.value=p.username||'';
-  showTab('direct');const profile=$('#socialFriendProfile');if(profile)profile.hidden=true;
-  await updateChatHeader();await loadMessages('direct');
-  const input=$('#socialDirectInput');if(input)input.focus();
- }catch(e){say('تعذر فتح المحادثة: '+safe(e.message))}
+  const {data:links,error}=await state.client.from('student_friends').select('status').eq('status','accepted').or('and(user_id.eq.'+state.user.id+',friend_id.eq.'+requestedId+'),and(user_id.eq.'+requestedId+',friend_id.eq.'+state.user.id+')');
+  if(switchVersion!==chatSwitchVersion)return;
+  if(error)throw error;if(!links?.some(link=>link.status==='accepted')){say('المراسلة متاحة للأصدقاء المقبولين فقط.');return}
+  state.targetId=requestedId;const target=$('#socialTargetId');if(target)target.value=p.username||'';
+  const profile=$('#socialFriendProfile');if(profile)profile.hidden=true;
+  showTab('direct');await updateChatHeader(requestedId);if(switchVersion!==chatSwitchVersion||state.targetId!==requestedId)return;
+  await loadMessages('direct',requestedId);
+  if(switchVersion===chatSwitchVersion&&state.targetId===requestedId){const input=$('#socialDirectInput');if(input)input.focus()}
+ }catch(e){if(switchVersion===chatSwitchVersion)say('تعذر فتح المحادثة: '+safe(e.message))}
 };
 const openFriendProfile=async userId=>{
  const panel=$('#socialFriendProfile');if(!panel||!state.client||!state.user)return;
@@ -76,7 +83,7 @@ const openFriendProfile=async userId=>{
   const bio=document.createElement('p');bio.className='social-profile-bio';bio.textContent=p.bio||'لم يضف نبذة بعد.';panel.append(bio);
   const companion=document.createElement('p');companion.className='note';companion.textContent='الرفيق: '+(p.companion_name||'رفيقي');panel.append(companion);
   const actions=document.createElement('div');actions.className='social-profile-actions';
-  const chat=document.createElement('button');chat.type='button';chat.className='btn primary';chat.textContent='إرسال رسالة';chat.onclick=async()=>{state.targetId=userId;$('#socialTargetId').value=p.username;$('#socialDirectInput').disabled=false;$('#socialDirectForm').querySelector('button').disabled=false;panel.hidden=true;await loadMessages('direct');$('#socialDirectInput').focus()};
+  const chat=document.createElement('button');chat.type='button';chat.className='btn primary';chat.textContent='إرسال رسالة';chat.onclick=async()=>{panel.hidden=true;await openFriendChat(p)};
   const close=document.createElement('button');close.type='button';close.className='btn';close.textContent='إغلاق الملف';close.onclick=()=>panel.hidden=true;actions.append(chat,close);panel.append(actions);
   const title=document.createElement('h4');title.textContent='إنجازات هذا الصديق';panel.append(title);
   const {data:posts,error:pe}=await state.client.from('student_achievement_posts').select('id,title,description,created_at').eq('user_id',userId).order('created_at',{ascending:false}).limit(20);if(pe)throw pe;
@@ -141,16 +148,29 @@ const drawMessages=async(container,rows)=>{
  container.scrollTop=container.scrollHeight;
 };
 
-const updateChatHeader=async()=>{
+const updateChatHeader=async(targetId=state.targetId)=>{
  const avatar=$('#socialChatAvatar'),name=$('#socialChatName'),handle=$('#socialChatHandle'),input=$('#socialDirectInput'),send=$('#socialDirectForm button');
- if(!state.targetId||!state.client){if(avatar)avatar.textContent='✉';if(name)name.textContent='اختر صديقًا للمحادثة';if(handle)handle.textContent='رسائلك الخاصة تظهر هنا';if(input)input.disabled=true;if(send)send.disabled=true;return}
- const profiles=await loadProfiles([state.targetId]),p=profiles[state.targetId]||{};
+ if(!targetId||!state.client){if(avatar)avatar.textContent='✉';if(name)name.textContent='اختر صديقًا للمحادثة';if(handle)handle.textContent='رسائلك الخاصة تظهر هنا';if(input)input.disabled=true;if(send)send.disabled=true;return}
+ if(name)name.textContent='جارٍ فتح المحادثة…';
+ const profiles=await loadProfiles([targetId]);if(state.targetId!==targetId)return;const p=profiles[targetId]||{};
  if(name)name.textContent=p.display_name||'صديق';if(handle)handle.textContent='@'+(p.username||'')+' · محادثة خاصة';
  if(avatar){avatar.innerHTML='';if(p.avatar_url){const img=document.createElement('img');img.src=p.avatar_url;img.alt=p.display_name||p.username||'صديق';avatar.append(img)}else avatar.textContent=(p.display_name||p.username||'ص').trim().slice(0,1)}
  if(input)input.disabled=false;if(send)send.disabled=false;
 };
-const getMessages=async channel=>{if(channel!=='direct'||!state.targetId)return[];const q=state.client.from('student_social_messages').select('*').eq('channel','direct').or('and(sender_id.eq.'+state.user.id+',recipient_id.eq.'+state.targetId+'),and(sender_id.eq.'+state.targetId+',recipient_id.eq.'+state.user.id+')').order('created_at',{ascending:true}).limit(100);const {data,error}=await q;if(error)throw error;return data||[]};
-const loadMessages=async channel=>{if(channel!=='direct')return;try{await updateChatHeader();const rows=await getMessages('direct');const unread=(rows||[]).filter(m=>m.recipient_id===state.user.id&&!m.read_at).map(m=>m.id);if(unread.length){const {error}=await state.client.from('student_social_messages').update({read_at:new Date().toISOString()}).in('id',unread);if(error)console.warn('Could not mark messages read:',error)}await state.client.from('student_notifications').update({read_at:new Date().toISOString()}).eq('user_id',state.user.id).eq('actor_id',state.targetId).eq('kind','message').is('read_at',null);await drawMessages($('#socialDirectMessages'),rows);await loadNotifications()}catch(e){say('تعذر تحميل الرسائل: '+e.message)}};
+const getMessages=async(channel,targetId=state.targetId)=>{if(channel!=='direct'||!targetId)return[];const q=state.client.from('student_social_messages').select('*').eq('channel','direct').or('and(sender_id.eq.'+state.user.id+',recipient_id.eq.'+targetId+'),and(sender_id.eq.'+targetId+',recipient_id.eq.'+state.user.id+')').order('created_at',{ascending:true}).limit(100);const {data,error}=await q;if(error)throw error;return data||[]};
+const loadMessages=async(channel,targetId=state.targetId)=>{
+ if(channel!=='direct'||!targetId)return;const loadVersion=++messageLoadVersion;
+ try{
+  await updateChatHeader(targetId);if(state.targetId!==targetId||loadVersion!==messageLoadVersion)return;
+  const rows=await getMessages('direct',targetId);if(state.targetId!==targetId||loadVersion!==messageLoadVersion)return;
+  const unread=rows.filter(m=>m.recipient_id===state.user.id&&!m.read_at).map(m=>m.id);
+  if(unread.length){const {error}=await state.client.from('student_social_messages').update({read_at:new Date().toISOString()}).in('id',unread);if(error)console.warn('Could not mark messages read:',error)}
+  await state.client.from('student_notifications').update({read_at:new Date().toISOString()}).eq('user_id',state.user.id).eq('actor_id',targetId).eq('kind','message').is('read_at',null);
+  if(state.targetId!==targetId||loadVersion!==messageLoadVersion)return;
+  await drawMessages($('#socialDirectMessages'),rows);if(state.targetId!==targetId||loadVersion!==messageLoadVersion)return;
+  await loadNotifications();
+ }catch(e){if(state.targetId===targetId&&loadVersion===messageLoadVersion)say('تعذر تحميل الرسائل: '+e.message)}
+};
 const sendMessage=async(channel,body)=>{if(channel!=='direct')throw Error('المتاح حاليًا هو المحادثات الخاصة فقط.');const text=String(body||'').trim();if(!text)return;if(!state.targetId||state.targetId===state.user.id)throw Error('اختر صديقًا لبدء المحادثة.');const row={sender_id:state.user.id,channel:'direct',body:text,companion_name:petName(),recipient_id:state.targetId};const {error}=await state.client.from('student_social_messages').insert(row);if(error)throw error;await loadMessages('direct');say('✅ تم إرسال رسالتك بنجاح. ستصل إشعارات الرسائل الجديدة للطرف الآخر إذا سمح بالإشعارات وكان التطبيق بالخلفية.');};
 const notifyIncomingMessage=m=>{if(!m||m.recipient_id!==state.user?.id||m.sender_id===state.user?.id||!document.hidden||!('Notification' in window)||Notification.permission!=='granted')return;loadProfiles([m.sender_id]).then(profiles=>{const p=profiles[m.sender_id]||{};const n=new Notification('رسالة جديدة من '+(p.display_name||p.companion_name||'صديق'),{body:String(m.body||'').slice(0,180),tag:'student-guide-message-'+m.id});n.onclick=async()=>{window.focus();const profiles=await loadProfiles([m.sender_id]);const p=profiles[m.sender_id]||{};state.targetId=m.sender_id;const id=$('#socialTargetId');if(id)id.value=p.username||'';showTab('direct');loadMessages('direct');n.close()}}).catch(e=>console.warn('تعذر عرض إشعار الرسالة:',e))};
 const showTab=tab=>{$$('.social-panel').forEach(p=>p.hidden=true);const p=$('#social-'+tab);if(p)p.hidden=false;$$('[data-social-tab]').forEach(b=>b.classList.toggle('primary',b.dataset.socialTab===tab));state.channel=tab;if(tab==='direct'){renderFriends();renderFriendRequests();renderSentFriendRequests();loadNotifications()}if(tab==='profile')ensureProfile().catch(e=>say(e.message));if(tab==='feed')loadAchievements()};
@@ -174,7 +194,7 @@ const requestMessageNotifications=()=>{if(!('Notification' in window)||Notificat
 document.addEventListener('click',event=>{const center=$('.notification-center'),drop=$('#notificationDropdown'),bell=$('#notificationBell');if(center&&drop&&!center.contains(event.target)){drop.setAttribute('hidden','');bell?.setAttribute('aria-expanded','false')}});
 document.addEventListener('keydown',event=>{if(event.key==='Escape'){const drop=$('#notificationDropdown');drop?.setAttribute('hidden','');$('#notificationBell')?.setAttribute('aria-expanded','false')}});
 $('#socialRefreshRequests')?.addEventListener('click',()=>renderFriendRequests());$('#socialRefreshNotifications')?.addEventListener('click',()=>loadNotifications());
-$('#socialDirectFind').onsubmit=async e=>{e.preventDefault();const username=$('#socialTargetId').value.trim().replace(/^@/,'').toLowerCase();if(!/^[a-z0-9_]{3,24}$/.test(username)){say('اكتب اسم المستخدم فقط.');return}const {data:p,error}=await state.client.from('student_profile_directory').select('user_id,username').eq('username',username).maybeSingle();if(error)throw error;if(!p){say('لم أجد حسابًا بهذا الاسم.');return}const {data:links,error:le}=await state.client.from('student_friends').select('status').eq('status','accepted').or('and(user_id.eq.'+state.user.id+',friend_id.eq.'+p.user_id+'),and(user_id.eq.'+p.user_id+',friend_id.eq.'+state.user.id+')');if(le)throw le;if(!links?.length){say('المراسلة متاحة للأصدقاء المقبولين فقط.');return}state.targetId=p.user_id;$('#socialDirectInput').disabled=false;$('#socialDirectForm').querySelector('button').disabled=false;await loadMessages('direct');say('تم فتح المحادثة الخاصة.')};
+$('#socialDirectFind').onsubmit=async e=>{e.preventDefault();const username=$('#socialTargetId').value.trim().replace(/^@/,'').toLowerCase();if(!/^[a-z0-9_]{3,24}$/.test(username)){say('اكتب اسم المستخدم فقط.');return}const {data:p,error}=await state.client.from('student_profile_directory').select('user_id,username').eq('username',username).maybeSingle();if(error)throw error;if(!p){say('لم أجد حسابًا بهذا الاسم.');return}const {data:links,error:le}=await state.client.from('student_friends').select('status').eq('status','accepted').or('and(user_id.eq.'+state.user.id+',friend_id.eq.'+p.user_id+'),and(user_id.eq.'+p.user_id+',friend_id.eq.'+state.user.id+')');if(le)throw le;if(!links?.length){say('المراسلة متاحة للأصدقاء المقبولين فقط.');return}await openFriendChat(p);if(state.targetId===p.user_id)say('تم فتح المحادثة الخاصة.')};
 $('#socialAddFriend').onsubmit=async e=>{e.preventDefault();await addFriendByUsername($('#socialFriendUsername').value)};
 $('#socialAvatarFile').addEventListener('change',()=>{const file=$('#socialAvatarFile').files?.[0],preview=$('#socialAvatarPreview');if(!file)return;preview.src=URL.createObjectURL(file);preview.hidden=false});
 $('#socialDirectForm').onsubmit=async e=>{e.preventDefault();try{await sendMessage('direct',$('#socialDirectInput').value);$('#socialDirectInput').value=''}catch(err){say(err.message)}};
