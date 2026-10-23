@@ -183,3 +183,12 @@ BEGIN
   ALTER PUBLICATION supabase_realtime ADD TABLE public.student_notifications;
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
+
+DROP POLICY IF EXISTS "Achievements visible to friends only" ON public.student_achievement_posts;
+CREATE POLICY "Achievements visible to friends only"
+ON public.student_achievement_posts FOR SELECT TO authenticated
+USING (user_id = (SELECT auth.uid()) OR EXISTS (
+ SELECT 1 FROM public.student_friends f WHERE f.status='accepted'
+ AND ((f.user_id=(SELECT auth.uid()) AND f.friend_id=student_achievement_posts.user_id)
+ OR (f.friend_id=(SELECT auth.uid()) AND f.user_id=student_achievement_posts.user_id))
+));
