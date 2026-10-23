@@ -98,25 +98,8 @@ document.addEventListener('click',event=>{
  if(tab.dataset.socialTab==='direct')requestMessageNotificationsSafe();
  showTab(tab.dataset.socialTab);
 },true);
-document.addEventListener('submit',event=>{
- const form=event.target;
- if(!form||!['socialAddFriend','socialDirectFind'].includes(form.id))return;
- event.preventDefault();event.stopImmediatePropagation();
- (async()=>{
-  try{
-   if(!state.client||!state.user){say('سجّل الدخول أولًا، ثم أعد المحاولة.');return}
-   if(form.id==='socialAddFriend'){await addFriendByUsername($('#socialFriendUsername').value);return}
-   const term=$('#socialTargetId').value.trim().replace(/^@/,'').toLowerCase();
-   if(!/^[a-z0-9_]{3,24}$/.test(term)){say('اكتب اسم المستخدم فقط. لا تحتاج إلى ID لفتح محادثة.');return}
-   const {data:profile,error}=await state.client.from('student_profile_directory').select('user_id,username').eq('username',term).maybeSingle();if(error)throw error;if(!profile){say('لم أجد حسابًا بهذا الاسم.');return}if(profile.user_id===state.user.id){say('هذا حسابك أنت.');return}
-   const {data:links,error:linkError}=await state.client.from('student_friends').select('status').eq('status','accepted').or('and(user_id.eq.'+state.user.id+',friend_id.eq.'+profile.user_id+'),and(user_id.eq.'+profile.user_id+',friend_id.eq.'+state.user.id+')');if(linkError)throw linkError;if(!links?.length){say('يمكنك مراسلة الأصدقاء بعد قبول طلب الصداقة فقط.');return}const userId=profile.user_id;state.targetId=userId;
-   $('#socialDirectInput').disabled=false;
-   $('#socialDirectForm').querySelector('button').disabled=false;
-   await loadMessages('direct');
-   say('تم فتح المحادثة.');
-  }catch(error){say('تعذّر تنفيذ الطلب: '+(error?.message||'خطأ غير معروف'))}
- })();
-},true);
+// The add-friend and direct-find forms each have their own submit handlers below.
+// Do not register a second capture-phase submit handler; it caused duplicate submissions.
 
 document.addEventListener('DOMContentLoaded',()=>{if(!$('#view-community'))return;
 const requestMessageNotifications=()=>{if(!('Notification' in window)||Notification.permission!=='default')return;try{const permission=Notification.requestPermission();if(permission&&typeof permission.catch==='function')permission.catch(()=>{})}catch(_){}};document.querySelectorAll('[data-social-tab]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.socialTab==='direct')requestMessageNotifications();showTab(b.dataset.socialTab)}));$('#socialRefreshRequests')?.addEventListener('click',()=>renderFriendRequests());$('#socialRefreshNotifications')?.addEventListener('click',()=>loadNotifications());
