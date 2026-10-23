@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX IF NOT EXISTS student_friends_unordered_pair_unique_idx ON public.student_friends (LEAST(user_id, friend_id), GREATEST(user_id, friend_id));
